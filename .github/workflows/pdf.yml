@@ -1,7 +1,7 @@
 name: PDF
 on: [ push, pull_request ]
 jobs:
-  build_latex:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,13 +17,13 @@ jobs:
         uses: xu-cheng/texlive-action@v3
         with:
           scheme: full
-          run: latexmk -pdf NON.tex
+          run: latexmk -pdf UNIDAMPING.tex
       - name: Release
         if: github.event_name == 'push'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: NON.pdf
-          asset_name: NON.pdf
+          file: UNIDAMPING.pdf
+          asset_name: UNIDAMPING.pdf
           tag: latest
           overwrite: true

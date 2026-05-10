@@ -24,8 +24,9 @@
 *.bak
 *.sav.tmp
 *.synctex.gz
-NON.pdf
+UNIDAMPING.pdf
 venv
+.venv
 .idea
 .vscode
 *.fls
