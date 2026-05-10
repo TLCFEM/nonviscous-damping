@@ -1,0 +1,121 @@
+\section{Introduction}
+Consider the general equation of motion of a dynamic system under external load $\bp\left(t\right)$,
+\begin{gather}
+\br\left(\bu,\bv,\ba\right)=\bp\left(t\right)
+\end{gather}
+A practical simplification may assume the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
+\begin{gather}
+\br=\br_{\bu}+\br_{\bv}+\br_{\ba}.
+\end{gather}
+Additional energy dissipating terms can be introduced,
+\begin{gather}
+\br_{\bu}+\br_{\bv}+\br_{\ba}+\bbf_{\bu}+\bbf_{\bv}+\bbf_{\ba}=\bp\left(t\right),
+\end{gather}
+in which $\bbf_{\baleph}$ (for $\baleph$ being one of $\bu$, $\bv$ and $\ba$) is governed by the following differential equation:
+\begin{gather}
+\dot{\bbf_{\baleph}}=-s_{\baleph}\bbf_{\baleph}+m_{\baleph}\by_{\baleph}
+\end{gather}
+where $s_{\baleph}$ and $m_{\baleph}$ are two scalar parameters that control the response, $\by_{\baleph}=\by_{\baleph}\left(\baleph\right)$ is a function of $\baleph$, two possible candidates can be $\by_{\baleph}=\br_{\baleph}$ and $\by_{\baleph}=\baleph$.
+The subscript $\left(\cdot\right)_{\baleph}$ may be dropped for brevity in the following discussion, providing no ambiguity would occur by doing so.
+\subsection{Free Vibration}
+\subsubsection{Displacement Dependent}
+\paragraph{One Single Term}
+Since only the displacement dependent energy dissipating force $\bbf_{\bu}$ is considered, the subscript $\left(\cdot\right)_{\bu}$ is omitted for brevity.
+By selecting $\by=\mb{K}\bu$, the linear elastic system simplifies to the following.
+\begin{gather}
+\left\{\begin{array}{l}
+\mb{M}\ddot{\bu}+\mb{K}\bu+\bbf=\mb{0},\\
+\dot{\bbf}=-s\bbf+m\mb{K}\bu.
+\end{array}\right.
+\end{gather}
+One could obtain
+\begin{gather}
+\mb{M}\dddot{\bu}+\mb{K}\dot{\bu}+s\mb{M}\ddot{\bu}+\left(s+m\right)\mb{K}\bu=\mb{0}.
+\end{gather}
+With the assist of assuming a harmonic solution $\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right)$, the characteristic equation can be obtained as follows.
+\begin{gather}
+-i\omega^3\mb{M}-s\omega^2\mb{M}+i\omega\mb{K}+\left(s+m\right)\mb{K}=\mb{0}.
+\end{gather}
+Rearranging gives
+\begin{gather}
+\left(s+m+i\omega\right)\mb{K}-\left(s+i\omega\right)\omega^2\mb{M}=\mb{0}\qquad\longrightarrow\qquad
+\dfrac{s+m+i\omega}{s+i\omega}\mb{K}-\omega^2\mb{M}=\mb{0}.
+\end{gather}
+The dynamic stiffness is then
+\begin{gather}
+\mb{K}^*=\dfrac{s+m+i\omega}{s+i\omega}\mb{K}=\left(1+\dfrac{m}{s+i\omega}\right)\mb{K},
+\end{gather}
+the corresponding storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$ can be expressed as
+\begin{gather}
+\mb{K}'=\left(1+\dfrac{sm}{s^2+\omega^2}\right)\mb{K},\qquad
+\mb{K}''=\dfrac{m\omega}{s^2+\omega^2}\mb{K},
+\end{gather}
+such that $\mb{K}^*=\mb{K}'-\mb{K}''i$.
+The ratio between them is
+\begin{gather}
+\eta=\dfrac{m\omega}{s^2+sm+\omega^2}.
+\end{gather}
+\paragraph{Multiple Terms}
+Now consider multiple energy dissipating terms $f_j$, all contributing to the equation of motion, one have
+\begin{gather}
+\left\{\begin{array}{l}
+\mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
+\dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu.
+\end{array}\right.
+\end{gather}
+Assuming harmonic solutions for both $\bu$ and $\bbf$,
+\begin{gather}
+\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right),\qquad
+\bbf_j\left(t\right)=\mb{F}_j\exp\left(i\omega{}t\right),
+\end{gather}
+the second expression can be expressed in the frequency domain as
+\begin{gather}
+i\omega\mb{F}_j=-s_j\mb{F}_j+m_j\mb{K}\mb{U},
+\end{gather}
+thus
+\begin{gather}
+\mb{F}_j=\dfrac{m_j}{s_j+i\omega}\mb{K}\mb{U}.
+\end{gather}
+The characteristic equation can be then derived as
+\begin{gather}
+\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}=\mb{0}.
+\end{gather}
+The dynamic stiffness is
+\begin{gather}
+\mb{K}^*=\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}
+\end{gather}
+with
+\begin{gather}
+\mb{K}'=\left(1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\right)\mb{K},\qquad
+\mb{K}''=\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
+\end{gather}
+The ratio between them is now
+\begin{gather}
+\eta=\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
+\end{gather}
+
+The multi-term case is nothing but an additive extension of the previous single-term case.
+\subsubsection{Acceleration Dependent}
+The system simplifies to the following.
+\begin{gather}
+\left\{\begin{array}{l}
+\mb{M}\ddot{\bu}+\mb{K}\bu+\bbf_{\ba}=\mb{0},\\
+\dot{\bbf_{\ba}}=-s\bbf_{\ba}+m\by_{\ba}.
+\end{array}\right.
+\end{gather}
+By selecting $\by_{\ba}=\mb{M}\ddot{\bu}$,
+\begin{gather}
+\mb{M}\dddot{\bu}+\mb{K}\dot{\bu}+s\left(\mb{M}\ddot{\bu}+\mb{K}\bu\right)+m\mb{M}\ddot{\bu}=\mb{0}.
+\end{gather}
+\begin{gather}
+-i\omega^3\mb{M}\mb{U}+i\omega\mb{K}\mb{U}-s\omega^2\mb{M}\mb{U}+s\mb{K}\mb{U}-m\omega^2\mb{M}\mb{U}=\mb{0}.\\
+-\left(s+m+i\omega\right)\omega^2\mb{M}\mb{U}+i\omega\mb{K}\mb{U}+s\mb{K}\mb{U}=\mb{0}.\\
+\end{gather}
+
+\begin{gather}
+\dfrac{s+i\omega}{s+m+i\omega}=1-\dfrac{m}{s+m+i\omega}=1-\dfrac{ms+m^2-mi\omega}{\left(s+m\right)^2+\omega^2}
+\end{gather}
+
+\begin{gather}
+\dfrac{m\omega}{s^2+ms+\omega^2}
+\end{gather}

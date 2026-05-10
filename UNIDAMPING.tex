@@ -1,0 +1,75 @@
+\documentclass[3p,11pt,fleqn,review,sort&compress]{elsarticle}
+\bibliographystyle{elsarticle-num-names}
+\usepackage{amsmath,amsfonts,amssymb,siunitx,float,subcaption,setspace,booktabs,diagbox,bm,tikz,structmech,mathtools,tikz-3dplot,pgfplots,url,fontawesome5}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{lineno}
+\usetikzlibrary{shapes.geometric}
+\pgfplotsset{compat=1.8}
+\journal{}
+\newcommand*{\mb}[1]{\bm{#1}}
+\newcommand*{\bbar}[1]{\bar{\bm{#1}}}
+\newcommand*{\bhat}[1]{\hat{\bm{#1}}}
+\newcommand*{\mT}{\mathrm{T}}
+\newcommand*{\md}[1]{\mathrm{d}#1}
+\newcommand*{\eqsref}[1]{Eq.~(\ref{#1})}
+\newcommand*{\figref}[1]{Fig.~\ref{#1}}
+\newcommand*{\tabref}[1]{Table~\ref{#1}}
+\newcommand*{\algoref}[1]{Algorithm~\ref{#1}}
+\newcommand*{\secref}[1]{\S~\ref{#1}}
+\newcommand*{\diag}[1]{\text{diag}\left(#1\right)}
+\newcommand*{\sign}[1]{\text{sign}\left(#1\right)}
+\newcommand*{\dev}[1]{\text{dev}\left(#1\right)}
+\newcommand*{\tr}[1]{\text{trace}\left(#1\right)}
+\newcommand*{\ddfrac}[2]{\dfrac{\md{#1}}{\md{#2}}}
+\newcommand*{\pdfrac}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bsigma}{\mb{\sigma}}
+\newcommand{\bvarepsilon}{\mb{\varepsilon}}
+\newcommand{\beeta}{\mb{\eta}}
+\newcommand{\balpha}{\mb{\alpha}}
+\newcommand{\baleph}{\mb{\aleph}}
+\newcommand{\bbeta}{\mb{\beta}}
+\newcommand{\bgamma}{\mb{\gamma}}
+\newcommand{\bn}{\mb{n}}
+\newcommand{\bq}{\mb{q}}
+\newcommand{\bs}{\mb{s}}
+\newcommand{\bc}{\mb{c}}
+\newcommand{\be}{\mb{e}}
+\newcommand{\bu}{\mb{u}}
+\newcommand{\bv}{\mb{v}}
+\newcommand{\bw}{\mb{w}}
+\newcommand{\by}{\mb{y}}
+\newcommand{\ba}{\mb{a}}
+\newcommand{\bx}{\mb{x}}
+\newcommand{\br}{\mb{r}}
+\newcommand{\bp}{\mb{p}}
+\newcommand{\bbf}{\mb{f}}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\begin{document}
+\linenumbers
+\begin{abstract}
+\begin{linenumbers}
+A universal damping model and its implementation.
+\end{linenumbers}
+\end{abstract}
+\begin{keyword}
+damping\sep
+direct integration
+\end{keyword}
+\begin{frontmatter}
+\title{A Universal Damping Model: Formulation and Implementation}
+\author[add1]{Theodore~L.~Chang\corref{tlc}}\ead{tlcfem@gmail.com}
+\author[add2]{Chin-Long~Lee}
+\cortext[tlc]{corresponding author}
+\address[add1]{IRIS Adlershof, Humboldt-Universität zu Berlin, Berlin, Germany, 12489.}
+\address[add2]{Department of Civil and Natural Resources Engineering, University of Canterbury, Christchurch, New Zealand, 8041.}
+\end{frontmatter}
+\input{SEC/INTRO}
+\bibliography{BIB}
+\end{document}
