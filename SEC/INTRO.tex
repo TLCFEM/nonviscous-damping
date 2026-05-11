@@ -208,3 +208,28 @@ where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j
 \end{gather}
 with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$.
 The proposed formulation is a further generalization of the previous one \citep{Huang2019} that only accepts real parameters.
+
+\algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
+Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
+The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{K}$ is real--valued.
+One shall notice that the proposed implementation has the following advantages.
+\begin{enumerate}
+\item It retains the size of the original problem/system.
+\item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
+\item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
+\item The hysteretic damping \citep{Huang2019} can \textbf{always} be converted to an equivalent one that operates on inertial force $\br_{\ba}$. In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
+\end{enumerate}
+\begin{breakablealgorithm}
+\setstretch{2}
+\caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
+\begin{algorithmic}
+\State \textbf{*Schema: Newmark + Trapezoidal}
+\State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained via conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $m_j$, $s_j$
+\State \textbf{Output}: $\bu$
+\State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
+\State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}$\Comment{\eqsref{eq:revised_k}}
+\State \faMicrochip~compute revised resistance $\bhat{r}=\br+\sum\bbf$
+\State $\delta\bu=\bhat{K}^{-1}\left(\mb{p}-\bhat{r}\right)$
+\State update and return $\bu\leftarrow\bu+\delta\bu$
+\end{algorithmic}
+\end{breakablealgorithm}

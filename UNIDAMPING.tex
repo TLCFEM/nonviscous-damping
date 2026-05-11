@@ -51,6 +51,20 @@
 \def\abs{\@ifstar{\oldabs}{\oldabs*}}
 \let\oldnorm\norm
 \def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\newenvironment{breakablealgorithm}
+{\begin{center}
+\refstepcounter{algorithm}
+\hrule height.8pt depth0pt \kern2pt
+\renewcommand{\caption}[2][\relax]{
+{\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}
+\ifx\relax##1\relax
+\addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}
+\else
+\addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}
+\fi
+\kern2pt\hrule\kern2pt
+}}{\kern2pt\hrule\relax
+\end{center}}
 \begin{document}
 \linenumbers
 \begin{abstract}
