@@ -77,7 +77,7 @@ thus
 \mb{F}_j=\dfrac{m_j}{s_j+i\omega}\mb{K}\mb{U}.
 \end{gather}
 The characteristic equation can then be derived as
-\begin{gather}
+\begin{gather}\label{eq:disp_cha}
 \left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}=\mb{0}.
 \end{gather}
 The dynamic stiffness is
@@ -107,10 +107,32 @@ The system is
 \end{array}\right.
 \end{gather}
 Adopting a similar approach, the characteristic equation can be derived as
-\begin{gather}
+\begin{gather}\label{eq:acc_cha}
 \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}=\mb{0}.
 \end{gather}
 The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient in the expression of dynamic stiffness is the reciprocal of that in the previous displacement dependent case.
+
+It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
+Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
+s_1&s_2&\cdots&s_j
+\end{bmatrix}^\mT$ and $\mb{m}=\begin{bmatrix}
+m_1&m_2&\cdots&m_j
+\end{bmatrix}^\mT$ and applying the Sherman--Morrison--Woodbury formula, one could obtain
+\begin{gather}
+\begin{split}
+\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}&=\left(1+\mb{1}^\mT\diag{\mb{s}+i\omega}^{-1}\mb{m}\right)^{-1}\\&=1-\mb{1}^\mT\left(\diag{\mb{s}+i\omega}+\mb{m}\mb{1}^\mT\right)^{-1}\mb{m}.
+\end{split}
+\end{gather}
+Denoting the eigenvalues of $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $\mb{s}'=\begin{bmatrix}
+s'_1&s'_2&\cdots&s'_j
+\end{bmatrix}^\mT$, then
+\begin{gather}
+\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}
+\end{gather}
+where $m'_j=\dfrac{\prod_ls_l-s'_j}{\prod_{k\neq{}j}s'_k-s'_j}$.
+
+For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
+This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \section{Numerical Implementation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
 The governing system is
