@@ -177,3 +177,14 @@ We in fact have adapted and repurposed the algorithm proposed by \citet{Chang202
 \end{table}
 The proposed damping formulation can be applied at both the global model and element levels.
 Consequently, the energy dissipating force $\bbf$ can be flexibly formulated using either node-based or element-based representations.
+
+Borrowing the relation discussed in the work by \citet{Chang2024}, the proposed damping formulation can also be equivalently expressed as
+\begin{gather}
+\br+\sum{}g_j*\by_j=\mb{p}
+\end{gather}
+where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j$, that is,
+\begin{gather}\label{eq:conv}
+\left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
+\end{gather}
+with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$.
+The proposed formulation is a further generalization of the previous one \citep{Huang2019} that only accepts real parameters.
