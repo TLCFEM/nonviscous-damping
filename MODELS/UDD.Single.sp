@@ -22,7 +22,7 @@ set fixed_step_size 1
 
 integrator UDDNewmark 1 .25 .5 -2 0 10 0
 
-converger RelIncreDisp 2 1E-12 10 1
+converger AbsIncreDisp 2 1E-14 10 1
 
 analyze
 
