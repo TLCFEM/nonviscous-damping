@@ -21,6 +21,7 @@ set ini_step_size 1E-2
 set fixed_step_size 1
 
 integrator UDDNewmark 1 .25 .5 -2 0 10 0
+# integrator UDANewmark 1 .25 .5 2 0 10 0
 
 converger AbsIncreDisp 2 1E-14 10 1
 
