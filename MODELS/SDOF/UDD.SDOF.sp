@@ -23,10 +23,12 @@ set fixed_step_size 1
 integrator UDDNewmark 1 .25 .5 -2 0 10 0
 # integrator UDANewmark 1 .25 .5 2 0 10 0
 
-converger AbsIncreDisp 2 1E-14 10 1
+converger AbsIncreDisp 2 1E-14 10 0
 
 analyze
 
 save recorder 1
+
+terminal mv R1-U.h5 R1-U-0.01.h5
 
 exit

@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 import h5py
 import matplotlib
 import numpy as np
@@ -47,6 +50,7 @@ matplotlib.rcParams.update({"font.size": 6})
 
 def system(omega, s, m):
     roots = np.roots([1, s, omega**2, (s + m) * omega**2])
+    print("roots", roots)
 
     r1, r2, r3 = roots
 
@@ -97,12 +101,14 @@ def numerical(vibrator, pick):
 
 
 if __name__ == "__main__":
+    os.chdir(Path(__file__).parent)
+
     fig = plt.figure(figsize=(6, 3.5))
     fig.add_subplot(211)
 
     results = {}
 
-    sdof = analytical([1, 2, 100, 1])
+    sdof = analytical([10, 10, -2])
     results["0.0001"] = numerical(sdof, 0.0001)
     results["0.0002"] = numerical(sdof, 0.0002)
     results["0.0005"] = numerical(sdof, 0.0005)
@@ -124,7 +130,7 @@ if __name__ == "__main__":
     plt.xlabel("time (s)")
     plt.ylabel("displacement")
     plt.grid(which="both", linestyle="--", linewidth=0.2)
-    plt.xlim(0, 10)
+    plt.xlim(0, 5)
 
     fig.add_subplot(2, 1, 2)
 
@@ -148,8 +154,7 @@ if __name__ == "__main__":
     plt.ylabel("absolute error $\\epsilon$")
 
     fig.tight_layout(pad=0.1)
-    plt.show()
-    fig.savefig("single_exp.pdf")
+    fig.savefig("UDD.SDOF.pdf")
 
     fig = plt.figure(figsize=(6, 2))
 
@@ -167,8 +172,7 @@ if __name__ == "__main__":
     plt.xlabel("time (s)")
     plt.ylabel("absolute error $\\epsilon$")
     plt.grid(which="both", linestyle="--", linewidth=0.2)
-    plt.xlim(0, 10)
+    plt.xlim(0, 5)
 
     fig.tight_layout(pad=0.1)
-    plt.show()
-    fig.savefig("single_exp_error.pdf")
+    fig.savefig("UDD.SDOF.ERROR.pdf")
