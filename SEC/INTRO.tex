@@ -1,27 +1,27 @@
-\section{Introduction}
+\section{A Universal Damping Model}
 Consider the general equation of motion of a dynamic system under external load $\bp\left(t\right)$,
 \begin{gather}
 \br\left(\bu,\bv,\ba\right)=\bp\left(t\right)
 \end{gather}
-A practical simplification may assume the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
-\begin{gather}
-\br=\br_{\bu}+\br_{\bv}+\br_{\ba}.
-\end{gather}
 Additional energy dissipating terms can be introduced,
 \begin{gather}
-\br_{\bu}+\br_{\bv}+\br_{\ba}+\bbf_{\bu}+\bbf_{\bv}+\bbf_{\ba}=\bp,
+\br+\bbf=\bp,
 \end{gather}
-in which $\bbf_{\baleph}$ (for $\baleph$ being one of $\bu$, $\bv$ and $\ba$) is governed by the following differential equation:
+in which $\bbf$ can be additively decomposed such that
 \begin{gather}
-\dot{\bbf_{\baleph}}=-s_{\baleph}\bbf_{\baleph}+m_{\baleph}\by_{\baleph}
+    \bbf=\sum\bbf_j
 \end{gather}
-where $s_{\baleph}$ and $m_{\baleph}$ are two scalar parameters that control the response, $\by_{\baleph}=\by_{\baleph}\left(\baleph\right)$ is a function of $\baleph$, various forms can be chosen. For brevity, we consider $\by_{\baleph}=\br_{\baleph}$ in this work unless otherwise stated.
-The subscript $\left(\cdot\right)_{\baleph}$ may be dropped for brevity in the following discussion, providing no ambiguity would occur by doing so.
-\subsection{Free Vibration}
-\subsubsection{Displacement Dependent}
-\paragraph{One Single Term}
-Since only the displacement dependent energy dissipating force $\bbf_{\bu}$ is considered, the subscript $\left(\cdot\right)_{\bu}$ is omitted for brevity.
-By selecting $\by=\mb{K}\bu$, the linear elastic system simplifies to the following.
+and each term $\bbf_j$ is governed by the following differential equation:
+\begin{gather}
+    \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
+\end{gather}
+where $s_j$ and $m_j$ are two scalar parameters that control the response, $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
+Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
+The specific form of $\by_j$ will be discussed in the following sections.
+\subsection{Displacement Dependent}
+\subsubsection{One Single Term}
+Since only one displacement dependent energy dissipating force $\bbf_j$ is considered, the subscript $\left(\cdot\right)_j$ is omitted for brevity.
+By selecting $\by_j=\mb{K}\bu$, the linear elastic system simplifies to the following.
 \begin{gather}
 \left\{\begin{array}{l}
 \mb{M}\ddot{\bu}+\mb{K}\bu+\bbf=\mb{0},\\
@@ -32,7 +32,7 @@ One could obtain
 \begin{gather}
 \mb{M}\dddot{\bu}+\mb{K}\dot{\bu}+s\mb{M}\ddot{\bu}+\left(s+m\right)\mb{K}\bu=\mb{0}.
 \end{gather}
-With the assist of assuming a harmonic solution $\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right)$, the characteristic equation can be obtained as follows.
+Assuming a harmonic solution $\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right)$, the characteristic equation can be obtained as follows.
 \begin{gather}
 -i\omega^3\mb{M}-s\omega^2\mb{M}+i\omega\mb{K}+\left(s+m\right)\mb{K}=\mb{0}.
 \end{gather}
@@ -41,22 +41,22 @@ Rearranging gives
 \left(s+m+i\omega\right)\mb{K}-\left(s+i\omega\right)\omega^2\mb{M}=\mb{0}\qquad\longrightarrow\qquad
 \dfrac{s+m+i\omega}{s+i\omega}\mb{K}-\omega^2\mb{M}=\mb{0}.
 \end{gather}
-The dynamic stiffness is then
+The dynamic stiffness $\mb{K}^*$ is then
 \begin{gather}
 \mb{K}^*=\dfrac{s+m+i\omega}{s+i\omega}\mb{K}=\left(1+\dfrac{m}{s+i\omega}\right)\mb{K},
 \end{gather}
 the corresponding storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$ can be expressed as
 \begin{gather}
 \mb{K}'=\left(1+\dfrac{sm}{s^2+\omega^2}\right)\mb{K},\qquad
-\mb{K}''=\dfrac{m\omega}{s^2+\omega^2}\mb{K},
+\mb{K}''=-\dfrac{m\omega}{s^2+\omega^2}\mb{K},
 \end{gather}
-such that $\mb{K}^*=\mb{K}'-\mb{K}''i$.
+such that $\mb{K}^*=\mb{K}'+\mb{K}''i$.
 The ratio $\eta_u$ between them is
 \begin{gather}
-\eta_u=\dfrac{m\omega}{s^2+sm+\omega^2}.
+\eta_u=-\dfrac{m\omega}{s^2+sm+\omega^2}.
 \end{gather}
-\paragraph{Multiple Terms}
-Now consider multiple energy dissipating terms $\bbf_j$, all contributing to the equation of motion, one have
+\subsubsection{Multiple Terms}
+Now consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
 \begin{gather}
 \left\{\begin{array}{l}
 \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
@@ -76,7 +76,7 @@ thus
 \begin{gather}
 \mb{F}_j=\dfrac{m_j}{s_j+i\omega}\mb{K}\mb{U}.
 \end{gather}
-The characteristic equation can be then derived as
+The characteristic equation can then be derived as
 \begin{gather}
 \left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}=\mb{0}.
 \end{gather}
@@ -87,18 +87,18 @@ The dynamic stiffness is
 with
 \begin{gather}
 \mb{K}'=\left(1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\right)\mb{K},\qquad
-\mb{K}''=\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
+\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
 \end{gather}
 The ratio $\eta_u$ between them is now
 \begin{gather}
-\eta_u=\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
+\eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
 
 The multi-term formulation is a straightforward additive extension of the single-term case.
 The resulting dynamic stiffness has the same form as that reported by \citet{Huang2019}, where dissipation is introduced through resistance filtering.
 The foregoing derivation therefore provides an alternative differential equation based formulation.
-\subsubsection{Acceleration Dependent}
-We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ directly.
+\subsection{Acceleration Dependent}
+We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ directly with identical $\by_j=\mb{M}\ba$.
 The system is
 \begin{gather}
 \left\{\begin{array}{l}
@@ -111,16 +111,21 @@ Adopting a similar approach, the characteristic equation can be derived as
 \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}=\mb{0}.
 \end{gather}
 The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient in the expression of dynamic stiffness is the reciprocal of that in the previous displacement dependent case.
-\section{Implementation}
-To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple displacement dependent term.
+\section{Numerical Implementation}
+To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
 The governing system is
 \begin{gather}\label{eq:eqv_sys}
 \left\{
 \begin{array}{l}
-\dot{\bbf}_j=-s_j\bbf_j+m_j\br_{\bu},\\
-\br_{\bu}+\br_{\bv}+\br_{\ba}+\sum\bbf_j=\mb{p}.
+\dot{\bbf}_j=-s_j\bbf_j+m_j\by_j,\\
+\br+\sum\bbf_j=\mb{p}.
 \end{array}\right.
 \end{gather}
+A practical simplification may assume the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
+\begin{gather}
+    \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
+\end{gather}
+such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ with $\baleph\in\left\{\bu,\bv,\ba\right\}$.
 
 The first expression is a first-order ODE (of $\bbf_j$) that can be integrated by the (implicit) trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
@@ -128,24 +133,45 @@ The first expression is a first-order ODE (of $\bbf_j$) that can be integrated b
 \end{gather}
 Expanding gives
 \begin{gather}
-\bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\left(-s_j\bbf_{j,n}+m_j\br_{\bu,n}\right)+\left(-s_j\bbf_{j,n+1}+m_j\br_{\bu,n+1}\right)\right),
+\bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\left(-s_j\bbf_{j,n}+m_j\by_{j,n}\right)+\left(-s_j\bbf_{j,n+1}+m_j\by_{j,n+1}\right)\right),
 \end{gather}
 one may further rearrange to obtain
 \begin{gather}\label{eq:discretised_c}
-\bbf_{j,n+1}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\br_{\bu,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\br_{\bu,n+1},
+\bbf_{j,n+1}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1},
 \end{gather}
 in which subscripts $\left(\cdot\right)_n$ and $\left(\cdot\right)_{n+1}$ denote the corresponding quantity at $t_n$ and $t_{n+1}=t_n+\Delta{}t$.
 
-Now assuming the equation of motion is satisfied at $t_{n+1}$, the second expression is
+Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the Newmark method), the second expression is
 \begin{gather}\label{eq:residual}
-\br_{\bu,n+1}+\br_{\bv,n+1}+\br_{\ba,n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\br_{\bu,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\br_{\bu,n+1}=\mb{p}_{n+1}.
+    \br_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1}=\mb{p}_{n+1}.
 \end{gather}
 Differentiation leads to the following revised effective stiffness $\bhat{K}_{n+1}$,
 \begin{gather}\label{eq:revised_k}
-\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}.
+\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}.
 \end{gather}
 in which the conventional effective stiffness $\bbar{K}_{n+1}$ is
 \begin{gather}
-\bbar{K}_{n+1}=\mb{K}_{n+1}+\mb{C}_{n+1}\ddfrac{\bv_{n+1}}{\bu_{n+1}}+\mb{M}_{n+1}\ddfrac{\ba_{n+1}}{\bu_{n+1}}.
+\bbar{K}_{n+1}=\ddfrac{\br_{n+1}}{\bu_{n+1}}=\mb{K}_{n+1}+\mb{C}_{n+1}\ddfrac{\bv_{n+1}}{\bu_{n+1}}+\mb{M}_{n+1}\ddfrac{\ba_{n+1}}{\bu_{n+1}}.
 \end{gather}
-It thus can be concluded from \eqsref{eq:revised_k} that to account for this displacement dependent damping term, only the stiffness matrix needs to be scaled by the factor $1+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$.
+It thus can be concluded from \eqsref{eq:revised_k} that to account for this additional energy dissipating term $\bbf$, only an additional matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ needs to be added to the original effective stiffness $\bbar{K}_{n+1}$.
+In some certain cases, this additional matrix can be very efficiently formulated.
+For example, if $\by_j=\br_{\bu}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the stiffness matrix $\mb{K}_{n+1}$ that is already available in the original formulation.
+In some other special cases, this matrix can be diagonal, for example, with $\by_j=\bu$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\mb{I}$ is a unit matrix.
+Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally very efficient, almost trivial.
+
+We in fact have adapted and repurposed the algorithm proposed by \citet{Chang2024} that is originally developed for velocity dependent nonviscous damping.
+\subsection{Some Special Cases}
+\tabref{tab:special} summaries a few special cases.
+\begin{table}[ht!]
+\centering\footnotesize\renewcommand{\arraystretch}{1.5}
+\caption{some special cases}\label{tab:special}
+\begin{tabular}{ccccc}
+    \toprule
+    $s_j$ & $m_j$ &                        $\by_j$                         &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &                   Remarks                    \\ \midrule
+          &       &                      $\br_{\bu}$                       &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to the model by \citet{Huang2019}  \\
+          &       &                      $\br_{\ba}$                       & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to the model by \citet{Huang2019} \\
+          &       &                         $\bv$                          &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to the model by \citet{Chang2024}  \\
+          &       &                         $\bu$                          &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &          general hysteretic damping          \\
+      0   &   1   & $\left(\alpha\mb{M}_{n+1}+\beta\mb{K}_{n+1}\right)\ba$ &                                                                                 &        identical to Rayleigh damping         \\ \bottomrule
+\end{tabular}
+\end{table}
