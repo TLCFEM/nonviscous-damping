@@ -123,13 +123,10 @@ m_1&m_2&\cdots&m_j
 \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}&=\left(1+\mb{1}^\mT\diag{\mb{s}+i\omega}^{-1}\mb{m}\right)^{-1}\\&=1-\mb{1}^\mT\left(\diag{\mb{s}+i\omega}+\mb{m}\mb{1}^\mT\right)^{-1}\mb{m}.
 \end{split}
 \end{gather}
-Denoting the eigenvalues of $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $\mb{s}'=\begin{bmatrix}
-s'_1&s'_2&\cdots&s'_j
-\end{bmatrix}^\mT$, then
+Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ and the corresponding left and right eigenvectors as $\mb{v}^l_j$ and $\mb{v}^r_j$, then
 \begin{gather}
-\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}
+\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}\qquad\text{with}\quad{}m'_j=-\dfrac{\left\langle\mb{1},\mb{v}^r_j\right\rangle\left\langle\mb{v}^l_j,\mb{m}\right\rangle}{\left\langle\mb{v}^r_j,\mb{v}^l_j\right\rangle}.
 \end{gather}
-where $m'_j=\dfrac{\prod_ls_l-s'_j}{\prod_{k\neq{}j}s'_k-s'_j}$.
 
 For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
