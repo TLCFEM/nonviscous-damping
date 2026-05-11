@@ -163,16 +163,16 @@ We in fact have adapted and repurposed the algorithm proposed by \citet{Chang202
 \subsection{Some Special Cases}
 \tabref{tab:special} summaries a few special cases.
 \begin{table}[ht!]
-\centering\footnotesize\renewcommand{\arraystretch}{1.5}
+\centering\scriptsize\renewcommand{\arraystretch}{2}
 \caption{some special cases}\label{tab:special}
 \begin{tabular}{ccccc}
     \toprule
-    $s_j$ & $m_j$ &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &                   Remarks                    \\ \midrule
-          &       &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to the model by \citet{Huang2019}  \\
-          &       &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to the model by \citet{Huang2019} \\
-          &       &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to the model by \citet{Chang2024}  \\
-          &       &                     $\bu$                      &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &          general hysteretic damping          \\
-      0   &   1   & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &               Rayleigh damping               \\ \bottomrule
+     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &                   Remarks                    \\ \midrule
+     real   &  real   &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to the model by \citet{Huang2019}  \\
+     real   &  real   &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to the model by \citet{Huang2019} \\
+    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to the model by \citet{Chang2024}  \\
+    complex & complex &                     $\bu$                      &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &          general hysteretic damping          \\
+       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &               Rayleigh damping               \\ \bottomrule
 \end{tabular}
 \end{table}
 The proposed damping formulation can be applied at both the global model and element levels.
