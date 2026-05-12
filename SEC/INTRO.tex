@@ -34,13 +34,13 @@ One could obtain
 \end{gather}
 Assuming a harmonic solution $\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right)$, the characteristic equation can be obtained as follows.
 \begin{gather}
--i\omega^3\mb{M}-s\omega^2\mb{M}+i\omega\mb{K}+\left(s+m\right)\mb{K}=\mb{0}.
+\det\left(-i\omega^3\mb{M}-s\omega^2\mb{M}+i\omega\mb{K}+\left(s+m\right)\mb{K}\right)=0.
 \end{gather}
 Rearranging gives
-\begin{gather}
-\left(s+m+i\omega\right)\mb{K}-\left(s+i\omega\right)\omega^2\mb{M}=\mb{0}\qquad\longrightarrow\qquad
-\dfrac{s+m+i\omega}{s+i\omega}\mb{K}-\omega^2\mb{M}=\mb{0}.
-\end{gather}
+\begin{multline}
+\det\left(\left(s+m+i\omega\right)\mb{K}-\left(s+i\omega\right)\omega^2\mb{M}\right)=0\\\longrightarrow\qquad
+\det\left(\dfrac{s+m+i\omega}{s+i\omega}\mb{K}-\omega^2\mb{M}\right)=0.
+\end{multline}
 The dynamic stiffness $\mb{K}^*$ is then
 \begin{gather}
 \mb{K}^*=\dfrac{s+m+i\omega}{s+i\omega}\mb{K}=\left(1+\dfrac{m}{s+i\omega}\right)\mb{K},
@@ -78,7 +78,7 @@ thus
 \end{gather}
 The characteristic equation can then be derived as
 \begin{gather}\label{eq:disp_cha}
-\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}=\mb{0}.
+\det\left(\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
 The dynamic stiffness is
 \begin{gather}
@@ -108,7 +108,7 @@ The system is
 \end{gather}
 Adopting a similar approach, the characteristic equation can be derived as
 \begin{gather}\label{eq:acc_cha}
-\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}=\mb{0}.
+\det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
 The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient in the expression of dynamic stiffness is the reciprocal of that in the previous displacement dependent case.
 
