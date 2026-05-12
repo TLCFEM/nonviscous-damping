@@ -154,7 +154,7 @@ if __name__ == "__main__":
     plt.ylabel("absolute error $\\epsilon$")
 
     fig.tight_layout(pad=0.1)
-    fig.savefig("UDD.SDOF.pdf")
+    fig.savefig("../../PIC/UDD.SDOF.pdf")
 
     fig = plt.figure(figsize=(6, 2))
 
@@ -175,4 +175,4 @@ if __name__ == "__main__":
     plt.xlim(0, 5)
 
     fig.tight_layout(pad=0.1)
-    fig.savefig("UDD.SDOF.ERROR.pdf")
+    fig.savefig("../../PIC/UDD.SDOF.ERROR.pdf")
