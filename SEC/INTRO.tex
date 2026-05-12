@@ -112,6 +112,16 @@ In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ w
 The multi-term formulation is a straightforward additive extension of the single-term case.
 The resulting dynamic stiffness has the same form as that reported by \citet{Huang2019}, where dissipation is introduced through resistance filtering.
 The foregoing derivation therefore provides an alternative differential equation based formulation.
+\subsubsection{Alternative Form Applied to Displacement Directly}
+Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
+\begin{gather}
+\mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
+\end{gather}
+with
+\begin{gather}
+\mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
+\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
+\end{gather}
 \subsection{Acceleration Dependent}
 We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ directly with identical $\by_j=\mb{M}\ba$.
 The system is
