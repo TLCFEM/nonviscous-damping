@@ -69,10 +69,12 @@ def random_sm(
 
 
 if __name__ == "__main__":
-    s, m = random_sm(5, complex_valued=True, seed=42)
+    s, m = random_sm(5, complex_valued=False, seed=42)
     a, b = inverse_poles_residues(s, m)
     print("s:", s)
     print("m:", m)
+    print("a:", a)
+    print("b:", b)
     s, m = inverse_poles_residues(a, b)
     print("Recovered s:", s)
     print("Recovered m:", m)
