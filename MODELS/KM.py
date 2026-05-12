@@ -1,44 +1,30 @@
 import numpy as np
 
 
-def inverse_poles_residues(s, m, tol=1e-12):
-    s = np.asarray(s, dtype=np.complex128)
+def inverse(s, m):
     m = np.asarray(m, dtype=np.complex128)
+    ones = np.ones_like(m)
 
-    n = len(s)
+    A = np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
 
-    ones = np.ones(n, dtype=np.complex128)
-    b = np.zeros(n, dtype=np.complex128)
+    ar, R = np.linalg.eig(A)
+    al, L = np.linalg.eig(A.T)
 
-    A = np.diag(s) + np.outer(m, ones)
+    a = ar[idx := np.argsort(ar)]
+    R = R[:, idx]
+    L = L[:, np.argsort(al)]
 
-    a, R = np.linalg.eig(A)
-
-    a_left, L = np.linalg.eig(A.T)
-
-    used = np.zeros(n, dtype=bool)
-
-    for k in range(n):
-        idx = None
-
-        for j in range(n):
-            if not used[j] and abs(a_left[j] - a[k]) < tol:
-                idx = j
-                used[j] = True
-                break
-
-        if idx is None:
-            raise ValueError("Could not match left/right eigenvalues")
-
-        b[k] = -(ones @ R[:, k]) * (L[:, idx] @ m) / (L[:, idx] @ R[:, k])
+    b = np.zeros_like(a)
+    for k in range(b.size):
+        b[k] = -(ones @ R[:, k]) * (L[:, k] @ m) / (L[:, k] @ R[:, k])
 
     return a, b
 
 
 def random_sm(
     n,
-    s_range=(0.1, 10.0),
-    m_range=(-1.0, 1.0),
+    s_range=(10, 1000),
+    m_range=(-1, 0),
     complex_valued=False,
     seed=None,
 ):
@@ -69,12 +55,7 @@ def random_sm(
 
 
 if __name__ == "__main__":
-    s, m = random_sm(5, complex_valued=False, seed=42)
-    a, b = inverse_poles_residues(s, m)
-    print("s:", s)
-    print("m:", m)
-    print("a:", a)
-    print("b:", b)
-    s, m = inverse_poles_residues(a, b)
-    print("Recovered s:", s)
-    print("Recovered m:", m)
+    s, m = random_sm(500, complex_valued=True)
+    rs, rm = inverse(*inverse(s, m))
+    print("|s-rs|:", np.linalg.norm(s - rs))
+    print("|m-rm|:", np.linalg.norm(m - rm))
