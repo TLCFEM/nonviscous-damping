@@ -15,7 +15,7 @@ and each term $\bbf_j$ is governed by the following differential equation:
 \begin{gather}
     \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
 \end{gather}
-where $s_j$ and $m_j$ are two scalar parameters that control the response, $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
+where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions), $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
 \subsection{Displacement Dependent}
@@ -93,6 +93,21 @@ The ratio $\eta_u$ between them is now
 \begin{gather}
 \eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
+
+One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
+\begin{gather}
+m_j\in\mathbb{C},\qquad
+s_j\in\mathbb{C},\qquad
+m_{j+1}=\bar{m_j},\qquad
+s_{j+1}=\bar{s_j},
+\end{gather}
+then denoting $Z_j=\dfrac{s_jm_j}{s_j^2+\omega^2}$, one would have
+\begin{gather}
+Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)
+\end{gather}
+to be strictly real-valued.
+This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
+In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
 
 The multi-term formulation is a straightforward additive extension of the single-term case.
 The resulting dynamic stiffness has the same form as that reported by \citet{Huang2019}, where dissipation is introduced through resistance filtering.
@@ -218,6 +233,7 @@ One shall notice that the proposed implementation has the following advantages.
 \item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
 \item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
 \item The hysteretic damping \citep{Huang2019} can \textbf{always} be converted to an equivalent one that operates on inertial force $\br_{\ba}$. In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
+\item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
 \end{enumerate}
 \begin{breakablealgorithm}
 \setstretch{2}
