@@ -59,3 +59,7 @@ if __name__ == "__main__":
     rs, rm = inverse(*inverse(s, m))
     print("|s-rs|:", np.linalg.norm(s - rs))
     print("|m-rm|:", np.linalg.norm(m - rm))
+
+    ra, rb = inverse([20, 10], [-3, -4])
+    print("ra", ra)
+    print("rb", rb)
