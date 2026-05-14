@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def inverse(s, m):
+def inverse(m, s):
     m = np.asarray(m, dtype=np.complex128)
     ones = np.ones_like(m)
 
@@ -10,15 +10,15 @@ def inverse(s, m):
     ar, R = np.linalg.eig(A)
     al, L = np.linalg.eig(A.T)
 
-    a = ar[idx := np.argsort(ar)]
+    rs = ar[idx := np.argsort(ar)]
     R = R[:, idx]
     L = L[:, np.argsort(al)]
 
-    b = np.zeros_like(a)
-    for k in range(b.size):
-        b[k] = -(ones @ R[:, k]) * (L[:, k] @ m) / (L[:, k] @ R[:, k])
+    rm = np.zeros_like(rs)
+    for k in range(rm.size):
+        rm[k] = -(ones @ R[:, k]) * (L[:, k] @ m) / (L[:, k] @ R[:, k])
 
-    return a, b
+    return rm, rs
 
 
 def random_sm(
@@ -51,15 +51,11 @@ def random_sm(
         s = s_real.astype(np.complex128)
         m = m_real.astype(np.complex128)
 
-    return s, m
+    return m, s
 
 
 if __name__ == "__main__":
-    s, m = random_sm(500, complex_valued=True)
-    rs, rm = inverse(*inverse(s, m))
-    print("|s-rs|:", np.linalg.norm(s - rs))
+    m, s = random_sm(500, complex_valued=True)
+    rm, rs = inverse(*inverse(m, s))
     print("|m-rm|:", np.linalg.norm(m - rm))
-
-    ra, rb = inverse([20, 10], [-3, -4])
-    print("ra", ra)
-    print("rb", rb)
+    print("|s-rs|:", np.linalg.norm(s - rs))
