@@ -244,8 +244,11 @@ One shall notice that the proposed implementation has the following advantages.
 \item It retains the size of the original problem/system.
 \item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
 \item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
-\item The hysteretic damping \citep{Huang2019} can \textbf{always} be converted to an equivalent one that operates on inertial force $\br_{\ba}$. In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
+In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
 \item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
+\item The hysteretic damping \citep{Huang2019} can \textbf{always} be converted to an equivalent one that operates on inertial force $\br_{\ba}$.
+Instead of scaling $\mb{K}$, now we scale $\mb{M}$.
+Noting that in global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ needs to be scaled anyway by a factor, for example, $\dfrac{1}{\beta\Delta{}t^2}$ in Newmark method, accounting for the proposed damping formulation only needs to revise this scalar factor to $\dfrac{1}{\beta\Delta{}t^2}\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$.
 \end{enumerate}
 \begin{breakablealgorithm}
 \setstretch{2}
