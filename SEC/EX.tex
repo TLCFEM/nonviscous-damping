@@ -23,3 +23,26 @@ It is clear that second-order convergence of the used Newmark method is retained
     \includegraphics{PIC/UDD.SDOF.ERROR.pdf}
     \caption{absolute error history of SDOF oscillator (free vibration)}\label{fig:sdof_error}
 \end{figure}
+\subsection{Equivalence}
+\begin{table}
+    \centering\footnotesize
+    \begin{tabular}{cccc}
+        \toprule
+        $m_j$         & $s_j$        & $m'_j$       & $s'_j$       \\
+        \midrule
+        -1.408683e-03 & 7.943400e-02 & 1.053682e-02 & 7.167213e-02 \\
+        -4.346389e-03 & 7.947900e-02 & 6.542804e-08 & 7.944506e-02 \\
+        -1.496775e-02 & 3.766420e-01 & 2.386119e-02 & 3.577093e-01 \\
+        -3.904917e-02 & 1.173000e+00 & 5.716967e-02 & 1.125667e+00 \\
+        -9.693870e-02 & 3.162970e+00 & 1.314155e-01 & 3.049910e+00 \\
+        -2.839401e-01 & 8.528780e+00 & 3.554469e-01 & 8.210599e+00 \\
+        -1.055718e+00 & 2.656430e+01 & 1.209992e+00 & 2.543257e+01 \\
+        -9.116416e+00 & 1.258930e+02 & 8.824363e+00 & 1.169172e+02 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\begin{figure}
+    \centering
+    \includegraphics{PIC/MASS.EQ.pdf}
+    \caption{euivalent inertial formulation}\label{fig:mass_eq}
+\end{figure}
