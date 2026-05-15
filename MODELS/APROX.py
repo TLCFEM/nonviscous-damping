@@ -96,7 +96,7 @@ if __name__ == "__main__":
     fig.add_subplot(2, 1, 2)
 
     t = np.linspace(0, 0.1, 500)
-    kernel = np.zeros_like(t)
+    kernel = np.zeros_like(t, dtype=np.complex128)
     for mj, sj in zip(m, s):
         kernel += mj * np.exp(-sj * t)
     plt.plot(t, np.abs(kernel), ls="dashed", label="$(m_j,s_j)$")
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     plt.plot(t, np.abs(kernel), ls="dotted", label="$(m'_j,s'_j)$")
 
     plt.xlabel("time (s)")
-    plt.ylabel("abs. kernel value")
+    plt.ylabel("abs. kernel value $|g(t)|$")
     plt.xlim(0, 0.1)
     plt.yscale("log")
     plt.legend()
@@ -116,9 +116,10 @@ if __name__ == "__main__":
     plt.text(
         0.07,
         4,
-        r"kernel: $g(t)=\sum_jm_je^{-s_jt}$",
+        r"kernel: $g(t)=\sum{}m_je^{-s_jt}$",
         va="center",
         ha="center",
+        fontsize=8,
         bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.7", alpha=0.9),
     )
 
