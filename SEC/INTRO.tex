@@ -144,6 +144,11 @@ It is easy to see that
 \end{gather}
 With this formulation, the storage stiffness $\mb{K}'$ is independent from frequency $\omega$, there is no extra hardening induced by introduced energy dissipation.
 In the meantime, the loss stiffness possesses the same factor $\dfrac{m_j\omega}{s^2_j+\omega^2}$ as before, enabling customisation of energy dissipation characteristics.
+
+In this formulation, dissipativity requires $\by_j=\by_j(\bv)$ to depend explicitly on $\bv$.
+Moreover, to obtain the desired energy dissipation profile, the dissipation mechanism must be coupled with the stiffness matrix $\mb{K}$.
+Under these requirements, the choice $\by_j=\mb{K}\bv$ emerges as the only viable formulation.
+Consequently, alternative forms are not considered in this work.
 \section{Numerical Implementation}
 \subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
@@ -194,26 +199,7 @@ In some other special cases, this matrix can be diagonal, for example, with $\by
 Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally very efficient, almost trivial.
 
 We in fact have adapted and repurposed the algorithm proposed by \citet{Chang2024} that is originally developed for velocity dependent nonviscous damping.
-\subsection{Some Special Cases}
-\tabref{tab:special} summaries a few special cases.
-\begin{table}[ht!]
-\centering\scriptsize\renewcommand{\arraystretch}{2}
-\caption{some special cases}\label{tab:special}
-\begin{tabular}{ccccc}
-    \toprule
-     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &             Remarks             \\ \midrule
-     real   &  real   &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to \citep{Huang2019}  \\
-     real   &  real   &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to \citep{Huang2019} \\
-    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to \citep{Chang2024}  \\
-    complex & complex &                     $\bu$                      &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &   general hysteretic damping    \\
-    complex & complex &                     $\br$                      &            $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bbar{K}_{n+1}$             &         general damping         \\
-       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &        Rayleigh damping         \\ \bottomrule
-\end{tabular}
-\end{table}
-The proposed damping formulation can be applied at both the global model and element levels.
-Consequently, the energy dissipating force $\bbf$ can be flexibly formulated using either node-based or element-based representations.
-
-Borrowing the relation discussed in the work by \citet{Chang2024}, the proposed damping formulation can also be equivalently expressed as
+Borrowing the relation discussed in the same work, the proposed damping formulation can also be equivalently expressed as
 \begin{gather}
 \br+\sum{}g_j*\by_j=\mb{p}
 \end{gather}
@@ -222,7 +208,6 @@ where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j
 \left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
 \end{gather}
 with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$.
-The proposed formulation is a further generalization of the previous one \citep{Huang2019} that only accepts real parameters.
 
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
@@ -253,3 +238,50 @@ Noting that in global time integration methods that express the equation of moti
 \end{algorithmic}
 \end{breakablealgorithm}
 \subsection{Second Order Formulation}
+The governing system is
+\begin{gather}\label{eq:eqv_sys_2nd}
+\left\{
+\begin{array}{l}
+\ddot{\bbf_j}=s^2_j\bbf_j+m_j\by_j,\\
+\br+\sum\bbf_j=\mb{p}.
+\end{array}\right.
+\end{gather}
+
+Applying the same implicit trapezoidal rule, one can obtain
+\begin{gather}\label{eq:discretised_c_2nd}
+\bbf_{j,n+1}=\dfrac{4+s^2_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\bbf_{j,n}+\dfrac{4\Delta{}t}{4-s^2_j\Delta{}t^2}\dot{\bbf}_{j,n}+\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\left(\by_{j,n}+\by_{j,n+1}\right)
+\end{gather}
+with
+\begin{gather}
+\dot{\bbf}_{j,n+1}=\dfrac{4+s^2_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\dot{\bbf}_{j,n}+\dfrac{4s^2_j\Delta{}t}{4-s^2_j\Delta{}t^2}\bbf_{j,n}+\dfrac{2m_j\Delta{}t}{4-s^2_j\Delta{}t^2}\left(\by_{j,n}+\by_{j,n+1}\right)
+\end{gather}
+as the history variable that needs to stored along with $\bbf_j$.
+However, $\dot{\bbf}_j$ does not enter \eqsref{eq:discretised_c_2nd} so it only needs to be updated at the end of each (sub-)step when convergence is achieved.
+
+The effective stiffness shall be revised as
+\begin{gather}\label{eq:revised_k_2nd}
+\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}.
+\end{gather}
+As we only consider $\by_j=\mb{K}\bv$, the above can be further written as
+\begin{gather}
+\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\ddfrac{\bv_{n+1}}{\bu_{n+1}}\mb{K}_{n+1}.
+\end{gather}
+The additional term is a stiffness proportional `damping' matrix $\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\mb{K}_{n+1}$.
+\subsection{Some Special Cases}
+\tabref{tab:special} summaries a few special cases.
+\begin{table}[ht!]
+\centering\scriptsize\renewcommand{\arraystretch}{2}
+\caption{some special cases}\label{tab:special}
+\begin{tabular}{ccccc}
+    \toprule
+     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &             Remarks             \\ \midrule
+     real   &  real   &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to \citep{Huang2019}  \\
+     real   &  real   &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to \citep{Huang2019} \\
+    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to \citep{Chang2024}  \\
+    complex & complex &                     $\bu$                      &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &   general hysteretic damping    \\
+    complex & complex &                     $\br$                      &            $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bbar{K}_{n+1}$             &         general damping         \\
+       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &        Rayleigh damping         \\ \bottomrule
+\end{tabular}
+\end{table}
+The proposed damping formulations can be applied at both the global model and element levels.
+Consequently, the energy dissipating force $\bbf$ can be flexibly formulated using either node-based or element-based representations.
