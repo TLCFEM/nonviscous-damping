@@ -1,62 +1,27 @@
 \section{A Universal Damping Model}
 Consider the general equation of motion of a dynamic system under external load $\bp\left(t\right)$,
 \begin{gather}
-\br\left(\bu,\bv,\ba\right)=\bp\left(t\right)
+\br\left(\bu,\bv,\ba\right)=\bp\left(t\right),
 \end{gather}
-Additional energy dissipating terms can be introduced,
+where $\br=\br\left(\bu,\bv,\ba\right)$ is the overall resistance of the system, accounting for contributions by displacement $\bu$, velocity $\bv$ and acceleration $\ba$.
+Additional energy dissipating term can be introduced,
 \begin{gather}
 \br+\bbf=\bp,
 \end{gather}
 in which $\bbf$ can be additively decomposed such that
 \begin{gather}
-    \bbf=\sum\bbf_j
+    \bbf=\sum\bbf_j.
 \end{gather}
-and each term $\bbf_j$ is governed by the following differential equation:
+\subsection{First Order Formulation}
+Each term $\bbf_j$ is governed by the following differential equation:
 \begin{gather}
     \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
 \end{gather}
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions), $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
-\subsection{Displacement Dependent}
-\subsubsection{One Single Term}
-Since only one displacement dependent energy dissipating force $\bbf_j$ is considered, the subscript $\left(\cdot\right)_j$ is omitted for brevity.
-By selecting $\by_j=\mb{K}\bu$, the linear elastic system simplifies to the following.
-\begin{gather}
-\left\{\begin{array}{l}
-\mb{M}\ddot{\bu}+\mb{K}\bu+\bbf=\mb{0},\\
-\dot{\bbf}=-s\bbf+m\mb{K}\bu.
-\end{array}\right.
-\end{gather}
-One could obtain
-\begin{gather}
-\mb{M}\dddot{\bu}+\mb{K}\dot{\bu}+s\mb{M}\ddot{\bu}+\left(s+m\right)\mb{K}\bu=\mb{0}.
-\end{gather}
-Assuming a harmonic solution $\bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right)$, the characteristic equation can be obtained as follows.
-\begin{gather}
-\det\left(-i\omega^3\mb{M}-s\omega^2\mb{M}+i\omega\mb{K}+\left(s+m\right)\mb{K}\right)=0.
-\end{gather}
-Rearranging gives
-\begin{multline}
-\det\left(\left(s+m+i\omega\right)\mb{K}-\left(s+i\omega\right)\omega^2\mb{M}\right)=0\\\longrightarrow\qquad
-\det\left(\dfrac{s+m+i\omega}{s+i\omega}\mb{K}-\omega^2\mb{M}\right)=0.
-\end{multline}
-The dynamic stiffness $\mb{K}^*$ is then
-\begin{gather}
-\mb{K}^*=\dfrac{s+m+i\omega}{s+i\omega}\mb{K}=\left(1+\dfrac{m}{s+i\omega}\right)\mb{K},
-\end{gather}
-the corresponding storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$ can be expressed as
-\begin{gather}
-\mb{K}'=\left(1+\dfrac{sm}{s^2+\omega^2}\right)\mb{K},\qquad
-\mb{K}''=-\dfrac{m\omega}{s^2+\omega^2}\mb{K},
-\end{gather}
-such that $\mb{K}^*=\mb{K}'+\mb{K}''i$.
-The ratio $\eta_u$ between them is
-\begin{gather}
-\eta_u=-\dfrac{m\omega}{s^2+sm+\omega^2}.
-\end{gather}
-\subsubsection{Multiple Terms}
-Now consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
+\subsubsection{Displacement Dependent}
+Consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
 \begin{gather}
 \left\{\begin{array}{l}
 \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
@@ -64,7 +29,7 @@ Now consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\m
 \end{array}\right.
 \end{gather}
 Assuming harmonic solutions for both $\bu$ and $\bbf$,
-\begin{gather}
+\begin{gather}\label{eq:harmonic_solution}
 \bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right),\qquad
 \bbf_j\left(t\right)=\mb{F}_j\exp\left(i\omega{}t\right),
 \end{gather}
@@ -84,16 +49,17 @@ The dynamic stiffness is
 \begin{gather}
 \mb{K}^*=\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}
 \end{gather}
-with
+with storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$
 \begin{gather}
 \mb{K}'=\left(1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\right)\mb{K},\qquad
-\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
+\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}
 \end{gather}
-The ratio $\eta_u$ between them is now
+such that $\mb{K}^*=\mb{K}'+\mb{K}''i$.
+The ratio $\eta_u$ between them is
 \begin{gather}
 \eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
-
+\subsubsection{Complex Realm Extension}
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
 m_j\in\mathbb{C},\qquad
@@ -124,7 +90,7 @@ with
 \end{gather}
 By directly applying to displacement $\bu$, the loss stiffness $\mb{K}''$ no longer relies on the rate-independent stiffness $\mb{K}$.
 The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
-\subsection{Acceleration Dependent}
+\subsubsection{Acceleration Dependent}
 We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ directly with identical $\by_j=\mb{M}\ba$.
 The system is
 \begin{gather}
@@ -157,7 +123,29 @@ Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ an
 
 For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+\subsection{Second Order Formulation}
+Assume each term $\bbf_j$ is governed by the following differential equation:
+\begin{gather}
+\ddot{\bbf_j}=s^2_j\bbf_j+m_j\by_j.
+\end{gather}
+Choosing $\by_j=\mb{K}\bv$, assuming harmonic solutions \eqsref{eq:harmonic_solution}, one may derive the following.
+\begin{gather}
+-\omega^2\mb{F}_j=s^2_j\mb{F}_j+i\omega{}m_j\mb{K}\mb{U}\qquad\longrightarrow\qquad
+\mb{F}_j=-\dfrac{i\omega{}m_j}{s^2_j+\omega^2}\mb{K}\mb{U}.
+\end{gather}
+Inserting back to the equation of motion expressed in the frequency domain, the dynamic stiffness can be obtained as
+\begin{gather}
+\mb{K}^*=\left(1-\sum\dfrac{m_j\omega}{s^2_j+\omega^2}i\right)\mb{K}.
+\end{gather}
+It is easy to see that
+\begin{gather}
+\mb{K}'=\mb{K},\qquad
+\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
+\end{gather}
+With this formulation, the storage stiffness $\mb{K}'$ is independent from frequency $\omega$, there is no extra hardening induced by introduced energy dissipation.
+In the meantime, the loss stiffness possesses the same factor $\dfrac{m_j\omega}{s^2_j+\omega^2}$ as before, enabling customisation of energy dissipation characteristics.
 \section{Numerical Implementation}
+\subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
 The governing system is
 \begin{gather}\label{eq:eqv_sys}
@@ -264,3 +252,4 @@ Noting that in global time integration methods that express the equation of moti
 \State update and return $\bu\leftarrow\bu+\delta\bu$
 \end{algorithmic}
 \end{breakablealgorithm}
+\subsection{Second Order Formulation}
