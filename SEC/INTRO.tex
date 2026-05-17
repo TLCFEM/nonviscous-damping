@@ -12,7 +12,6 @@ in which $\bbf$ can be additively decomposed such that
 \begin{gather}
     \bbf=\sum\bbf_j.
 \end{gather}
-\subsection{First Order Formulation}
 Each term $\bbf_j$ is governed by the following differential equation:
 \begin{gather}
     \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
@@ -20,7 +19,7 @@ Each term $\bbf_j$ is governed by the following differential equation:
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions), $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
-\subsubsection{Displacement Dependent}
+\subsection{Displacement Dependent}
 Consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
 \begin{gather}
 \left\{\begin{array}{l}
@@ -59,7 +58,7 @@ The ratio $\eta_u$ between them is
 \begin{gather}
 \eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
-\subsubsection{Complex Realm Extension}
+\subsection{Complex Realm Extension}
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
 m_j\in\mathbb{C},\qquad
@@ -71,14 +70,10 @@ then denoting $Z_j=\dfrac{s_jm_j}{s_j^2+\omega^2}$, one would have
 \begin{gather}
 Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)
 \end{gather}
-to be strictly real-valued.
+to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
-
-The multi-term formulation is a straightforward additive extension of the single-term case.
-The resulting dynamic stiffness has the same form as that reported by \citet{Huang2019}, where dissipation is introduced through resistance filtering.
-The foregoing derivation therefore provides an alternative differential equation based formulation.
-\subsubsection{Alternative Form Applied to Displacement Directly}
+\subsection{Alternative Form Applied to Displacement Directly}
 Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
 \begin{gather}
 \mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
@@ -90,8 +85,8 @@ with
 \end{gather}
 By directly applying to displacement $\bu$, the loss stiffness $\mb{K}''$ no longer relies on the rate-independent stiffness $\mb{K}$.
 The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
-\subsubsection{Acceleration Dependent}
-We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ directly with identical $\by_j=\mb{M}\ba$.
+\subsection{Acceleration Dependent}
+We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{M}\ba$.
 The system is
 \begin{gather}
 \left\{\begin{array}{l}
@@ -103,7 +98,7 @@ Adopting a similar approach, the characteristic equation can be derived as
 \begin{gather}\label{eq:acc_cha}
 \det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
-The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient in the expression of dynamic stiffness is the reciprocal of that in the previous displacement dependent case.
+The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient is the reciprocal of that in the previous displacement dependent case.
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
@@ -122,33 +117,9 @@ Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ an
 \end{gather}
 
 For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
+This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
+Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
-\subsection{Second Order Formulation}
-Assume each term $\bbf_j$ is governed by the following differential equation:
-\begin{gather}
-\ddot{\bbf_j}=s^2_j\bbf_j+m_j\by_j.
-\end{gather}
-Choosing $\by_j=\mb{K}\bv$, assuming harmonic solutions \eqsref{eq:harmonic_solution}, one may derive the following.
-\begin{gather}
--\omega^2\mb{F}_j=s^2_j\mb{F}_j+i\omega{}m_j\mb{K}\mb{U}\qquad\longrightarrow\qquad
-\mb{F}_j=-\dfrac{i\omega{}m_j}{s^2_j+\omega^2}\mb{K}\mb{U}.
-\end{gather}
-Inserting back to the equation of motion expressed in the frequency domain, the dynamic stiffness can be obtained as
-\begin{gather}
-\mb{K}^*=\left(1-\sum\dfrac{m_j\omega}{s^2_j+\omega^2}i\right)\mb{K}.
-\end{gather}
-It is easy to see that
-\begin{gather}
-\mb{K}'=\mb{K},\qquad
-\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
-\end{gather}
-With this formulation, the storage stiffness $\mb{K}'$ is independent from frequency $\omega$, there is no extra hardening induced by introduced energy dissipation.
-In the meantime, the loss stiffness possesses the same factor $\dfrac{m_j\omega}{s^2_j+\omega^2}$ as before, enabling customisation of energy dissipation characteristics.
-
-In this formulation, dissipativity requires $\by_j=\by_j(\bv)$ to depend explicitly on $\bv$.
-Moreover, to obtain the desired energy dissipation profile, the dissipation mechanism must be coupled with the stiffness matrix $\mb{K}$.
-Under these requirements, the choice $\by_j=\mb{K}\bv$ emerges as the only viable formulation.
-Consequently, alternative forms are not considered in this work.
 \section{Numerical Implementation}
 \subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
@@ -164,7 +135,7 @@ A practical simplification may assume the contributions of $\bu$, $\bv=\dot{\bu}
 \begin{gather}
     \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
 \end{gather}
-such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ with $\baleph\in\left\{\bu,\bv,\ba\right\}$.
+such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
 
 The first expression is a first-order ODE (of $\bbf_j$) that can be integrated by the (implicit) trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
@@ -196,7 +167,7 @@ It thus can be concluded from \eqsref{eq:revised_k} that to account for this add
 In some certain cases, this additional matrix can be very efficiently formulated.
 For example, if $\by_j=\br_{\bu}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the stiffness matrix $\mb{K}_{n+1}$ that is already available in the original formulation.
 In some other special cases, this matrix can be diagonal, for example, with $\by_j=\bu$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\mb{I}$ is a unit matrix.
-Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally very efficient, almost trivial.
+Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally almost trivial.
 
 We in fact have adapted and repurposed the algorithm proposed by \citet{Chang2024} that is originally developed for velocity dependent nonviscous damping.
 Borrowing the relation discussed in the same work, the proposed damping formulation can also be equivalently expressed as
@@ -237,36 +208,6 @@ Noting that in global time integration methods that express the equation of moti
 \State update and return $\bu\leftarrow\bu+\delta\bu$
 \end{algorithmic}
 \end{breakablealgorithm}
-\subsection{Second Order Formulation}
-The governing system is
-\begin{gather}\label{eq:eqv_sys_2nd}
-\left\{
-\begin{array}{l}
-\ddot{\bbf_j}=s^2_j\bbf_j+m_j\by_j,\\
-\br+\sum\bbf_j=\mb{p}.
-\end{array}\right.
-\end{gather}
-
-Applying the same implicit trapezoidal rule, one can obtain
-\begin{gather}\label{eq:discretised_c_2nd}
-\bbf_{j,n+1}=\dfrac{4+s^2_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\bbf_{j,n}+\dfrac{4\Delta{}t}{4-s^2_j\Delta{}t^2}\dot{\bbf}_{j,n}+\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\left(\by_{j,n}+\by_{j,n+1}\right)
-\end{gather}
-with
-\begin{gather}
-\dot{\bbf}_{j,n+1}=\dfrac{4+s^2_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\dot{\bbf}_{j,n}+\dfrac{4s^2_j\Delta{}t}{4-s^2_j\Delta{}t^2}\bbf_{j,n}+\dfrac{2m_j\Delta{}t}{4-s^2_j\Delta{}t^2}\left(\by_{j,n}+\by_{j,n+1}\right)
-\end{gather}
-as the history variable that needs to stored along with $\bbf_j$.
-However, $\dot{\bbf}_j$ does not enter \eqsref{eq:discretised_c_2nd} so it only needs to be updated at the end of each (sub-)step when convergence is achieved.
-
-The effective stiffness shall be revised as
-\begin{gather}\label{eq:revised_k_2nd}
-\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}.
-\end{gather}
-As we only consider $\by_j=\mb{K}\bv$, the above can be further written as
-\begin{gather}
-\bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\ddfrac{\bv_{n+1}}{\bu_{n+1}}\mb{K}_{n+1}.
-\end{gather}
-The additional term is a stiffness proportional `damping' matrix $\sum\dfrac{m_j\Delta{}t^2}{4-s^2_j\Delta{}t^2}\mb{K}_{n+1}$.
 \subsection{Some Special Cases}
 \tabref{tab:special} summaries a few special cases.
 \begin{table}[ht!]
