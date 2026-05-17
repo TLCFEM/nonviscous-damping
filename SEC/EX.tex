@@ -1,5 +1,5 @@
 \section{Numerical Examples}
-\subsection{A SDOF System}
+\subsection{A SDOF System with First Order Formulation}
 We consider a SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$.
 The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u}(0)=0$.
 \begin{gather}
@@ -46,3 +46,26 @@ It is clear that second-order convergence of the used Newmark method is retained
     \includegraphics{PIC/MASS.EQ.pdf}
     \caption{euivalent inertial formulation}\label{fig:mass_eq}
 \end{figure}
+\subsection{A SDOF System with Second Order Formulation}
+We consider a SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$.
+The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u}(0)=0$.
+\begin{gather}
+    \left\{\begin{array}{l}
+        \ddot{u}+\omega_n^2u+f=0, \\
+        \ddot{f}=s^2f+m\omega^2_n\dot{u}.
+    \end{array}\right.
+\end{gather}
+The characteristic equation can be derived as
+\begin{gather}
+\lambda^4+\left(\omega_n^2-s^2\right)\lambda^2+m\omega^2_n\lambda-s^2\omega_n^2=0.
+\end{gather}
+This quartic function can be decomposed into the product of two quadratic functions:
+\begin{gather}
+\lambda^4+\left(\omega_n^2-s^2\right)\lambda^2+m\omega^2_n\lambda-s^2\omega_n^2=\left(\lambda^2+a\lambda+b\right)\left(\lambda^2-a\lambda+c\right),
+\end{gather}
+providing that
+\begin{gather}
+b+c-a^2=\omega_n^2-s^2,\qquad
+ac-ab=m\omega^2_n,\qquad
+bc=-s^2\omega_n^2.
+\end{gather}
