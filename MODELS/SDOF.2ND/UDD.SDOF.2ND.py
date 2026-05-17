@@ -73,7 +73,7 @@ def system(omega, s, m):
 
     w = np.linalg.solve(
         coef,
-        np.array([u0, v0, -u0 * (s**2), (omega**2 - s**2) * v0 + m * u0 * omega**2]),
+        np.array([u0, v0, -u0 * (s**2), -v0 * s**2 + m * u0 * omega**2]),
     )
 
     def _f(_t):
@@ -120,6 +120,8 @@ def run():
     results = {}
 
     sdof = analytical([10, 10, -2])
+
+    fig.savefig("../../PIC/UDD.SDOF.2ND.pdf")
 
     return
     # results["0.0001"] = numerical(sdof, 0.0001)
