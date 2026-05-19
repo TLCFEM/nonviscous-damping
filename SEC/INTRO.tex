@@ -19,7 +19,7 @@ Each term $\bbf_j$ is governed by the following differential equation:
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions), $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
-\subsection{Displacement Dependent}
+\subsection{Displacement Dependent}\label{sec:u_dep}
 Consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
 \begin{gather}
 \left\{\begin{array}{l}
@@ -49,7 +49,7 @@ The dynamic stiffness is
 \mb{K}^*=\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}
 \end{gather}
 with storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$
-\begin{gather}
+\begin{gather}\label{eq:u_stiffnesses}
 \mb{K}'=\left(1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\right)\mb{K},\qquad
 \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}
 \end{gather}
@@ -58,6 +58,19 @@ The ratio $\eta_u$ between them is
 \begin{gather}
 \eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
+This is the uniform damping proposed by \citet{Huang2019}.
+
+Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
+\begin{gather}
+\mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
+\end{gather}
+with
+\begin{gather}
+\mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
+\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
+\end{gather}
+By directly applying to displacement $\bu$, the loss stiffness $\mb{K}''$ no longer relies on the rate-independent stiffness $\mb{K}$.
+The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
 \subsection{Complex Realm Extension}
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
@@ -73,18 +86,6 @@ Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)
 to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
-\subsection{Alternative Form Applied to Displacement Directly}
-Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
-\begin{gather}
-\mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
-\end{gather}
-with
-\begin{gather}
-\mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
-\mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
-\end{gather}
-By directly applying to displacement $\bu$, the loss stiffness $\mb{K}''$ no longer relies on the rate-independent stiffness $\mb{K}$.
-The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
 \subsection{Acceleration Dependent}
 We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{M}\ba$.
 The system is
@@ -120,6 +121,25 @@ For any given sets of $s_j$ and $m_j$, it is thus possible to find the correspon
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+\subsection{Velocity Dependent}
+We consider multiple velocity dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{M}\bv$.
+The system becomes
+\begin{gather}
+\left\{\begin{array}{l}
+\mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
+\dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\dot{\bu}.
+\end{array}\right.
+\end{gather}
+The characteristic equation can be derived as
+\begin{gather}\label{eq:vel_cha}
+\det\left(\left(1+\sum\dfrac{m_ji\omega}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}\right)=0.
+\end{gather}
+Thus,
+\begin{gather}
+\mb{K}'=\left(1+\sum\dfrac{m_j\omega^2}{s_j^2+\omega^2}\right)\mb{K},\qquad
+\mb{K}''=\sum\dfrac{s_jm_j\omega}{s_j^2+\omega^2}\mb{K}.
+\end{gather}
+Compared to the displacement dependent formulation as discussed in \secref{sec:u_dep}, this velocity dependent formation is more advantageous.
 \section{Numerical Implementation}
 \subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
