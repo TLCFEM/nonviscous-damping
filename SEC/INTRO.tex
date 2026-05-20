@@ -58,7 +58,11 @@ The ratio $\eta_u$ between them is
 \begin{gather}
 \eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
 \end{gather}
-This is the uniform damping proposed by \citet{Huang2019}.
+One could identify
+\begin{gather}
+\lim\limits_{\omega\rightarrow0}\mb{K}'=\left(1+\sum\dfrac{m_j}{s_j}\right)\mb{K},\qquad
+\lim\limits_{\omega\rightarrow\infty}\mb{K}'=\mb{K}.
+\end{gather}
 
 Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
 \begin{gather}
@@ -122,7 +126,7 @@ This process naturally extends the definition of $s_j$ and $m_j$ to the complex 
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \subsection{Velocity Dependent}
-We consider multiple velocity dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{M}\bv$.
+We consider multiple velocity dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{K}\bv$.
 The system becomes
 \begin{gather}
 \left\{\begin{array}{l}
@@ -139,7 +143,11 @@ Thus,
 \mb{K}'=\left(1+\sum\dfrac{m_j\omega^2}{s_j^2+\omega^2}\right)\mb{K},\qquad
 \mb{K}''=\sum\dfrac{s_jm_j\omega}{s_j^2+\omega^2}\mb{K}.
 \end{gather}
-Compared to the displacement dependent formulation as discussed in \secref{sec:u_dep}, this velocity dependent formation is more advantageous.
+One could identify
+\begin{gather}
+\lim\limits_{\omega\rightarrow0}\mb{K}'=\mb{K},\qquad
+\lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1+\sum{}m_j\right)\mb{K}.
+\end{gather}
 \section{Numerical Implementation}
 \subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
