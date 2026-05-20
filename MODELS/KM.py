@@ -10,15 +10,9 @@ def inverse(m, s):
         np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
     )
 
-    rs = ar[idx := np.argsort(ar)]
-    R = R[:, idx]
-    L = np.linalg.inv(R).T
+    R = R[:, idx := np.argsort(ar)]
 
-    rm = np.zeros_like(rs)
-    for k in range(rm.size):
-        rm[k] = -(ones @ R[:, k]) * (L[:, k] @ m)
-
-    return rm, rs
+    return -(ones @ R) * np.linalg.solve(R, m), ar[idx]
 
 
 def inverse_rate(m, s):
@@ -29,15 +23,9 @@ def inverse_rate(m, s):
         np.diag(np.asarray(s, dtype=np.complex128)) - np.outer(m, ones)
     )
 
-    rs = ar[idx := np.argsort(ar)]
-    R = R[:, idx]
-    L = np.linalg.inv(R).T
+    R = R[:, idx := np.argsort(ar)]
 
-    rm = np.zeros_like(rs)
-    for k in range(rm.size):
-        rm[k] = -(ones @ R[:, k]) * (L[:, k] @ m)
-
-    return rm, rs
+    return -(ones @ R) * np.linalg.solve(R, m), ar[idx]
 
 
 def plot_response(m, s, ax, omega=None, w_min=None, w_max=None, reciprocal=False):
