@@ -24,6 +24,7 @@ It is clear that second-order convergence of the used Newmark method is retained
     \caption{absolute error history of SDOF oscillator (free vibration)}\label{fig:sdof_error}
 \end{figure}
 \subsection{Equivalence}
+Although mathematically it have been proved that the two forms \secref{sec:u_dep} and \secref{sec:a_dep} are equivalent to each other, we present a numerical example using the following parameters.
 \begin{table}
     \centering\footnotesize
     \begin{tabular}{cccc}
@@ -41,8 +42,10 @@ It is clear that second-order convergence of the used Newmark method is retained
         \bottomrule
     \end{tabular}
 \end{table}
+As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
+However, the corresponding kernel functions are different (as expected).
 \begin{figure}
     \centering
     \includegraphics{PIC/MASS.EQ.pdf}
-    \caption{euivalent inertial formulation}\label{fig:mass_eq}
+    \caption{equivalent inertial formulation}\label{fig:mass_eq}
 \end{figure}

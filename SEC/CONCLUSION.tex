@@ -1,7 +1,8 @@
 \section{Conclusions}
 \begin{itemize}
-\item A generalized damping model is formulated via differential equations, extending the capabilities of previous filter-based approaches \cite{Huang2019}.
-\item The proposed numerical implementation maintains a quadratic convergence rate and ensures compatibility with diverse global time integration schemes.
-\item While displacement--dependent and acceleration--dependent formulations are mathematically equivalent, the latter often provides superior numerical efficiency.
-\item The framework can be recast into the convolution form defined in \eqref{eq:conv}.
+\item The general damping formulation \eqsref{eq:general_eom} is analysed via four distinct variants: \secref{sec:u_dep}, \secref{sec:a_dep}, \secref{sec:v_dep_k}, and \secref{sec:v_dep_m}.
+\item Pairwise equivalences exist between \secref{sec:u_dep} and \secref{sec:a_dep}, as well as between \secref{sec:v_dep_k} and \secref{sec:v_dep_m}.
+All four variants accommodate complex conjugate parameter pairs ($m_j$, $s_j$), offering enhanced flexibility for tailoring damping responses.
+\item \eqsref{eq:general_eom} with \eqsref{eq:general_de} can be recast into the convolution form of \eqsref{eq:conv}, providing an alternative interpretation.
+\item The formulation in \secref{sec:v_dep_k} extends the model proposed by \citet{Huang2019}.
 \end{itemize}

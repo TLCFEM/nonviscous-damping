@@ -1,11 +1,11 @@
-\section{A Universal Damping Model}
+\section{A General Nonviscous Damping Formulation}
 Consider the general equation of motion of a dynamic system under external load $\bp\left(t\right)$,
 \begin{gather}
 \br\left(\bu,\bv,\ba\right)=\bp\left(t\right),
 \end{gather}
 where $\br=\br\left(\bu,\bv,\ba\right)$ is the overall resistance of the system, accounting for contributions by displacement $\bu$, velocity $\bv$ and acceleration $\ba$.
 Additional energy dissipating term can be introduced,
-\begin{gather}
+\begin{gather}\label{eq:general_eom}
 \br+\bbf=\bp,
 \end{gather}
 in which $\bbf$ can be additively decomposed such that
@@ -13,13 +13,13 @@ in which $\bbf$ can be additively decomposed such that
     \bbf=\sum\bbf_j.
 \end{gather}
 Each term $\bbf_j$ is governed by a first-order differential equation such that
-\begin{gather}
+\begin{gather}\label{eq:general_de}
 \dot{\bbf}_j=g\left(\bbf_j,\by_j\right)
 \end{gather}
 where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field that depends on $\bu$, $\bv$ and/or $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
-\subsection{Displacement Dependent}\label{sec:u_dep}
+\subsection{Formulation 1}\label{sec:u_dep}
 Assuming each term $\bbf_j$ is governed by the following differential equation:
 \begin{gather}
     \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu
@@ -92,7 +92,7 @@ Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)
 to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
-\subsection{Acceleration Dependent}
+\subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
 The system is
 \begin{gather}
@@ -127,7 +127,7 @@ For any given sets of $s_j$ and $m_j$, it is thus possible to find the correspon
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
-\subsection{Velocity Dependent}
+\subsection{Formulation 3}\label{sec:v_dep_k}
 We consider $\by_j=\mb{K}\bv$, the system becomes
 \begin{gather}\label{eq:vel_formulation}
 \left\{\begin{array}{l}
@@ -150,15 +150,22 @@ One could identify
 \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1+\sum{}m_j\right)\mb{K}.
 \end{gather}
 A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019}.
-
+\subsection{Formulation 4}\label{sec:v_dep_m}
 Alternatively, consider $\by_j=\mb{M}\dot{\ba}$, the corresponding characteristic equation can be expressed as
-\begin{gather}
+\begin{gather}\label{eq:vel_cha2}
 \det\left(\mb{K}-\left(1+\sum\dfrac{m_ji\omega}{s_j+i\omega}\right)\omega^2\mb{M}\right)=0,
 \end{gather}
 resulting the dynamic stiffness
 \begin{gather}
 \mb{K}^*=\dfrac{1}{1+\sum\dfrac{m_ji\omega}{s_j+i\omega}}\mb{K}.
 \end{gather}
+Similar to the previous case, via partial fraction decomposition, it is possible to find $s'_j$ and $m'_j$ (explicit expressions are not shown for brevity) such that
+\begin{gather}
+\dfrac{1}{1+\sum\dfrac{m_ji\omega}{s_j+i\omega}}=1+\sum\dfrac{m'_ji\omega}{s'_j+i\omega},
+\end{gather}
+effectively making \eqsref{eq:vel_cha2} an equivalent alternative formulation of \eqsref{eq:vel_cha}.
+Because computing and storing $\dot{\ba}=\dddot{\bu}$ is \textbf{not} supported in typical analysis frameworks, this practically restrictive formulation is presented solely to establish the equivalence between the two forms.
+Should $\dddot{\bu}$ be tracked, the system can leverage the unique characteristics of the mass matrix detailed in previous sections.
 \subsection{Remarks}
 Borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed three formulations can also be equivalently expressed as
 \begin{gather}
@@ -170,8 +177,8 @@ where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j
 \end{gather}
 with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$ and $\by_j$ possessing various forms.
 \section{Numerical Implementation}
-\subsection{First Order Formulation}
-To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
+\subsection{A Reference Algorithm}
+The algorithm discussed in the previous work \citep{Chang2024} is repurposed here to cater various types of systems.
 The governing system is
 \begin{gather}\label{eq:eqv_sys}
 \left\{
@@ -180,12 +187,6 @@ The governing system is
 \br+\sum\bbf_j=\mb{p}.
 \end{array}\right.
 \end{gather}
-A practical simplification may assume the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
-\begin{gather}
-    \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
-\end{gather}
-such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
-
 The first expression is a first-order ODE (of $\bbf_j$) that can be integrated by the (implicit) trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
 \bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\dot{\bbf}_{j,n}+\dot{\bbf}_{j,n+1}\right).
@@ -200,7 +201,7 @@ one may further rearrange to obtain
 \end{gather}
 in which subscripts $\left(\cdot\right)_n$ and $\left(\cdot\right)_{n+1}$ denote the corresponding quantity at $t_n$ and $t_{n+1}=t_n+\Delta{}t$.
 
-Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the Newmark method), the second expression is
+Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well known Newmark method), the second expression is
 \begin{gather}\label{eq:residual}
     \br_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1}=\mb{p}_{n+1}.
 \end{gather}
@@ -212,26 +213,21 @@ in which the conventional effective stiffness $\bbar{K}_{n+1}$ is
 \begin{gather}
 \bbar{K}_{n+1}=\ddfrac{\br_{n+1}}{\bu_{n+1}}=\mb{K}_{n+1}+\mb{C}_{n+1}\ddfrac{\bv_{n+1}}{\bu_{n+1}}+\mb{M}_{n+1}\ddfrac{\ba_{n+1}}{\bu_{n+1}}.
 \end{gather}
+By the above, we have assumed that the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
+\begin{gather}
+    \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
+\end{gather}
+such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
+
 It thus can be concluded from \eqsref{eq:revised_k} that to account for this additional energy dissipating term $\bbf$, only an additional matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ needs to be added to the original effective stiffness $\bbar{K}_{n+1}$.
 In some certain cases, this additional matrix can be very efficiently formulated.
-For example, if $\by_j=\br_{\bu}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the stiffness matrix $\mb{K}_{n+1}$ that is already available in the original formulation.
-In some other special cases, this matrix can be diagonal, for example, with $\by_j=\bu$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\mb{I}$ is a unit matrix.
-Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally almost trivial.
+For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the stiffness matrix $\mb{K}_{n+1}$ (or the mass matrix $\mb{M}_{n+1}$) that is already available in the original formulation.
+In some other special cases, this matrix can be diagonal, for example, with $\by_j\in\{\bu,\bv,\ba\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with possibly a non-unit scalar $\alpha$.
+Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
 The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{K}$ is real--valued.
-One shall notice that the proposed implementation has the following advantages.
-\begin{enumerate}
-\item It retains the size of the original problem/system.
-\item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
-\item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
-\item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
-In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
-\item The displacement dependent formulation can \textbf{always} be converted to an equivalent acceleration dependent one that operates on inertial force $\br_{\ba}$.
-Instead of scaling $\mb{K}$, now we scale $\mb{M}$.
-Noting that in global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ needs to be scaled anyway by a factor, for example, $\dfrac{1}{\beta\Delta{}t^2}$ in Newmark method, accounting for the proposed damping formulation only needs to revise this scalar factor to $\dfrac{1}{\beta\Delta{}t^2}\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$.
-\end{enumerate}
 \begin{breakablealgorithm}
 \setstretch{2}
 \caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
@@ -246,20 +242,35 @@ Noting that in global time integration methods that express the equation of moti
 \State update and return $\bu\leftarrow\bu+\delta\bu$
 \end{algorithmic}
 \end{breakablealgorithm}
-\subsection{Some Special Cases}
+\subsection{Remarks}
 \tabref{tab:special} summaries a few special cases.
 \begin{table}[ht!]
 \centering\scriptsize\renewcommand{\arraystretch}{2}
 \caption{some special cases}\label{tab:special}
 \begin{tabular}{ccccc}
     \toprule
-     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &             Remarks              \\ \midrule
-    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    &  identical to \citep{Chang2024}  \\
-     real   &  real   &                  $\mb{K}\bv$                   &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{K}$    &  identical to \citep{Huang2019}  \\
-    complex & complex &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              &        hysteretic damping        \\
-    complex & complex &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to hysteretic damping \\
-       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &         Rayleigh damping         \\ \bottomrule
+            ref.         &  $s_j$  &  $m_j$  &                    $\by_j$                     &            remarks             \\ \midrule
+                         & complex & complex &                     $\bv$                      & identical to \citep{Chang2024} \\ \midrule
+                         &  real   &  real   &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)     & identical to \citep{Huang2019} \\
+    \secref{sec:v_dep_k} & complex & complex &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)     & complex extension of the above \\
+    \secref{sec:v_dep_m} & complex & complex & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$)  &    equivalent to the above     \\ \midrule
+     \secref{sec:u_dep}  & complex & complex &                  $\br_{\bu}$                   &       hysteretic damping       \\
+     \secref{sec:a_dep}  & complex & complex &                  $\br_{\ba}$                   &    equivalent to the above     \\ \midrule
+                         &    0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &        Rayleigh damping
 \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
 Consequently, the energy dissipating force $\bbf$ can be flexibly formulated using either node-based or element-based representations.
+
+One shall notice that the proposed formulations has the following advantages.
+\begin{enumerate}
+\item It retains the size of the original problem/system.
+\item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
+\item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
+\item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
+In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
+\item The reciprocal formulations are equivalent mathematically.
+In absence of other energy dissipating actions (such as conventional viscous damping), one form can be converted into another.
+Instead of scaling $\mb{K}$, it is possible to scale $\mb{M}$ in the equivalent form.
+Noting that in global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ needs to be scaled anyway by a factor, for example, $\dfrac{1}{\beta\Delta{}t^2}$ in Newmark method, accounting for the proposed damping formulation only needs to revise this scalar factor to $\dfrac{1}{\beta\Delta{}t^2}\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$.
+\end{enumerate}
