@@ -12,15 +12,20 @@ in which $\bbf$ can be additively decomposed such that
 \begin{gather}
     \bbf=\sum\bbf_j.
 \end{gather}
-Each term $\bbf_j$ is governed by the following differential equation:
+Each term $\bbf_j$ is governed by a first-order differential equation such that
 \begin{gather}
-    \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
+\dot{\bbf}_j=g\left(\bbf_j,\by_j\right)
 \end{gather}
-where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions), $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is a function of $\bu$, $\bv$ and $\ba$.
+where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field that depends on $\bu$, $\bv$ and/or $\ba$.
 Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 The specific form of $\by_j$ will be discussed in the following sections.
 \subsection{Displacement Dependent}\label{sec:u_dep}
-Consider multiple energy dissipating terms $\bbf_j$ with identical $\by_j=\mb{K}\bu$, all contributing to the equation of motion, one have
+Assuming each term $\bbf_j$ is governed by the following differential equation:
+\begin{gather}
+    \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu
+\end{gather}
+where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions).
+The system becomes
 \begin{gather}
 \left\{\begin{array}{l}
 \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
@@ -36,15 +41,12 @@ the second expression can be expressed in the frequency domain as
 \begin{gather}
 i\omega\mb{F}_j=-s_j\mb{F}_j+m_j\mb{K}\mb{U},
 \end{gather}
-thus
-\begin{gather}
-\mb{F}_j=\dfrac{m_j}{s_j+i\omega}\mb{K}\mb{U}.
-\end{gather}
+thus $\mb{F}_j=\dfrac{m_j}{s_j+i\omega}\mb{K}\mb{U}$.
 The characteristic equation can then be derived as
 \begin{gather}\label{eq:disp_cha}
 \det\left(\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
-The dynamic stiffness is
+The dynamic stiffness $\mb{K}^*$ is
 \begin{gather}
 \mb{K}^*=\left(1+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}
 \end{gather}
@@ -54,17 +56,17 @@ with storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$
 \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}
 \end{gather}
 such that $\mb{K}^*=\mb{K}'+\mb{K}''i$.
-The ratio $\eta_u$ between them is
-\begin{gather}
-\eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
-\end{gather}
+%The ratio $\eta_u$ between them is
+%\begin{gather}
+%\eta_u=-\dfrac{\sum\dfrac{m_j\omega}{s_j^2+\omega^2}}{1+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}}.
+%\end{gather}
 One could identify
 \begin{gather}
 \lim\limits_{\omega\rightarrow0}\mb{K}'=\left(1+\sum\dfrac{m_j}{s_j}\right)\mb{K},\qquad
 \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\mb{K}.
 \end{gather}
 
-Now choose $\by_j=\bu$, repeating the above procedure, one can obtain the corresponding dynamic stiffness as follows.
+Repeating the above procedure with $\by_j=\bu$, one can obtain the following dynamic stiffness.
 \begin{gather}
 \mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
 \end{gather}
@@ -91,7 +93,7 @@ to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
 \subsection{Acceleration Dependent}
-We consider multiple acceleration dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{M}\ba$.
+Alternatively, one can pick $\by_j=\mb{M}\ba$.
 The system is
 \begin{gather}
 \left\{\begin{array}{l}
@@ -126,9 +128,8 @@ This process naturally extends the definition of $s_j$ and $m_j$ to the complex 
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \subsection{Velocity Dependent}
-We consider multiple velocity dependent energy dissipation forces $\bbf_j$ with identical $\by_j=\mb{K}\bv$.
-The system becomes
-\begin{gather}
+We consider $\by_j=\mb{K}\bv$, the system becomes
+\begin{gather}\label{eq:vel_formulation}
 \left\{\begin{array}{l}
 \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0},\\
 \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\dot{\bu}.
@@ -148,6 +149,17 @@ One could identify
 \lim\limits_{\omega\rightarrow0}\mb{K}'=\mb{K},\qquad
 \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1+\sum{}m_j\right)\mb{K}.
 \end{gather}
+A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019}.
+\subsection{Remarks}
+Borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed three formulations can also be equivalently expressed as
+\begin{gather}
+\br+\sum{}g_j*\by_j=\mb{p}
+\end{gather}
+where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j$, that is,
+\begin{gather}\label{eq:conv}
+\left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
+\end{gather}
+with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$ and $\by_j$ possessing various forms.
 \section{Numerical Implementation}
 \subsection{First Order Formulation}
 To develop a general algorithm that can be universally applied to various types of systems, we turn back to the general expression with multiple energy dissipating terms $\bbf_j$ that pair with different $\by_j$ terms.
@@ -197,28 +209,17 @@ For example, if $\by_j=\br_{\bu}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is sim
 In some other special cases, this matrix can be diagonal, for example, with $\by_j=\bu$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\mb{I}$ is a unit matrix.
 Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is computationally almost trivial.
 
-We in fact have adapted and repurposed the algorithm proposed by \citet{Chang2024} that is originally developed for velocity dependent nonviscous damping.
-Borrowing the relation discussed in the same work, the proposed damping formulation can also be equivalently expressed as
-\begin{gather}
-\br+\sum{}g_j*\by_j=\mb{p}
-\end{gather}
-where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j$, that is,
-\begin{gather}\label{eq:conv}
-\left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
-\end{gather}
-with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$.
-
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
 The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{K}$ is real--valued.
 One shall notice that the proposed implementation has the following advantages.
 \begin{enumerate}
 \item It retains the size of the original problem/system.
+\item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
 \item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
 \item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
 In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
-\item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
-\item The hysteretic damping \citep{Huang2019} can \textbf{always} be converted to an equivalent one that operates on inertial force $\br_{\ba}$.
+\item The displacement dependent formulation can \textbf{always} be converted to an equivalent acceleration dependent one that operates on inertial force $\br_{\ba}$.
 Instead of scaling $\mb{K}$, now we scale $\mb{M}$.
 Noting that in global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ needs to be scaled anyway by a factor, for example, $\dfrac{1}{\beta\Delta{}t^2}$ in Newmark method, accounting for the proposed damping formulation only needs to revise this scalar factor to $\dfrac{1}{\beta\Delta{}t^2}\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$.
 \end{enumerate}
@@ -231,7 +232,7 @@ Noting that in global time integration methods that express the equation of moti
 \State \textbf{Output}: $\bu$
 \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
 \State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}$\Comment{\eqsref{eq:revised_k}}
-\State \faMicrochip~compute revised resistance $\bhat{r}=\br+\sum\bbf$
+\State \faMicrochip~compute revised resistance $\bhat{r}=\br+\sum\bbf_j$
 \State $\delta\bu=\bhat{K}^{-1}\left(\mb{p}-\bhat{r}\right)$
 \State update and return $\bu\leftarrow\bu+\delta\bu$
 \end{algorithmic}
@@ -243,13 +244,12 @@ Noting that in global time integration methods that express the equation of moti
 \caption{some special cases}\label{tab:special}
 \begin{tabular}{ccccc}
     \toprule
-     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &             Remarks             \\ \midrule
-     real   &  real   &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              & identical to \citep{Huang2019}  \\
-     real   &  real   &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to \citep{Huang2019} \\
-    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    & identical to \citep{Chang2024}  \\
-    complex & complex &                     $\bu$                      &                $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{I}$                 &   general hysteretic damping    \\
-    complex & complex &                     $\br$                      &            $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bbar{K}_{n+1}$             &         general damping         \\
-       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &        Rayleigh damping         \\ \bottomrule
+     $s_j$  &  $m_j$  &                    $\by_j$                     &                         $\bhat{K}_{n+1}-\bbar{K}_{n+1}$                         &             Remarks              \\ \midrule
+    complex & complex &                     $\bv$                      &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{I}$    &  identical to \citep{Chang2024}  \\
+     real   &  real   &                  $\mb{K}\bv$                   &    $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{v_{n+1}}{u_{n+1}}\mb{K}$    &  identical to \citep{Huang2019}  \\
+    complex & complex &                  $\br_{\bu}$                   &             $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\mb{K}_{n+1}$              &        hysteretic damping        \\
+    complex & complex &                  $\br_{\ba}$                   & $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{a_{n+1}}{u_{n+1}}\mb{M}_{n+1}$ & equivalent to hysteretic damping \\
+       0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &                                                                                 &         Rayleigh damping         \\ \bottomrule
 \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
