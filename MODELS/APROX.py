@@ -3,6 +3,7 @@ from pathlib import Path
 
 from matplotlib import pyplot as plt
 import matplotlib
+from matplotlib.ticker import FuncFormatter
 import numpy as np
 
 
@@ -13,20 +14,13 @@ def inverse(m, s):
     m = np.asarray(m, dtype=np.complex128)
     ones = np.ones_like(m)
 
-    A = np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
+    ar, R = np.linalg.eig(
+        np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
+    )
 
-    ar, R = np.linalg.eig(A)
-    al, L = np.linalg.eig(A.T)
+    R = R[:, idx := np.argsort(ar)]
 
-    rs = ar[idx := np.argsort(ar)]
-    R = R[:, idx]
-    L = L[:, np.argsort(al)]
-
-    rm = np.zeros_like(rs)
-    for k in range(rm.size):
-        rm[k] = -(ones @ R[:, k]) * (L[:, k] @ m) / (L[:, k] @ R[:, k])
-
-    return rm, rs
+    return -(ones @ R) * np.linalg.solve(R, m), ar[idx]
 
 
 def to_latex_table(m, s, rm, rs, digits=6):
@@ -88,6 +82,10 @@ if __name__ == "__main__":
     # plt.plot(x, (dynamic.imag / dynamic.real) * 100, label=r"$\eta(m'_j,s'_j)$")
 
     plt.xscale("log")
+    plt.yscale("log")
+    ax1 = plt.gca()
+    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     plt.xlabel(r"frequency $\omega$")
     plt.ylabel(r"specific damping factor (%)")
     plt.legend()
@@ -124,7 +122,3 @@ if __name__ == "__main__":
     )
 
     fig.savefig("../PIC/MASS.EQ.pdf")
-
-    rm, rs = inverse(rm, rs)
-    print(rm - m)
-    print(rs - s)
