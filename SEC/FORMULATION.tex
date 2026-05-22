@@ -4,7 +4,7 @@ Consider the general equation of motion of a dynamic system under external load 
     \br\left(\bu,\bv,\ba\right)=\bp\left(t\right),
 \end{gather}
 where $\br=\br\left(\bu,\bv,\ba\right)$ is the overall resistance of the system, accounting for contributions by displacement $\bu$, velocity $\bv$ and acceleration $\ba$.
-Additional energy dissipating term can be introduced,
+Additional energy dissipating term can be introduced, for example,
 \begin{gather}\label{eq:general_eom}
     \br+\bbf=\bp,
 \end{gather}
@@ -12,27 +12,27 @@ in which $\bbf$ can be additively decomposed such that
 \begin{gather}
     \bbf=\sum\bbf_j.
 \end{gather}
-Each term $\bbf_j$ is governed by a first-order differential equation such that
+Each term $\bbf_j$ is assumed to be governed by a first-order differential equation such that
 \begin{gather}\label{eq:general_de}
     \dot{\bbf}_j=g\left(\bbf_j,\by_j\right)
 \end{gather}
 where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field that depends on $\bu$, $\bv$ and/or $\ba$.
-Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are functions of $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
-The specific form of $\by_j$ will be discussed in the following sections.
-\subsection{Formulation 1}\label{sec:u_dep}
-Assuming each term $\bbf_j$ is governed by the following differential equation:
+Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ depend on $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
+For simplicity, we assume each term $\bbf_j$ is governed by the following differential equation:
 \begin{gather}
-    \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu
+    \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
 \end{gather}
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions).
-The system becomes
+\subsection{Formulation 1}\label{sec:u_dep}
+For the ease of discussion, we consider the linear system, which becomes
 \begin{gather}
     \left\{\begin{array}{l}
         \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0}, \\
-        \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu.
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu,
     \end{array}\right.
 \end{gather}
-Assuming harmonic solutions for both $\bu$ and $\bbf$,
+with $\by_j=\mb{K}\bu$.
+Assuming harmonic solutions for both $\bu$ and $\bbf_j$,
 \begin{gather}\label{eq:harmonic_solution}
     \bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right),\qquad
     \bbf_j\left(t\right)=\mb{F}_j\exp\left(i\omega{}t\right),
@@ -66,11 +66,7 @@ One could identify
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\mb{K}.
 \end{gather}
 
-Repeating the above procedure with $\by_j=\bu$, one can obtain the following dynamic stiffness.
-\begin{gather}
-    \mb{K}^*=\mb{K}+\sum\dfrac{m_j}{s_j+i\omega}\mb{I}
-\end{gather}
-with
+Repeating the above procedure with $\by_j=\bu$, one can obtain the following stiffnesses:
 \begin{gather}
     \mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
     \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
@@ -78,6 +74,7 @@ with
 By directly applying to displacement $\bu$, the loss stiffness $\mb{K}''$ no longer relies on the rate-independent stiffness $\mb{K}$.
 The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
 \subsection{Complex Realm Extension}
+The above analyses assume $s_j$ and $m_j$ are real scalars.
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
     m_j\in\mathbb{C},\qquad
@@ -105,7 +102,7 @@ Adopting a similar approach, the characteristic equation can be derived as
 \begin{gather}\label{eq:acc_cha}
     \det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
-The loss ratio $\eta_a$ satisfies the condition $\abs{\eta_a}=\abs{\eta_u}$ since the scalar coefficient is the reciprocal of that in the previous displacement dependent case.
+The loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
@@ -118,15 +115,16 @@ Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatri
         \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}} & =\left(1+\mb{1}^\mT\diag{\mb{s}+i\omega}^{-1}\mb{m}\right)^{-1} \\&=1-\mb{1}^\mT\left(\diag{\mb{s}+i\omega}+\mb{m}\mb{1}^\mT\right)^{-1}\mb{m}.
     \end{split}
 \end{gather}
-Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ and the corresponding left and right eigenvectors as $\mb{v}^l_j$ and $\mb{v}^r_j$, then
+Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ and the corresponding left and right eigenvectors as $\mb{\phi}^l_j$ and $\mb{\phi}^r_j$, then
 \begin{gather}
-    \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}\qquad\text{with}\quad{}m'_j=-\dfrac{\left\langle\mb{1},\mb{v}^r_j\right\rangle\left\langle\mb{v}^l_j,\mb{m}\right\rangle}{\left\langle\mb{v}^r_j,\mb{v}^l_j\right\rangle}.
+    \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}\qquad\text{with}\quad{}m'_j=-\dfrac{\left\langle\mb{1},\mb{\phi}^r_j\right\rangle\left\langle\mb{\phi}^l_j,\mb{m}\right\rangle}{\left\langle\mb{\phi}^r_j,\mb{\phi}^l_j\right\rangle}.
 \end{gather}
 
 For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
-This may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+In absence of other energy dissipating actions, the two formulations are thus equivalent.
+This equivalence may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \subsection{Formulation 3}\label{sec:v_dep_k}
 We consider $\by_j=\mb{K}\bv$, the system becomes
 \begin{gather}\label{eq:vel_formulation}
@@ -159,7 +157,7 @@ resulting the dynamic stiffness
 \begin{gather}
     \mb{K}^*=\dfrac{1}{1+\sum\dfrac{m_ji\omega}{s_j+i\omega}}\mb{K}.
 \end{gather}
-Similar to the previous case, via partial fraction decomposition, it is possible to find $s'_j$ and $m'_j$ (explicit expressions are not shown for brevity) such that
+Similar to the previous derivation, via partial fraction decomposition, it is possible to find $s'_j$ and $m'_j$ (explicit expressions are not shown for brevity) such that
 \begin{gather}
     \dfrac{1}{1+\sum\dfrac{m_ji\omega}{s_j+i\omega}}=1+\sum\dfrac{m'_ji\omega}{s'_j+i\omega},
 \end{gather}
@@ -167,7 +165,7 @@ effectively making \eqsref{eq:vel_cha2} an equivalent alternative formulation of
 Because computing and storing $\dot{\ba}=\dddot{\bu}$ is \textbf{not} supported in typical analysis frameworks, this practically restrictive formulation is presented solely to establish the equivalence between the two forms.
 Should $\dddot{\bu}$ be tracked, the system can leverage the unique characteristics of the mass matrix detailed in previous sections.
 \subsection{Remarks}
-Borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed three formulations can also be equivalently expressed as
+Borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed formulations can also be equivalently expressed as
 \begin{gather}
     \br+\sum{}g_j*\by_j=\mb{p}
 \end{gather}
@@ -176,6 +174,8 @@ where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j
     \left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
 \end{gather}
 with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$ and $\by_j$ possessing various forms.
+This type of equivalence provides an alternative perspective to understand various damping formulations.
+The damping characteristics, parameterised by $s_j$ and $m_j$, may be interpreted as modifications to the kernel functions $g_j$, enabling the desired damping response to be realised through kernel design.
 \section{Numerical Implementation}
 \subsection{A Reference Algorithm}
 The algorithm discussed in the previous work \citep{Chang2024} is repurposed here to cater various types of systems.
@@ -233,7 +233,7 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
     \caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
     \begin{algorithmic}
         \State \textbf{*Schema: Newmark + Trapezoidal}
-        \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained via conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $m_j$, $s_j$
+        \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained via conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $\by_{j,n}$, $m_j$, $s_j$
         \State \textbf{Output}: $\bu$
         \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
         \State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}$\Comment{\eqsref{eq:revised_k}}
