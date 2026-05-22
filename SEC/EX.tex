@@ -5,20 +5,20 @@ The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u
 \begin{gather}
     \left\{\begin{array}{l}
         \ddot{u}+\omega_n^2u+f=0, \\
-        \dot{f}=-sf+m\omega^2u.
+        \dot{f}=-sf+m\omega^2_nu.
     \end{array}\right.
 \end{gather}
 The following parameters are used in the numerical simulation: $\omega_n=10$, $m=-2$, $s=10$.
 
 \figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$.
 It is clear that second-order convergence of the used Newmark method is retained.
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \includegraphics{PIC/UDD.SDOF.pdf}
     \caption{displacement history and error analysis of SDOF oscillator (free vibration)}\label{fig:sdof}
 \end{figure}
 \figref{fig:sdof_error} further shows the absolute error history of the SDOF system.
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \includegraphics{PIC/UDD.SDOF.ERROR.pdf}
     \caption{absolute error history of SDOF oscillator (free vibration)}\label{fig:sdof_error}
@@ -44,8 +44,8 @@ Although mathematically it have been proved that the two forms \secref{sec:u_dep
 \end{table}
 As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
 However, the corresponding kernel functions are different (as expected).
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \includegraphics{PIC/MASS.EQ.pdf}
-    \caption{equivalent inertial formulation}\label{fig:mass_eq}
+    \caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep}}\label{fig:mass_eq}
 \end{figure}
