@@ -127,6 +127,29 @@ This process naturally extends the definition of $s_j$ and $m_j$ to the complex 
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 In absence of other energy dissipating actions, the two formulations are thus equivalent.
 This equivalence may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+\subsection{Fix The Issue}\label{sec:fix}
+Noting that in \eqsref{eq:u_stiffnesses}, the storage stiffness $\mb{K}'$ does not approach the static stiffness $\mb{K}$ at low frequencies, which is unrealistic.
+The formulation shall be further augmented to fix this issue, for example, by introducing an additional term to cancel the contribution of $\sum\dfrac{m_j}{s_j}\mb{K}$ at low frequencies, resulting in
+\begin{gather}
+    \left\{\begin{array}{l}
+        \mb{M}\ddot{\bu}+\left(1-\sum\dfrac{m_j}{s_j}\right)\mb{K}\bu+\sum\bbf_j=\mb{0}, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu.
+    \end{array}\right.
+\end{gather}
+The corresponding dynamic stiffness $\mb{K}^*$ is
+\begin{gather}
+    \mb{K}^*=\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{K}=\left(1-\sum\dfrac{m_j}{s_j}\dfrac{i\omega}{s_j+i\omega}\right)\mb{K}
+\end{gather}
+with storage stiffness $\mb{K}'$ and loss stiffness $\mb{K}''$
+\begin{gather}
+    \mb{K}'=\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\right)\mb{K},\qquad
+    \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{K}.
+\end{gather}
+With such a modification, now
+\begin{gather}
+    \lim\limits_{\omega\rightarrow0}\mb{K}'=\mb{K},\qquad
+    \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1-\sum\dfrac{m_j}{s_j}\right)\mb{K}.
+\end{gather}
 \subsection{Formulation 3}\label{sec:v_dep_k}
 We consider $\by_j=\mb{K}\bv$, the system becomes
 \begin{gather}\label{eq:vel_formulation}
@@ -152,6 +175,7 @@ One could identify
 A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019}.
 The loss stiffness $\mb{K}''$ in this case is positive, indicating that the system is dissipative and stable when $\Re\left(m_j\right)>0$.
 Unlike the previous two formulations, the storage stiffness $\mb{K}'$ approaches the original stiffness $\mb{K}$ at low frequencies and hardens at high frequencies.
+It is in fact also equivalent to \secref{sec:fix} after a simple redefinition of parameters, for example, by keeping $s_j$ unchanged and letting $m_j\leftarrow{}-m_j/s_j$.
 \subsection{Formulation 4}\label{sec:v_dep_m}
 Alternatively, consider $\by_j=\mb{M}\dot{\ba}$, the corresponding characteristic equation can be expressed as
 \begin{gather}\label{eq:vel_cha2}
