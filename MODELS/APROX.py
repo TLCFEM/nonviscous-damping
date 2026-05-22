@@ -41,6 +41,8 @@ def to_latex_table(m, s, rm, rs, digits=6):
     lines.append(r"\midrule")
     for mj, sj, rmj, rsj in zip(m, s, rm, rs):
         lines.append(f"{fmt(mj)} & {fmt(sj)} & {fmt(rmj)} & {fmt(rsj)} \\\\")
+    lines.append(r"\midrule")
+    lines.append(f"$1+\\sum{{}}m_j/s_j$ & {fmt(1 + sum(m / s))} & & \\\\")
     lines.append(r"\bottomrule")
     lines.append(r"\end{tabular}")
     return "\n".join(lines)
@@ -80,7 +82,6 @@ def process(input_str: str, fn: str):
     plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
 
     plt.xscale("log")
-    plt.yscale("log")
     ax1 = plt.gca()
     ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
@@ -95,7 +96,6 @@ def process(input_str: str, fn: str):
     plt.plot(x, dynamic_inv.real, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
 
     plt.xscale("log")
-    plt.yscale("log")
     ax1 = plt.gca()
     ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
@@ -143,4 +143,9 @@ if __name__ == "__main__":
     process(
         "-type0 1.98700e-02 3.76642e-01 -type0 1.66460e-02 8.52878e+00 -type0 1.53240e-02 3.16297e+00 -type0 8.86700e-03 7.94340e-02 -type0 1.98710e-02 2.65643e+01 -type0 1.66450e-02 1.17300e+00 -type0 3.62070e-02 1.25893e+02 -type0 2.73430e-02 7.94790e-02",
         "../PIC/MASS.EQ.pdf",
+    )
+
+    process(
+        "-type0 3.82120e-02 4.72235e-01 -type0 3.91790e-02 1.93519e+02 -type0 3.82670e-02 4.26195e+01 -type0 3.91800e-02 5.16800e-03 -type0 3.82150e-02 9.49720e+00 -type0 3.82130e-02 2.11771e+00 -type0 6.03970e-02 1.11375e+03 -type0 6.03980e-02 8.98000e-04 -type0 3.82140e-02 1.05304e-01 -type0 3.82670e-02 2.34660e-02",
+        "../PIC/MASS.EQ.MORE.pdf",
     )

@@ -25,27 +25,66 @@ It is clear that second-order convergence of the used Newmark method is retained
 \end{figure}
 \subsection{Equivalence}
 Although mathematically it have been proved that the two forms \secref{sec:u_dep} and \secref{sec:a_dep} are equivalent to each other, we present a numerical example using the following parameters.
-\begin{table}
+\begin{table}[ht!]
     \centering\footnotesize
-    \begin{tabular}{cccc}
-        \toprule
-        $m_j$         & $s_j$        & $m'_j$       & $s'_j$       \\
-        \midrule
-        -1.408683e-03 & 7.943400e-02 & 1.053682e-02 & 7.167213e-02 \\
-        -4.346389e-03 & 7.947900e-02 & 6.542804e-08 & 7.944506e-02 \\
-        -1.496775e-02 & 3.766420e-01 & 2.386119e-02 & 3.577093e-01 \\
-        -3.904917e-02 & 1.173000e+00 & 5.716967e-02 & 1.125667e+00 \\
-        -9.693870e-02 & 3.162970e+00 & 1.314155e-01 & 3.049910e+00 \\
-        -2.839401e-01 & 8.528780e+00 & 3.554469e-01 & 8.210599e+00 \\
-        -1.055718e+00 & 2.656430e+01 & 1.209992e+00 & 2.543257e+01 \\
-        -9.116416e+00 & 1.258930e+02 & 8.824363e+00 & 1.169172e+02 \\
-        \bottomrule
-    \end{tabular}
+\begin{tabular}{cccc}
+\toprule
+$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\
+\midrule
+-1.408683e-03 & 7.943400e-02 & 1.053682e-02 & 7.167213e-02 \\
+-4.346389e-03 & 7.947900e-02 & 6.542804e-08 & 7.944506e-02 \\
+-1.496775e-02 & 3.766420e-01 & 2.386119e-02 & 3.577093e-01 \\
+-3.904917e-02 & 1.173000e+00 & 5.716967e-02 & 1.125667e+00 \\
+-9.693870e-02 & 3.162970e+00 & 1.314155e-01 & 3.049910e+00 \\
+-2.839401e-01 & 8.528780e+00 & 3.554469e-01 & 8.210599e+00 \\
+-1.055718e+00 & 2.656430e+01 & 1.209992e+00 & 2.543257e+01 \\
+-9.116416e+00 & 1.258930e+02 & 8.824363e+00 & 1.169172e+02 \\
+\midrule
+$1+\sum{}m_j/s_j$ & 6.784540e-01 & & \\
+\bottomrule
+\end{tabular}
 \end{table}
+With eight terms, the above parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
 As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
-However, the corresponding kernel functions are different (as expected).
+The corresponding kernel functions are different (as expected).
 \begin{figure}[ht!]
     \centering
     \includegraphics{PIC/MASS.EQ.pdf}
-    \caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep}}\label{fig:mass_eq}
+    \caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep} with a narrow approximation range}\label{fig:mass_eq}
+    \end{figure}
+    
+    Noting that the storage stiffness would gradually decrease as frequency approaches the left end of the approximation range.
+    Outside the approximation range, it can be as low as \SI{68}{\percent} of the static stiffness.
+    This could be a problem as the lower bound is controlled by the summation $\sum{}m_j/s_j$, which roughly translates to the area under the curve of the specific damping factor.
+    
+    To illustrate, the following parameters are used to approximate a constant specific damping factor of \SI{8}{\percent} with a wider approximation range from \num{0.001} rad/s to \num{1000} rad/s.
+    \begin{table}[ht!]
+        \centering\footnotesize
+        \begin{tabular}{cccc}
+            \toprule
+            $m_j$             & $s_j$        & $m'_j$       & $s'_j$       \\
+            \midrule
+            -1.084748e-04     & 8.980000e-04 & 1.621390e-03 & 4.706853e-04 \\
+            -4.049645e-04     & 5.168000e-03 & 3.018247e-03 & 4.033312e-03 \\
+            -1.795947e-03     & 2.346600e-02 & 9.303649e-03 & 1.930699e-02 \\
+            -8.048174e-03     & 1.053040e-01 & 3.066306e-02 & 8.940339e-02 \\
+            -3.609009e-02     & 4.722350e-01 & 1.050192e-01 & 4.101191e-01 \\
+            -1.618481e-01     & 2.117710e+00 & 3.706983e-01 & 1.871086e+00 \\
+            -7.258710e-01     & 9.497200e+00 & 1.340969e+00 & 8.505251e+00 \\
+            -3.261841e+00     & 4.261950e+01 & 4.957341e+00 & 3.858064e+01 \\
+            -1.516376e+01     & 1.935190e+02 & 1.916367e+01 & 1.764117e+02 \\
+            -1.345343e+02     & 1.113750e+03 & 1.279118e+02 & 9.823243e+02 \\
+            \midrule
+            $1+\sum{}m_j/s_j$ & 1.429160e-01 &              &              \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    It can be seen from \figref{fig:mass_eq_wider} that the storage stiffness is only \SI{14}{\percent} of the static stiffness below \num{0.001} rad/s.
+    At \num{1} rad/s, it is below \SI{50}{\percent} of the static stiffness.
+    \begin{figure}[ht!]
+    \centering
+    \includegraphics{PIC/MASS.EQ.MORE.pdf}
+    \caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep} with a wide approximation range}\label{fig:mass_eq_wider}
 \end{figure}
+
+Similar phenomena can also be observed in formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m}, in which hardening at high frequencies is observed.
