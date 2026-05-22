@@ -66,7 +66,7 @@ def process(input_str: str, fn: str):
     log_s = np.log10(s)
     log_s = np.where(log_s >= 0, np.ceil(log_s), np.floor(log_s)).astype(int)
 
-    x = np.logspace(log_s[0] - 1, log_s[-1] + 1, 500)
+    x = np.logspace(log_s[0], log_s[-1], 500)
     dynamic = np.ones_like(x, dtype=np.complex128)
     for mj, sj in zip(m, s):
         dynamic += mj / (sj + 1j * x)
@@ -81,9 +81,9 @@ def process(input_str: str, fn: str):
 
     plt.xscale("log")
     plt.yscale("log")
-    # ax1 = plt.gca()
-    # ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
-    # ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+    ax1 = plt.gca()
+    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     plt.xlabel(r"frequency $\omega$")
     plt.ylabel(r"$\dfrac{\text{loss stiffness}}{\text{static stiffness}}$ (%)")
     plt.legend()
