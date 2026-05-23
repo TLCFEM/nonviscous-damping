@@ -48,8 +48,52 @@ v0 = 0
 matplotlib.rcParams.update({"font.size": 6})
 
 
+model = """
+node 1 0 0
+node 2 1 0
+
+material Elastic1D 1 100
+
+element T2D2 1 1 2 1 1
+element Mass 2 2 1 1
+
+fix2 1 1 1
+fix2 2 2 1 2
+
+hdf5recorder 1 Node U 2
+
+initial displacement 1 1 2
+initial acceleration -100 1 2
+
+step dynamic 1 10
+set ini_step_size {step_time}
+set fixed_step_size 1
+
+integrator UDDNewmark 1 .25 .5 -2 0 10 0
+# integrator UDANewmark 1 .25 .5 2 0 10 0
+
+converger AbsIncreDisp 2 1E-14 10 0
+
+analyze
+
+save recorder 1
+
+terminal mv R1-U.h5 R1-U-{step_time}.h5
+
+exit
+"""
+
+
+def execute(step_time):
+    print(f"Executing with step_time={step_time}...")
+    target = Path("model.sp")
+    target.write_text(model.format(step_time=step_time))
+    os.system("suanpan -f model.sp")
+    target.unlink()
+
+
 def system(omega, s, m):
-    roots = np.roots([1, s, omega**2, (s + m) * omega**2])
+    roots = np.roots([1, s, (1 - m / s) * omega**2, s * omega**2])
     print("roots", roots)
 
     r1, r2, r3 = roots
@@ -108,14 +152,13 @@ if __name__ == "__main__":
 
     results = {}
 
+    refresh = True
+
     sdof = analytical([10, 10, -2])
-    results["0.0001"] = numerical(sdof, 0.0001)
-    results["0.0002"] = numerical(sdof, 0.0002)
-    results["0.0005"] = numerical(sdof, 0.0005)
-    results["0.001"] = numerical(sdof, 0.001)
-    results["0.002"] = numerical(sdof, 0.002)
-    results["0.005"] = numerical(sdof, 0.005)
-    results["0.01"] = numerical(sdof, 0.01)
+    for step_time in ["0.0001", "0.0002", "0.0005", "0.001", "0.002", "0.005", "0.01"]:
+        if refresh:
+            execute(step_time)
+        results[step_time] = numerical(sdof, float(step_time))
 
     for key, value in results.items():
         plt.plot(

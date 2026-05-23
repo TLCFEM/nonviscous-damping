@@ -1,12 +1,12 @@
 \appendix
 \section{Analytical Solution}
-Consider the SDOF system following \secref{sec:u_dep}, with $\omega_n$ denoting the natural frequency, the equation of motion can be expressed as
+Consider the SDOF system following \secref{sec:u_dep} with \secref{sec:fix}, with $\omega_n$ denoting the natural frequency, the equation of motion can be expressed as
 \begin{gather}
-\dddot{u}+s\ddot{u}+\omega_n^2\dot{u}+\left(s+m\right)\omega_n^2u=0.
+\dddot{u}+s\ddot{u}+\left(1-\dfrac{m}{s}\right)\omega_n^2\dot{u}+s\omega_n^2u=0.
 \end{gather}
 Apply the Laplace transform with $U=U\left(l\right)$ where $l$ denoting the Laplace variable,
 \begin{gather}
-\left(l^3+sl^2+\omega_n^2l+\left(s+m\right)\omega_n^2\right)U=u_0l^2+\left(su_0+v_0\right)l+sv_0.
+\left(l^3+sl^2+\left(1-\dfrac{m}{s}\right)\omega_n^2l+s\omega_n^2\right)U=u_0l^2+\left(su_0+v_0\right)l+sv_0.
 \end{gather}
 The three roots of the characteristic equation $l^3+sl^2+\omega_n^2l+\left(s+m\right)\omega_n^2=0$ can be solved and represented by $r_1$, $r_2$ and $r_3$, assuming $U$ can be expressed as
 \begin{gather}
