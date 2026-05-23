@@ -70,11 +70,12 @@
 \linenumbers
 \begin{abstract}
 \begin{linenumbers}
-This study presents a general formulation of nonviscous damping for dynamic systems and discusses several equivalent alternative forms that are convenient for analysis and computation.
-The proposed framework accommodates hereditary damping effects through kernel--based constitutive relations and unifies different formulations within a single representation.
-The resulting equations of motion are expressed in forms suitable for direct time integration and implementation in standard structural analysis workflows.
-Numerical examples are provided to illustrate the consistency of the alternative formulations, their influence on transient response, and practical considerations for parameter selection.
-The results show that the generalized nonviscous model can customise damping behaviours while remaining computationally tractable, offering a flexible basis for modelling frequency--dependent and memory--dependent dissipation in engineering structures.
+This paper develops alternative but equivalent forms of nonviscous damping for dynamic systems by introducing additive energy dissipating forces governed by first-order differential equations.
+Several choices of the driving field are examined, including displacement-, velocity-, and acceleration-dependent forms based on stiffness and mass contributions.
+The corresponding frequency-domain characteristics are derived to identify storage and loss stiffnesses, admissible complex conjugate parameter pairs, stability requirements, and the asymptotic behaviour needed to recover the correct static stiffness.
+The analysis shows how non-trivial correction terms restore low-frequency consistency and how reciprocal formulations can be converted into one another through transformed damping parameters.
+A trapezoidal update of the damping history variables is then embedded into a standard direct integration workflow, producing a revised residual and consistent tangent while retaining the size of the original structural system.
+Numerical examples involving a single-degree-of-freedom oscillator and broadband damping approximations verify the equivalence of selected formulations, demonstrate second-order convergence, and highlight practical limits imposed by changes in storage stiffness outside the target frequency range.
 \end{linenumbers}
 \end{abstract}
 \begin{keyword}
