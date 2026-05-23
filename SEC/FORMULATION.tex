@@ -76,7 +76,7 @@ Repeating the above procedure with $\by_j=\bu$, one can obtain the following sti
     \mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
     \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
 \end{gather}
-By such, the loss stiffness $\mb{K}''$ no longer relies on the static stiffness $\mb{K}$.
+With this choice, the loss stiffness $\mb{K}''$ no longer relies on the static stiffness $\mb{K}$.
 The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
 \subsection{Complex Realm Extension}
 The above analyses assume $s_j$ and $m_j$ are real scalars.
@@ -108,7 +108,7 @@ Adopting a similar approach, the characteristic equation can be derived as
 \begin{gather}\label{eq:acc_cha}
     \det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
-The (magnitude of, if a signed definition is used) loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
+The magnitude of the loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
@@ -276,9 +276,9 @@ For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\b
 In some other special cases, this matrix can be diagonal, for example, with $\by_j\in\{\bu,\bv,\ba\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with possibly a non-unit scalar $\alpha$.
 Adding such a diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 
-\algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
+\algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into an existing iterative analysis workflow.
 Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ shall be committed.
-The non-trivial $\bh_j$, that is, $\by_j$, often would not need to be stored separately.
+When $\bh_j$ is an algebraic function of $\by_j$, there is usually no need to store it separately.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
 The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{K}$ is real--valued.
 \begin{breakablealgorithm}
@@ -286,7 +286,7 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
     \caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
     \begin{algorithmic}
         \State \textbf{*Schema: Newmark + Trapezoidal}
-        \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained via conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $\by_{j,n}$, $m_j$, $s_j$
+        \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained in the conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $\by_{j,n}$, $m_j$, $s_j$
         \State \textbf{Output}: $\bu$
         \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
         \State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
