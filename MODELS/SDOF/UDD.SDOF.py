@@ -63,7 +63,7 @@ fix2 2 2 1 2
 hdf5recorder 1 Node U 2
 
 initial displacement 1 1 2
-initial acceleration -100 1 2
+initial acceleration -120 1 2
 
 step dynamic 1 10
 set ini_step_size {step_time}
@@ -88,7 +88,7 @@ def execute(step_time):
     print(f"Executing with step_time={step_time}...")
     target = Path("model.sp")
     target.write_text(model.format(step_time=step_time))
-    os.system("suanpan -f model.sp")
+    os.system("suanpan -np -f model.sp")
     target.unlink()
 
 
