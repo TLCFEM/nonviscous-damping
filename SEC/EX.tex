@@ -1,14 +1,15 @@
 \section{Numerical Examples}
 \subsection{A SDOF System}
-We consider a SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$.
+We consider a SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$, following \eqsref{eq:u_right}.
 The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u}(0)=0$.
 \begin{gather}
     \left\{\begin{array}{l}
-        \ddot{u}+\omega_n^2u+f=0, \\
+        \ddot{u}+\left(1-\dfrac{m}{s}\right)\omega_n^2u+f=0, \\
         \dot{f}=-sf+m\omega^2_nu.
     \end{array}\right.
 \end{gather}
 The following parameters are used in the numerical simulation: $\omega_n=10$, $m=-2$, $s=10$.
+Noting that in this case, the initial condition for acceleration $a_0=120$ needs to be properly assigned.
 
 \figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$.
 It is clear that second-order convergence of the used Newmark method is retained.
