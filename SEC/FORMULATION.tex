@@ -131,7 +131,8 @@ Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corre
 In absence of other energy dissipating actions, the two formulations are thus equivalent.
 This equivalence may offer numerical advantages (that can be seen later) when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \subsection{The Wrong Asymptotic Behaviour}\label{sec:fix}
-Noting that in \eqsref{eq:u_stiffnesses}, the storage stiffness $\mb{K}'$ does not approach the static stiffness $\mb{K}$ at low frequencies, which is unrealistic.
+The fundamental consistency requirement states that $\mb{K}^*$ (or $\mb{K}'$) must approach the static stiffness $\mb{K}$ at low frequencies, that is, $\lim\limits_{\omega\rightarrow0}\mb{K}^*=\mb{K}$, to ensure the system behaves as expected under static loading conditions.
+It can be noted that $\mb{K}'$ fails to meet this requirement as it does not converge to the static stiffness $\mb{K}$ at low frequencies in \eqsref{eq:u_stiffnesses}.
 The formulation shall be further augmented to fix this issue, for example, by introducing non-trivial terms $\bh_j$ to cancel the contribution of $\sum\dfrac{m_j}{s_j}\mb{K}$ at low frequencies, resulting in
 \begin{gather}\label{eq:u_right}
     \left\{\begin{array}{l}
