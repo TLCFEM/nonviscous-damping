@@ -47,14 +47,14 @@ $1+\sum{}m_j/s_j$ & 6.784540e-01 & & \\
 \end{table}
 With eight terms, the above parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
 As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
-The corresponding kernel functions are different (as expected).
+The corresponding kernel functions are, however, different (as expected).
 \begin{figure}[ht!]
 \centering
 \includegraphics{PIC/MASS.EQ.pdf}
 \caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep} with a narrow approximation range}\label{fig:mass_eq}
 \end{figure}
 
-Noting that the storage stiffness would gradually decrease as frequency approaches the left end of the approximation range.
+In absence of $\bh$, noting that the storage stiffness would gradually decrease as frequency approaches the left end of the approximation range.
 Outside the approximation range, it can be as low as \SI{68}{\percent} of the static stiffness.
 This lower bound is controlled by the summation $\sum{}m_j/s_j$, which roughly translates to the area under the curve of the specific damping factor.
 

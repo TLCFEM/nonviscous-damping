@@ -311,7 +311,37 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
     \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
-Consequently, the energy dissipating force $\bbf$ can be flexibly formulated using either node-based or element-based representations.
+Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
+
+Among various formulations, three practical ones are repeated in the nonlinear context as follows.
+Each one is equivalent to the others and all yield identical energy dissipation characteristics, providing that parameters $s_j$ and $m_j$ are properly adjusted.
+\paragraph{Displacement Dependent}
+\begin{gather}
+\boxed{
+    \left\{\begin{array}{l}
+        \br_{\ba}+\br_{\bv}+\left(1-\sum\dfrac{m_j}{s_j}\right)\br_{\bu}+\sum\bbf_j=\mb{p}, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\br_{\bu}.
+    \end{array}\right.
+}
+\end{gather}
+\paragraph{Velocity Dependent}
+\begin{gather}
+\boxed{
+    \left\{\begin{array}{l}
+        \br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\mb{p}, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\dot{\br}_{\bu}.
+    \end{array}\right.
+}
+\end{gather}
+\paragraph{Acceleration Dependent}
+\begin{gather}
+\boxed{
+    \left\{\begin{array}{l}
+        \left(1-\sum\dfrac{m_j}{s_j}\right)\br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\mb{p}, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\br_{\ba}.
+    \end{array}\right.
+}
+\end{gather}
 
 One shall notice that the proposed formulations has the following advantages.
 \begin{enumerate}
