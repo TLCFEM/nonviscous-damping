@@ -18,7 +18,6 @@ Each term $\bbf_j$ is assumed to be governed by a first-order differential equat
     g\left(\dot{\bbf}_j,\bbf_j,\by_j\right)=\mb{0},
 \end{gather}
 where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field that depends on $\bu$, $\bv$ and/or $\ba$.
-Given that $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ depend on $\bu$, eventually $\by_j=\by_j\left(\bu\right)$.
 Optional terms $\bh_j$ are included in \eqsref{eq:general_eom} to fine-tune energy dissipation characteristics.
 
 For simplicity, we assume each $\bbf_j$ is governed by the following linear differential equation in this work:
@@ -26,6 +25,7 @@ For simplicity, we assume each $\bbf_j$ is governed by the following linear diff
     \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
 \end{gather}
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions).
+It is also assumed that the initial condition for $\bbf_j$ is trivial: $\bbf_j\left(0\right)=\mb{0}$.
 \subsection{Formulation 1}\label{sec:u_dep}
 For the ease of discussion, we consider the linear version of \eqsref{eq:general_eom} under free vibration ($\bp=\mb{0}$), which is
 \begin{gather}
@@ -92,7 +92,7 @@ then denoting $Z_j=\dfrac{s_jm_j}{s_j^2+\omega^2}$, one would have
     Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)\in\mathbb{R}
 \end{gather}
 to be strictly real--valued.
-This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, providing that they come in conjugate pairs.
+This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, provided that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
 \subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
@@ -221,7 +221,7 @@ This type of equivalence provides an alternative perspective to understand vario
 The damping characteristics, parametrised by $s_j$ and $m_j$, may be interpreted as modifications to the kernel functions $g_j$, enabling the desired damping response to be realised through kernel design.
 \section{Numerical Implementation}
 \subsection{A Reference Algorithm}
-The algorithm discussed in the previous work \citep{Chang2024} is repurposed here to cater various types of systems.
+The algorithm discussed in the previous work \citep{Chang2024} is repurposed here to handle various types of systems.
 In the general nonlinear context, the governing system is
 \begin{gather}\label{eq:eqv_sys}
     \left\{
@@ -244,7 +244,7 @@ one may further rearrange to obtain
 \end{gather}
 in which subscripts $\left(\cdot\right)_n$ and $\left(\cdot\right)_{n+1}$ denote the corresponding quantity at $t_n$ and $t_{n+1}=t_n+\Delta{}t$.
 
-Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well known Newmark method), the second expression is
+Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well-known Newmark method), the second expression is
 \begin{gather}\label{eq:residual}
     \br_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1}+\sum\bh_{j,n+1}=\mb{p}_{n+1}.
 \end{gather}
@@ -270,10 +270,10 @@ By the above, we have assumed that the contributions of $\bu$, $\bv=\dot{\bu}$ a
 such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
 
 It thus can be concluded from \eqsref{eq:revised_k} that to account for this additional energy dissipating term $\bbf$, only an additional matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$, or $\sum\left(\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}-\dfrac{m_j}{s_j}\right)\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ if $\bh_j$ is present, needs to be added to the original effective stiffness $\bbar{K}_{n+1}$.
-In some certain cases, this additional matrix can be very efficiently formulated.
-For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the stiffness matrix $\mb{K}_{n+1}$ (or the mass matrix $\mb{M}_{n+1}$) that is already available in the original formulation.
+In certain cases, this additional matrix can be very efficiently formulated.
+For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the (possibly scaled) stiffness matrix $\mb{K}_{n+1}$ (or the mass matrix $\mb{M}_{n+1}$) that is already available in the original formulation.
 In some other special cases, this matrix can be diagonal, for example, with $\by_j\in\{\bu,\bv,\ba\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with possibly a non-unit scalar $\alpha$.
-Adding such an diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
+Adding such a diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
@@ -286,14 +286,14 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
         \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained via conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $\by_{j,n}$, $m_j$, $s_j$
         \State \textbf{Output}: $\bu$
         \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
-        \State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\dfrac{m_j}{s_j}\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
+        \State \faMicrochip~compute revised effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
         \State \faMicrochip~compute revised resistance $\bhat{r}=\br+\sum\bbf_j+\sum\bh_j$
         \State $\delta\bu=\bhat{K}^{-1}\left(\mb{p}-\bhat{r}\right)$
         \State update and return $\bu\leftarrow\bu+\delta\bu$
     \end{algorithmic}
 \end{breakablealgorithm}
 \subsection{Remarks}
-\tabref{tab:special} summaries a few special cases.
+\tabref{tab:special} summarises a few special cases.
 \begin{table}[ht!]
     \centering\scriptsize\renewcommand{\arraystretch}{1.4}
     \caption{some special cases}\label{tab:special}
@@ -344,7 +344,7 @@ Each one is equivalent to the others and all yield identical energy dissipation 
 }
 \end{gather}
 
-One shall notice that the proposed formulations has the following advantages.
+One shall notice that the proposed formulations have the following advantages.
 \begin{enumerate}
     \item It retains the size of the original problem/system.
     \item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.

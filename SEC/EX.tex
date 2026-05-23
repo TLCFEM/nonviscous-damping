@@ -9,19 +9,19 @@ The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u
     \end{array}\right.
 \end{gather}
 The following parameters are used in the numerical simulation: $\omega_n=10$, $m=-2$, $s=10$.
-Noting that in this case, the initial condition for acceleration $a_0=120$ needs to be properly assigned.
-This value \num{120} shall be interpreted as the original \num{100} plus additional \num{20} associated with $h_0$.
+Noting that in this case, the initial condition for acceleration $a_0=-120$ needs to be properly assigned.
+This value \num{120} shall be interpreted as the original \num{-100} plus additional \num{-20} associated with $h_0$.
 How this initial condition is assigned to the system belongs to implementation detail thus won't be discussed in this work.
 It is not a concern in general if the global time integration is self-starting.
 
-\figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$.
+\figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$ and the corresponding error convergence rate.
 It is clear that second-order convergence of the used Newmark method is retained.
 \begin{figure}[ht!]
     \centering
     \includegraphics{PIC/UDD.SDOF.pdf}
     \caption{displacement history and error analysis of SDOF oscillator (free vibration)}\label{fig:sdof}
 \end{figure}
-\figref{fig:sdof_error} further shows the absolute error history of the SDOF system.
+\figref{fig:sdof_error} further shows the absolute error history of the SDOF system in the time domain.
 \begin{figure}[ht!]
     \centering
     \includegraphics{PIC/UDD.SDOF.ERROR.pdf}
@@ -31,9 +31,11 @@ It is clear that second-order convergence of the used Newmark method is retained
 One can further validate that this example can be equivalently expressed in the form of \eqsref{eq:a_right}, with $m=25/18$ and $s=25/3$.
 To maintain brevity, these results are omitted since they are identical to those already presented.
 \subsection{Equivalence}
-Although mathematically it have been proved that the two forms \secref{sec:u_dep} and \secref{sec:a_dep} are equivalent to each other, we present a numerical example using the following parameters.
+Although mathematically it has been proved that the two forms \secref{sec:u_dep} and \secref{sec:a_dep} are equivalent to each other, we present a numerical example using the following parameters.
 \begin{table}[ht!]
     \centering\footnotesize
+\caption{parameter sets for the narrow-band
+equivalence test}
 \begin{tabular}{cccc}
 \toprule
 $m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\
@@ -67,6 +69,8 @@ This lower bound is controlled by the summation $\sum{}m_j/s_j$, which roughly t
 To illustrate, the following parameters are used to approximate a constant specific damping factor of \SI{8}{\percent} with a wider approximation range from \num{0.001} rad/s to \num{1000} rad/s.
 \begin{table}[ht!]
     \centering\footnotesize
+\caption{parameter sets for the wide-band
+equivalence test}
     \begin{tabular}{cccc}
         \toprule
         $m_j$             & $s_j$        & $m'_j$       & $s'_j$       \\
