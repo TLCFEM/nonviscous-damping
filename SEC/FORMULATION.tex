@@ -94,6 +94,7 @@ then denoting $Z_j=\dfrac{s_jm_j}{s_j^2+\omega^2}$, one would have
 to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, provided that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
+Besides, for the system to be stable, it is required that $\Re\left(s_j\right)>0$.
 \subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
 The system is
@@ -107,7 +108,7 @@ Adopting a similar approach, the characteristic equation can be derived as
 \begin{gather}\label{eq:acc_cha}
     \det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
-The loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
+The (magnitude of, if a signed definition is used) loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
@@ -128,7 +129,7 @@ Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ an
 For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
-In absence of other energy dissipating actions, the two formulations are thus equivalent.
+In the absence of other energy dissipating actions, the two formulations are thus equivalent.
 This equivalence may offer numerical advantages (that can be seen later) when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 \subsection{The Wrong Asymptotic Behaviour}\label{sec:fix}
 The fundamental consistency requirement states that $\mb{K}^*$ (or $\mb{K}'$) must approach the static stiffness $\mb{K}$ at low frequencies, that is, $\lim\limits_{\omega\rightarrow0}\mb{K}^*=\mb{K}$, to ensure the system behaves as expected under static loading conditions.
@@ -190,13 +191,13 @@ One could identify
 A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019}.
 The loss stiffness $\mb{K}''$ in this case is positive, indicating that the system is dissipative and stable when $\Re\left(m_j\right)>0$.
 Unlike the previous formulations, the storage stiffness $\mb{K}'$ approaches the original stiffness $\mb{K}$ at low frequencies and hardens at high frequencies.
-It is in fact also equivalent to \eqsref{eq:u_right} after a simple redefinition of parameters, for example, by keeping $s_j$ unchanged and replacing $m_j$ with $-m_j/s_j$.
+It is in fact also equivalent to \eqsref{eq:u_right} after a simple mapping of parameters.
 \subsection{Formulation 4}\label{sec:v_dep_m}
 Alternatively, consider $\by_j=\mb{M}\dot{\ba}$, the corresponding characteristic equation can be expressed as
 \begin{gather}\label{eq:vel_cha2}
     \det\left(\mb{K}-\left(1+\sum\dfrac{m_ji\omega}{s_j+i\omega}\right)\omega^2\mb{M}\right)=0,
 \end{gather}
-resulting the dynamic stiffness
+resulting in the dynamic stiffness
 \begin{gather}
     \mb{K}^*=\dfrac{1}{1+\sum\dfrac{m_ji\omega}{s_j+i\omega}}\mb{K}.
 \end{gather}
@@ -276,6 +277,8 @@ In some other special cases, this matrix can be diagonal, for example, with $\by
 Adding such a diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into existing iterative analysis workflow.
+Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ shall be committed.
+The non-trivial $\bh_j$, that is, $\by_j$, often would not need to be stored separately.
 Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
 The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{K}$ is real--valued.
 \begin{breakablealgorithm}
@@ -307,15 +310,16 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
         \secref{sec:v_dep_k}                     & complex & complex &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)     &      $\mb{0}$       & complex extension of \citep{Huang2019}         \\
         \secref{sec:v_dep_m}                     & complex & complex & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$)  &      $\mb{0}$       & eqv. to \secref{sec:v_dep_k}                   \\ \midrule
         \secref{sec:u_dep} with \secref{sec:fix} & complex & complex &                  $\br_{\bu}$                   & $-m_j/s_j\br_{\bu}$ & alternative form, eqv. to \secref{sec:v_dep_k} \\
-        \secref{sec:a_dep} with \secref{sec:fix} & complex & complex &                  $\br_{\ba}$                   & $-m_j/s_j\br_{\ba}$ & alternative form, eqv. to \secref{sec:v_dep_k} \\ \midrule
-                                                 &    0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &      $\mb{0}$       & Rayleigh damping                               \\ \bottomrule
+        \secref{sec:a_dep} with \secref{sec:fix} & complex & complex &                  $\br_{\ba}$                   & $-m_j/s_j\br_{\ba}$ & alternative form, eqv. to \secref{sec:v_dep_k} \\ %\midrule
+%                                                 &    0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &      $\mb{0}$       & Rayleigh damping                               \\
+\bottomrule
     \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
 Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
 
 Among various formulations, three practical ones are repeated in the nonlinear context as follows.
-Each one is equivalent to the others and all yield identical energy dissipation characteristics, providing that parameters $s_j$ and $m_j$ are properly adjusted.
+Each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{Displacement Dependent}
 \begin{gather}
 \boxed{
@@ -352,11 +356,11 @@ One shall notice that the proposed formulations have the following advantages.
     \item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
           In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
     \item The reciprocal formulations are equivalent mathematically.
-          In absence of other energy dissipating actions (such as conventional viscous damping), one form can be converted into another.
+          In the absence of other energy dissipating actions (such as conventional viscous damping), one form can be converted into another.
           Instead of scaling $\mb{K}$, it is possible to scale $\mb{M}$ in the equivalent form.
           Noting that in global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ needs to be scaled anyway by some scalar factor, accounting for the proposed damping formulations can be done by merely one extra scalar multiplication.
 \end{enumerate}
 
 The preceding analyses assume no external damping actions.
-Consequently, the derived loss stiffnesses and loss ratios hold strictly in absence of additional velocity dependent energy dissipation mechanisms, such as conventional viscous damping.
+Consequently, the derived loss stiffnesses and loss ratios hold strictly in the absence of additional velocity dependent energy dissipation mechanisms, such as conventional viscous damping.
 Nonetheless, a non-trivial $\mb{C}$ is maintained in \eqsref{eq:effective_k} to preserve structural generality.
