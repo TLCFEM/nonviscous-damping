@@ -69,8 +69,7 @@ step dynamic 1 10
 set ini_step_size {step_time}
 set fixed_step_size 1
 
-integrator UDDNewmark 1 .25 .5 -2 0 10 0
-# integrator UDANewmark 1 .25 .5 2 0 10 0
+{damping}
 
 converger AbsIncreDisp 2 1E-14 10 0
 
@@ -84,17 +83,16 @@ exit
 """
 
 
-def execute(step_time):
+def execute(step_time, damping):
     print(f"Executing with step_time={step_time}...")
     target = Path("model.sp")
-    target.write_text(model.format(step_time=step_time))
+    target.write_text(model.format(step_time=step_time, damping=damping))
     os.system("suanpan -np -f model.sp")
     target.unlink()
 
 
 def system(omega, s, m):
     roots = np.roots([1, s, (1 - m / s) * omega**2, s * omega**2])
-    print("roots", roots)
 
     r1, r2, r3 = roots
 
@@ -144,21 +142,19 @@ def numerical(vibrator, pick):
     return Response(time, displacement, error)
 
 
-if __name__ == "__main__":
-    os.chdir(Path(__file__).parent)
-
-    fig = plt.figure(figsize=(6, 3.5))
-    fig.add_subplot(211)
-
+def generate(damping, steps):
     results = {}
 
     refresh = True
 
     sdof = analytical([10, 10, -2])
-    for step_time in ["0.0001", "0.0002", "0.0005", "0.001", "0.002", "0.005", "0.01"]:
+    for step_time in steps:
         if refresh:
-            execute(step_time)
+            execute(step_time, damping)
         results[step_time] = numerical(sdof, float(step_time))
+
+    fig = plt.figure(figsize=(6, 3.5))
+    fig.add_subplot(211)
 
     for key, value in results.items():
         plt.plot(
@@ -219,3 +215,12 @@ if __name__ == "__main__":
 
     fig.tight_layout(pad=0.1)
     fig.savefig("../../PIC/UDD.SDOF.ERROR.pdf")
+
+
+if __name__ == "__main__":
+    os.chdir(Path(__file__).parent)
+
+    generate(
+        "integrator UDDNewmark 1 .25 .5 -2 0 10 0",
+        ["0.0001", "0.0002", "0.0005", "0.001", "0.002", "0.005", "0.01"],
+    )
