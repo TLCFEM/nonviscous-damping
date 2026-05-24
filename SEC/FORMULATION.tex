@@ -17,14 +17,16 @@ Each term $\bbf_j$ is assumed to be governed by a first-order differential equat
 \begin{gather}\label{eq:general_de}
     g\left(\dot{\bbf}_j,\bbf_j,\by_j\right)=\mb{0},
 \end{gather}
-where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field that depends on $\bu$, $\bv$ and/or $\ba$.
-Optional terms $\bh_j$ are included in \eqsref{eq:general_eom} to fine-tune energy dissipation characteristics.
+where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field.
+Optional terms $\bh_j$ are included in \eqsref{eq:general_eom} to ensure correct energy dissipation characteristics.
 
 For simplicity, we assume each $\bbf_j$ is governed by the following linear differential equation in this work:
 \begin{gather}
     \dot{\bbf}_j=-s_j\bbf_j+m_j\by_j
 \end{gather}
-where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are two real scalar parameters that control the response (and can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions).
+where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are distinctive real scalar parameters that control the response.
+Both can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions.
+To ensure stability, the poles $s_j$ shall meet the constraint: $\Re\left(s_j\right)>0$.
 It is also assumed that the initial condition for $\bbf_j$ is trivial: $\bbf_j\left(0\right)=\mb{0}$.
 \subsection{Formulation 1}\label{sec:u_dep}
 For ease of discussion, we consider the linear version of \eqsref{eq:general_eom} under free vibration ($\bp=\mb{0}$), which is
@@ -34,7 +36,7 @@ For ease of discussion, we consider the linear version of \eqsref{eq:general_eom
         \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu,
     \end{array}\right.
 \end{gather}
-with $\by_j=\mb{K}\bu$ and trivial $\bh_j$.
+with $\by_j=\mb{K}\bu$, trivial $\bh_j$ and real parameters $s_j$ and $m_j$.
 Assuming harmonic solutions for both $\bu$ and $\bbf_j$,
 \begin{gather}\label{eq:harmonic_solution}
     \bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right),\qquad
@@ -68,8 +70,9 @@ One could identify
     \lim\limits_{\omega\rightarrow0}\mb{K}'=\left(1+\sum\dfrac{m_j}{s_j}\right)\mb{K},\qquad
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\mb{K}.
 \end{gather}
-Noting that in this formulation, it is required that $m_j<0$ to ensure the system is dissipative and stable.
-Accordingly, the storage stiffness $\mb{K}'$ softens at low frequencies and approaches the original stiffness $\mb{K}$ at high frequencies.
+Noting that in this formulation, it is required that $m_j<0$ to ensure the system is dissipative.
+Physically, $\bbf_j$ represent filtered resistance forces and must be exerted against motion in order to dissipate energy.
+Accordingly, the storage stiffness $\mb{K}'$ softens at low frequencies (since $m_j<0$ and $s_j>0$) and approaches the original stiffness $\mb{K}$ at high frequencies.
 
 Repeating the above procedure with $\by_j=\bu$, one can obtain the following stiffnesses:
 \begin{gather}
@@ -77,24 +80,32 @@ Repeating the above procedure with $\by_j=\bu$, one can obtain the following sti
     \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
 \end{gather}
 With this choice, the loss stiffness $\mb{K}''$ no longer relies on the static stiffness $\mb{K}$.
-The amount of energy dissipated thus does not change even if the system exhibits softening behaviour.
 \subsection{Complex Realm Extension}
 The above analyses assume $s_j$ and $m_j$ are real scalars.
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
     m_j\in\mathbb{C},\qquad
     s_j\in\mathbb{C},\qquad
-    m_{j+1}=\bar{m_j},\qquad
-    s_{j+1}=\bar{s_j},
+    m_{j+1}=\overline{m_j},\qquad
+    s_{j+1}=\overline{s_j},
 \end{gather}
-then denoting $Z_j=\dfrac{s_jm_j}{s_j^2+\omega^2}$, one would have
+it can be proved that the above expressions for storage and loss stiffnesses still hold.
+For example, the real part
 \begin{gather}
-    Z_j+Z_{j+1}=Z_j+\bar{Z_j}=2\Re\left(Z_j\right)\in\mathbb{R}
+\begin{split}
+\Re\left(\dfrac{m_j}{s_j+i\omega}+\dfrac{m_{j+1}}{s_{j+1}+i\omega}\right)
+&=\Re\left(\dfrac{m_j}{s_j+i\omega}+\dfrac{\overline{m_j}}{\overline{s_j}+i\omega}\right)
+=\Re\left(\dfrac{m_j}{s_j+i\omega}+\overline{\dfrac{m_j}{s_j-i\omega}}\right)
+\\&=\Re\left(\dfrac{m_j}{s_j+i\omega}+\dfrac{m_j}{s_j-i\omega}\right)
+=\Re\left(\dfrac{2s_jm_j}{s^2_j+\omega^2}\right)
+\\&=\Re\left(\dfrac{s_jm_j}{s_j^2+\omega^2}+\dfrac{s_jm_j}{s_j^2+\omega^2}\right)
+=\Re\left(\dfrac{s_jm_j}{s_j^2+\omega^2}+\overline{\dfrac{s_jm_j}{s_j^2+\omega^2}}\right)
+\\&=\Re\left(\dfrac{s_jm_j}{s_j^2+\omega^2}+\dfrac{s_{j+1}m_{j+1}}{s_{j+1}^2+\omega^2}\right).
+\end{split}
 \end{gather}
-to be strictly real--valued.
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, provided that they come in conjugate pairs.
 In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
-Besides, for the system to be stable, it is required that $\Re\left(s_j\right)>0$.
+Again, for the system to be stable, it is required that $\Re\left(s_j\right)>0$.
 \subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
 The system is
@@ -112,16 +123,16 @@ The magnitude of the loss ratio stays the same since the scalar coefficient is t
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
-        s_1 & s_2 & \cdots & s_j
+        s_1 & s_2 & \cdots
     \end{bmatrix}^\mT$ and $\mb{m}=\begin{bmatrix}
-        m_1 & m_2 & \cdots & m_j
+        m_1 & m_2 & \cdots
     \end{bmatrix}^\mT$ and applying the Sherman--Morrison--Woodbury formula, one could obtain
 \begin{gather}
     \begin{split}
         \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}} & =\left(1+\mb{1}^\mT\diag{\mb{s}+i\omega}^{-1}\mb{m}\right)^{-1} \\&=1-\mb{1}^\mT\left(\diag{\mb{s}+i\omega}+\mb{m}\mb{1}^\mT\right)^{-1}\mb{m}.
     \end{split}
 \end{gather}
-Denoting the eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ as $s'_j$ and the corresponding left and right eigenvectors as $\mb{\phi}^l_j$ and $\mb{\phi}^r_j$, then
+Assuming the matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ is neither defective nor degenerate and denoting its eigenvalues as $s'_j$ and the corresponding left and right eigenvectors as $\mb{\phi}^l_j$ and $\mb{\phi}^r_j$, then
 \begin{gather}
     \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}\qquad\text{with}\quad{}m'_j=-\dfrac{\left\langle\mb{1},\mb{\phi}^r_j\right\rangle\left\langle\mb{\phi}^l_j,\mb{m}\right\rangle}{\left\langle\mb{\phi}^r_j,\mb{\phi}^l_j\right\rangle}.
 \end{gather}
@@ -209,7 +220,7 @@ effectively making \eqsref{eq:vel_cha2} an equivalent alternative formulation of
 Because computing and storing $\dot{\ba}=\dddot{\bu}$ is \textbf{not} supported in typical analysis frameworks, this practically restrictive formulation is presented solely to establish the equivalence between the two forms.
 Should $\dddot{\bu}$ be tracked, the system can leverage the unique characteristics of the mass matrix detailed in previous sections.
 \subsection{Remarks}
-Borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed formulations can also be equivalently expressed as
+Since the trivial initial condition $\bbf_j\left(0\right)=\mb{0}$ is assumed, borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed formulations can also be equivalently expressed as
 \begin{gather}
     \br+\sum{}g_j*\by_j+\sum\bh_j=\mb{p}
 \end{gather}
@@ -231,6 +242,12 @@ In the general nonlinear context, the governing system is
         \br+\sum\bbf_j+\sum\bh_j=\mb{p}.
     \end{array}\right.
 \end{gather}
+We shall assume that the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
+\begin{gather}
+    \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
+\end{gather}
+such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
+
 The first expression is a first-order ODE (of $\bbf_j$) that can be integrated by the (implicit) trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
     \bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\dot{\bbf}_{j,n}+\dot{\bbf}_{j,n+1}\right).
@@ -263,12 +280,6 @@ For the latter,
 \sum\ddfrac{\bh_{j,n+1}}{\bu_{n+1}}=-\sum\dfrac{m_j}{s_j}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}
 \end{gather}
 can be combined with the second term in \eqsref{eq:revised_k}.
-
-By the above, we have assumed that the contributions of $\bu$, $\bv=\dot{\bu}$ and $\ba=\ddot{\bu}$ are separable, indicating no coupling among them, then the resistance $\br$ can be split into three components
-\begin{gather}
-    \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
-\end{gather}
-such that $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ are functions of $\baleph$ where $\baleph\in\left\{\bu,\bv,\ba\right\}$.
 
 It thus can be concluded from \eqsref{eq:revised_k} that to account for this additional energy dissipating term $\bbf$, only an additional matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$, or $\sum\left(\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}-\dfrac{m_j}{s_j}\right)\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ if $\bh_j$ is present, needs to be added to the original effective stiffness $\bbar{K}_{n+1}$.
 In certain cases, this additional matrix can be very efficiently formulated.
