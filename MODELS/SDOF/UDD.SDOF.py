@@ -197,7 +197,12 @@ def generate(damping, steps):
 
     fig = plt.figure(figsize=(6, 2))
 
+    v_min, v_max = 1, 0
+
     for key, value in results.items():
+        segment = np.abs(value.error[len(value.error) // 20 :])
+        v_min = min(v_min, np.min(segment))
+        v_max = max(v_max, np.max(segment))
         plt.plot(
             value.time,
             np.abs(value.error),
@@ -212,6 +217,7 @@ def generate(damping, steps):
     plt.ylabel("absolute error $\\epsilon$")
     plt.grid(which="both", linestyle="--", linewidth=0.2)
     plt.xlim(0, 5)
+    plt.ylim(v_min, v_max * 2)
 
     fig.tight_layout(pad=0.1)
     fig.savefig("../../PIC/UDD.SDOF.ERROR.pdf")
