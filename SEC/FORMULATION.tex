@@ -322,19 +322,19 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ thus $\bhat{
 \tabref{tab:special} summarises a few special cases.
 \begin{table}[ht!]
     \centering\scriptsize\renewcommand{\arraystretch}{1.4}
-    \caption{some special cases}\label{tab:special}
-    \begin{tabular}{lccccl}
+    \caption{some noticeable formulations}\label{tab:special}
+    \begin{tabular}{lccccll}
         \toprule
-        section                                  &  $s_j$  &  $m_j$  &                    $\by_j$                     &       $\bh_j$       & remarks                                          \\ \midrule
-                                                 & complex & complex &                     $\bu$                      &    $-m_j/s_j\bu$    & general damping                                  \\
-                                                 & complex & complex &                     $\bv$                      &      $\mb{0}$       & identical to \citep{Chang2024}                   \\
-                                                 & complex & complex &                     $\ba$                      &    $-m_j/s_j\ba$    & general damping                                  \\ \midrule
-                                                 &  real   &  real   &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)     &      $\mb{0}$       & identical to \citep{Huang2019}                   \\
-        \secref{sec:v_dep_k}                     & complex & complex &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)     &      $\mb{0}$       & complex extension of \citep{Huang2019}           \\
-        \secref{sec:v_dep_m}                     & complex & complex & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$)  &      $\mb{0}$       & equiv. to \secref{sec:v_dep_k}                   \\ \midrule
-        \secref{sec:u_dep} with \secref{sec:fix} & complex & complex &                  $\br_{\bu}$                   & $-m_j/s_j\br_{\bu}$ & alternative form, equiv. to \secref{sec:v_dep_k} \\
-        \secref{sec:a_dep} with \secref{sec:fix} & complex & complex &                  $\br_{\ba}$                   & $-m_j/s_j\br_{\ba}$ & alternative form, equiv. to \secref{sec:v_dep_k} \\ %\midrule
-        %                                        &    0    &    1    & $\left(\alpha\mb{M}_0+\beta\mb{K}_0\right)\ba$ &      $\mb{0}$       & Rayleigh damping                                 \\ \bottomrule
+        section                                  &    $s_j$     &    $m_j$     &                    $\by_j$                    &       $\bh_j$       & cost                                                                    & remarks                                          \\ \midrule
+                                                 & $\mathbb{C}$ & $\mathbb{C}$ &                     $\bu$                     &    $-m_j/s_j\bu$    & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & general damping                                  \\
+                                                 & $\mathbb{C}$ & $\mathbb{C}$ &                     $\bv$                     &      $\mb{0}$       & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & identical to \citep{Chang2024}                   \\
+                                                 & $\mathbb{C}$ & $\mathbb{C}$ &                     $\ba$                     &    $-m_j/s_j\ba$    & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & general damping                                  \\ \midrule
+                                                 & $\mathbb{R}$ & $\mathbb{R}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStarHalf*\faStar[regular]                       & identical to \citep{Huang2019}                   \\
+        \secref{sec:v_dep_k}                     & $\mathbb{C}$ & $\mathbb{C}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar[regular]                            & complex extension of \citep{Huang2019}           \\
+        \secref{sec:v_dep_m}                     & $\mathbb{C}$ & $\mathbb{C}$ & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$) &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar                                     & equiv. to \secref{sec:v_dep_k}                   \\ \midrule
+        \secref{sec:u_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\bu}$                  & $-m_j/s_j\br_{\bu}$ & \faStar\faStar\faStarHalf*\faStar[regular]\faStar[regular]              & alternative form, equiv. to \secref{sec:v_dep_k} \\
+        \secref{sec:a_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\ba}$                  & $-m_j/s_j\br_{\ba}$ & \faStar\faStar[regular]\faStar[regular]\faStar[regular]\faStar[regular] & alternative form, equiv. to \secref{sec:v_dep_k} \\ \midrule
+        \multicolumn{7}{p{14cm}}{Note: the reported implementation cost is intended only to indicate the relative ranking among the formulations in the table, and does not represent a quantitative or absolute measure of computational expense.}                               \\ \bottomrule
     \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
@@ -343,6 +343,8 @@ Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly for
 Among various formulations, three practical ones are repeated in the nonlinear context as follows.
 Each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{Displacement Dependent}
+This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
+Its computational cost is lower than that of \eqsref{eq:v_final} but higher than that of \eqsref{eq:a_final}.
 \begin{gather}\label{eq:u_final}
 \boxed{
     \left\{\begin{array}{l}
@@ -352,7 +354,9 @@ Each one is equivalent to the others and all yield identical energy dissipation 
 }
 \end{gather}
 \paragraph{Velocity Dependent}
-\begin{gather}
+This formulation also requires scaling of the tangent stiffness matrix $\mb{K}$.
+In addition, the non-standard quantity $\mb{K}\bv$ must be computed, assembled, and stored as an additional history variable, resulting in the highest computational cost among the three formulations.
+\begin{gather}\label{eq:v_final}
 \boxed{
     \left\{\begin{array}{l}
         \br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\mb{p}, \\
@@ -361,7 +365,10 @@ Each one is equivalent to the others and all yield identical energy dissipation 
 }
 \end{gather}
 \paragraph{Acceleration Dependent}
-\begin{gather}
+This formulation requires scaling of the mass matrix $\mb{M}$.
+Since $\mb{M}$ is typically sparser than $\mb{K}$ and must be scaled regardless, the additional computational cost is negligible.
+Consequently, this formulation is the least expensive among the three.
+\begin{gather}\label{eq:a_final}
 \boxed{
     \left\{\begin{array}{l}
         \left(1-\sum\dfrac{m_j}{s_j}\right)\br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\mb{p}, \\
