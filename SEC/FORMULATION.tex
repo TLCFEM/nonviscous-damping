@@ -120,6 +120,7 @@ Adopting a similar approach, the characteristic equation can be derived as
     \det\left(\dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)=0.
 \end{gather}
 The magnitude of the loss ratio stays the same since the scalar coefficient is the reciprocal of that in the previous case.
+In this formulation, a dissipative system requires $\Re\left(m_j\right)>0$.
 
 It is possible to show that \eqsref{eq:acc_cha} is in fact identical to \eqsref{eq:disp_cha}.
 Rewriting the scalar coefficient into the matrix form with $\mb{s}=\begin{bmatrix}
@@ -199,7 +200,8 @@ One could identify
     \lim\limits_{\omega\rightarrow0}\mb{K}'=\mb{K},\qquad
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1+\sum{}m_j\right)\mb{K}.
 \end{gather}
-A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019}.
+In this formulation, a dissipative system requires $\Re\left(m_j\right)>0$.
+A careful comparison reveals that \eqsref{eq:vel_formulation} is in fact equivalent to the model by \citet{Huang2019} that adopts real parameters $s_j$ and $m_j$.
 The loss stiffness $\mb{K}''$ in this case is positive, indicating that the system is dissipative and stable when $\Re\left(m_j\right)>0$.
 Unlike the previous formulations, the storage stiffness $\mb{K}'$ approaches the original stiffness $\mb{K}$ at low frequencies and hardens at high frequencies.
 It is in fact also equivalent to \eqsref{eq:u_right} after a simple mapping of parameters: $s_j$ stays unchanged; replacing $m_j$ in \eqsref{eq:vel_formulation} by $-m_j/s_j$ yields \eqsref{eq:u_right}.
