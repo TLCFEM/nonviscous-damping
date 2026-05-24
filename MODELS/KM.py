@@ -18,17 +18,15 @@ def inverse(m, s):
 def inverse_highpass(m, s):
     m = np.asarray(m, dtype=np.complex128)
     s = np.asarray(s, dtype=np.complex128)
-    ms = m * s
-    ones = np.ones_like(m)
 
     D = 1.0 + np.sum(m)
 
-    ar, R = np.linalg.eig(np.diag(s) - np.outer(ones, ms) / D)
+    ar, R = np.linalg.eig(np.diag(s) - np.outer(m, s) / D)
 
     R = R[:, idx := np.argsort(ar)]
     rs = ar[idx]
 
-    return -(ms @ R) * np.linalg.solve(R, ones) / (D**2 * rs), rs
+    return -(s @ R) * np.linalg.solve(R, m) / (D**2 * rs), rs
 
 
 def plot_response(m, s, ax, omega=None, w_min=None, w_max=None, reciprocal=False):
@@ -86,7 +84,7 @@ def random_sm(
 
 
 if __name__ == "__main__":
-    m, s = random_sm(500, complex_valued=True, seed=21621431)
+    m, s = random_sm(12, complex_valued=False, seed=21621431)
     rm, rs = inverse_highpass(m, s)
     ax = plt.subplot(1, 1, 1)
     plot_response(m, s, ax)
