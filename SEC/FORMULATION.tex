@@ -143,6 +143,8 @@ This process naturally extends the definition of $s_j$ and $m_j$ to the complex 
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 In the absence of other energy dissipating actions, the two formulations are thus equivalent.
 This equivalence may offer numerical advantages (that can be seen later) when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+
+One shall note that the above equivalence is only valid under free vibration.
 \subsection{The Wrong Asymptotic Behaviour}\label{sec:fix}
 The fundamental consistency requirement states that $\mb{K}^*$ (or $\mb{K}'$) must approach the static stiffness $\mb{K}$ at low frequencies, that is, $\lim\limits_{\omega\rightarrow0}\mb{K}^*=\mb{K}$, to ensure the system behaves as expected under static loading conditions.
 It can be noted that $\mb{K}'$ fails to meet this requirement as it does not converge to the static stiffness $\mb{K}$ at low frequencies in \eqsref{eq:u_stiffnesses}.
@@ -331,9 +333,9 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$, and thus $\
                                                  & $\mathbb{C}$ & $\mathbb{C}$ &                     $\ba$                     &    $-m_j/s_j\ba$    & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & general damping                                  \\ \midrule
                                                  & $\mathbb{R}$ & $\mathbb{R}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStarHalf*\faStar[regular]                       & identical to \citep{Huang2019}                   \\
         \secref{sec:v_dep_k}                     & $\mathbb{C}$ & $\mathbb{C}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar[regular]                            & complex extension of \citep{Huang2019}           \\
-        \secref{sec:v_dep_m}                     & $\mathbb{C}$ & $\mathbb{C}$ & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$) &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar                                     & equiv. to \secref{sec:v_dep_k}                   \\ \midrule
-        \secref{sec:u_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\bu}$                  & $-m_j/s_j\br_{\bu}$ & \faStar\faStar\faStarHalf*\faStar[regular]\faStar[regular]              & alternative form, equiv. to \secref{sec:v_dep_k} \\
-        \secref{sec:a_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\ba}$                  & $-m_j/s_j\br_{\ba}$ & \faStar\faStar[regular]\faStar[regular]\faStar[regular]\faStar[regular] & alternative form, equiv. to \secref{sec:v_dep_k} \\ \midrule
+        \secref{sec:v_dep_m}                     & $\mathbb{C}$ & $\mathbb{C}$ & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$) &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar                                     & equiv. to \secref{sec:v_dep_k} if free vibration                   \\ \midrule
+        \secref{sec:u_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\bu}$                  & $-m_j/s_j\br_{\bu}$ & \faStar\faStar\faStarHalf*\faStar[regular]\faStar[regular]              & alt. form, equiv. to \secref{sec:v_dep_k} \\
+        \secref{sec:a_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\ba}$                  & $-m_j/s_j\br_{\ba}$ & \faStar\faStar[regular]\faStar[regular]\faStar[regular]\faStar[regular] & alt. form, equiv. to \secref{sec:v_dep_k} if free vibration \\ \midrule
         \multicolumn{7}{p{15cm}}{The reported implementation cost is intended only to indicate the relative ranking among the formulations in the table, and does not represent a quantitative or absolute measure of computational expense. More stars indicate higher implementation cost.}                               \\ \bottomrule
     \end{tabular}
 \end{table}
@@ -341,7 +343,7 @@ The proposed damping formulations can be applied at both the global model and el
 Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
 
 Among various formulations, three practical ones are repeated in the nonlinear context as follows.
-Each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
+Under free vibration, each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{Displacement Dependent}
 This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
 Its computational cost is lower than that of \eqsref{eq:v_final} but higher than that of \eqsref{eq:a_final}.
