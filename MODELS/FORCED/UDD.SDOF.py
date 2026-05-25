@@ -74,16 +74,16 @@ analyze
 
 save recorder 1
 
-terminal mv R1-U.h5 R1-U-{step_time}.h5
+terminal mv R1-U.h5 R1-U-{scheme}-{step_time}.h5
 
 exit
 """
 
 
-def execute(step_time: str, damping: str):
+def execute(step_time: str, damping: str, scheme: str):
     print(f"Executing with step_time={step_time}...")
     target = Path("model.sp")
-    target.write_text(model.format(step_time=step_time, damping=damping))
+    target.write_text(model.format(step_time=step_time, damping=damping, scheme=scheme))
     os.system("suanpan -np -f model.sp")
     target.unlink()
 
@@ -141,9 +141,9 @@ def analytical(*para):
     return disp
 
 
-def numerical(disp, pick):
+def numerical(disp, pick, scheme):
     name = "R1-U"
-    with h5py.File(f"{name}-{str(pick)}.h5", "r") as f:
+    with h5py.File(f"{name}-{scheme}-{str(pick)}.h5", "r") as f:
         data = f[f"/{name}/{name}2"]
 
         return Response(
@@ -164,8 +164,8 @@ def generate(damping, steps, refresh=False):
     disp = analytical(10, -2, 10, 1, 2 * np.pi)
     for step_time in steps:
         if refresh:
-            execute(step_time, damping)
-        results[step_time] = numerical(disp, float(step_time))
+            execute(step_time, damping, scheme)
+        results[step_time] = numerical(disp, float(step_time), scheme)
 
     for key, value in results.items():
         plt.plot(
