@@ -1,6 +1,6 @@
 \section{Numerical Examples}
 \subsection{A SDOF System}
-We consider a SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$, following \eqsref{eq:u_final}.
+We consider an SDOF system with natural frequency $\omega_n$ and damping parameters $m$ and $s$, following \eqsref{eq:u_final}.
 The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u}(0)=0$.
 \begin{gather}
     \left\{\begin{array}{l}
@@ -10,12 +10,11 @@ The system undergoes free vibration with initial conditions $u(0)=1$ and $\dot{u
 \end{gather}
 The following parameters are used in the numerical simulation: $\omega_n=10$, $m=-2$, $s=10$.
 In this case, the initial condition for acceleration $a_0=-120$ needs to be properly assigned.
-How this initial condition is assigned is an implementation detail and is not discussed
-here.
-It is not a concern in general if the global time integration is self-starting.
+How this initial condition is assigned is an implementation detail and is not discussed here.
+This is generally not a concern if the global time integration is self-starting.
 
 \figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$ and the corresponding error convergence rate.
-It is clear that second-order convergence of the used Newmark method is retained.
+It is clear that second-order convergence of the Newmark method used here is retained.
 \begin{figure}[htb]
 \centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.pdf}
@@ -31,9 +30,9 @@ It is clear that second-order convergence of the used Newmark method is retained
 One can further validate that this example can be equivalently expressed in the form of \eqsref{eq:a_right}, with $m=25/18$ and $s=25/3$.
 To maintain brevity, these results are omitted since they are identical to those already presented.
 \subsection{Forced Vibration}
-The same SDOF is analysed under a harmonic external load $p\left(t\right)=\sin\left(2\pi{}t\right)$ with trivial initial conditions.
-\figref{fig:sdof_forced_udd} and \figref{fig:sdof_forced_uda} show displacement history and error convergence with both formulations \eqsref{eq:u_final} and \eqsref{eq:a_final}.
-They together add further evidence that the proposed algorithm is second-order accurate for both formulations under either free or forced vibration.
+The same SDOF system is analysed under a harmonic external load $p\left(t\right)=\sin\left(2\pi{}t\right)$ with trivial initial conditions.
+\figref{fig:sdof_forced_udd} and \figref{fig:sdof_forced_uda} show the displacement history and error convergence for formulations \eqsref{eq:u_final} and \eqsref{eq:a_final}, respectively.
+Together, they provide further evidence that the proposed algorithm is second-order accurate for both formulations under either free or forced vibration.
 \begin{figure}[htb]
     \centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.FORCED.pdf}
@@ -45,7 +44,7 @@ They together add further evidence that the proposed algorithm is second-order a
     \caption{displacement history and error analysis of SDOF oscillator (forced vibration with UDA)}\label{fig:sdof_forced_uda}
 \end{figure}
 
-By comparing the absolute error history as presented in \figref{fig:sdof_error_forced_udd} and \figref{fig:sdof_error_forced_uda}, one may observe that both formulations yield identical error history, which further confirms their equivalence.
+Comparing the absolute error histories in \figref{fig:sdof_error_forced_udd} and \figref{fig:sdof_error_forced_uda} shows that both formulations yield identical error histories, further confirming their equivalence.
 \begin{figure}[htb]
     \centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.ERROR.FORCED.pdf}
@@ -57,7 +56,7 @@ By comparing the absolute error history as presented in \figref{fig:sdof_error_f
     \caption{absolute error history of SDOF oscillator (forced vibration with UDA)}\label{fig:sdof_error_forced_uda}
 \end{figure}
 \subsection{Equivalence and Damping Characteristics}
-Although the aforementioned formulations have been proven mathematically equivalent, their damping characteristics are further examined through a numerical example using the following parameters that satisfy \eqref{eq:rate_eqv}.
+Although these formulations have been proven mathematically equivalent, their damping characteristics are further examined through a numerical example using the following parameters that satisfy \eqref{eq:rate_eqv}.
 \begin{table}[htb]
     \centering\footnotesize
 \caption{parameter sets for the narrow-band
@@ -77,8 +76,8 @@ $m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule
 $1+\sum{}m_j$ & 1.3215e+00 & & \\\bottomrule
 \end{tabular}
 \end{table}
-With eight terms, the above parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
-As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
+With eight terms, these parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
+As shown in \figref{fig:mass_eq}, the specific damping factor is identical in both cases.
 The corresponding kernel functions are, however, different (as expected).
 \begin{figure}[htb]
 \centering
@@ -86,9 +85,9 @@ The corresponding kernel functions are, however, different (as expected).
 \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a narrow approximation range}\label{fig:mass_eq}
 \end{figure}
 
-The storage stiffness would gradually increase as frequency approaches the right end of the approximation range.
+The storage stiffness gradually increases as the frequency approaches the right end of the approximation range.
 Outside the approximation range, it can be as high as \SI{132}{\percent} of the static stiffness.
-This higher bound is controlled by the summation $\sum{}m_j$, which roughly translates to the area under the curve of the specific damping factor.
+This upper bound is controlled by the summation $\sum{}m_j$, which roughly corresponds to the area under the specific-damping-factor curve.
 
 To illustrate, the following parameters are used to approximate a constant specific damping factor of \SI{8}{\percent} with a wider approximation range from \num{0.001} rad/s to \num{1000} rad/s.
 \begin{table}[htb]
@@ -112,7 +111,7 @@ $m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule
 $1+\sum{}m_j$ & 1.8571e+00 & & \\\bottomrule
 \end{tabular}
 \end{table}
-It can be seen from \figref{fig:mass_eq_wider} that the storage stiffness can reach \SI{186}{\percent} of the static stiffness above \num{1000} rad/s.
+As shown in \figref{fig:mass_eq_wider}, the storage stiffness can reach \SI{186}{\percent} of the static stiffness above \num{1000} rad/s.
 At \num{1} rad/s, it is above \SI{140}{\percent} of the static stiffness.
 \begin{figure}[htb]
 \centering
@@ -129,15 +128,15 @@ To accurately represent this range, the target system must remain lightly damped
 As discussed by \citet{Huang2019}, this type of nonviscous damping may be interpreted as a manifestation of stress relaxation in the underlying material.
 However, whether the associated hardening accurately represents the physical behaviour of the system or material remains an open question requiring further investigation.
 
-To close this example, we further present a multi-level damping curve in \figref{fig:mass_eq_multilevel} with higher damping level at ultra-low and ultra-high frequencies, while maintaining a constant specific damping factor of \SI{5}{\percent} in the middle frequency range.
+To close this example, we further present a multi-level damping curve in \figref{fig:mass_eq_multilevel} with higher damping levels at ultra-low and ultra-high frequencies, while maintaining a constant specific damping factor of \SI{5}{\percent} in the middle frequency range.
 The corresponding parameters are not listed here for brevity.
 \begin{figure}[htb]
     \centering
     \includegraphics{PIC/MASS.EQ.MUCHMORE.pdf}
     \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a multi-level damping curve}\label{fig:mass_eq_multilevel}
 \end{figure}
-\subsection{Large System Perforamnce}
-In this example, the performance differences among the proposed formulations are demonstrated.
+\subsection{Large System Performance}
+In this example, differences in performance among the proposed formulations are demonstrated.
 The system under consideration is a three-dimensional model comprising \num{20124} nodes, each with six degrees of freedom, yielding a total of \num{120744} degrees of freedom.
 The model includes \num{39990} triangular shell elements.
 The global system adopts a banded storage format.
@@ -153,7 +152,7 @@ Relative to the static case, dynamic analyses primarily incur additional computa
 This is reflected in the undamped case solved using the Newmark integration scheme.
 
 For the damped analyses, the same eight terms listed in \tabref{tab:constant_five} are adopted.
-The label `UDA' refers to the formulation in \eqsref{eq:a_final}, whose computational cost is only marginally higher than that of the undamped case.
+The label `UDA' refers to the formulation in \eqsref{eq:a_final}, for which the computational cost is only marginally higher than that of the undamped case.
 This behaviour is expected, as the additional cost primarily originates from the computation of the vectors $\bbf_j$ and $\bq_j$, which scales with the number of terms employed in the analysis.
 For a small number of terms, the associated overhead remains negligible.
 The label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.

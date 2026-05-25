@@ -9,9 +9,9 @@ In the general nonlinear context, the governing system is
         \br+\sum\bbf_j+\sum\bh_j=\mb{z}.
     \end{array}\right.
 \end{gather}
-Consider the external load may be augmented as in \eqsref{eq:a_final}, here we use $\mb{z}$ instead.
+Because the external load may be augmented as in \eqsref{eq:a_final}, $\mb{z}$ is used here instead.
 \subsubsection{Effective Stiffness}
-The first expression is a first-order ODE (of $\bbf_j$) that can be integrated by the (implicit) trapezoidal rule, which is second-order accurate and A-stable,
+The first expression is a first-order ODE for $\bbf_j$ that can be integrated with the implicit trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
     \bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\dot{\bbf}_{j,n}+\dot{\bbf}_{j,n+1}\right).
 \end{gather}
@@ -19,13 +19,13 @@ Expanding gives
 \begin{gather}
     \bbf_{j,n+1}=\bbf_{j,n}+\dfrac{\Delta{}t}{2}\left(\left(-s_j\bbf_{j,n}+m_j\by_{j,n}\right)+\left(-s_j\bbf_{j,n+1}+m_j\by_{j,n+1}\right)\right),
 \end{gather}
-one may further rearrange to obtain
+which can be rearranged to obtain
 \begin{gather}\label{eq:discretised_c}
     \bbf_{j,n+1}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1},
 \end{gather}
 in which subscripts $\left(\cdot\right)_n$ and $\left(\cdot\right)_{n+1}$ denote the corresponding quantity at $t_n$ and $t_{n+1}=t_n+\Delta{}t$.
 
-Now assuming the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well-known Newmark method), the second expression is
+Assuming that the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well-known Newmark method), the second expression is
 \begin{gather}\label{eq:residual}
     \br_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1}+\sum\bh_{j,n+1}=\mb{z}_{n+1}.
 \end{gather}
@@ -33,7 +33,7 @@ Differentiation leads to the following revised effective stiffness $\bhat{K}_{n+
 \begin{gather}\label{eq:revised_k}
     \bhat{K}_{n+1}=\bbar{K}_{n+1}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}+\sum\ddfrac{\bh_{j,n+1}}{\bu_{n+1}}.
 \end{gather}
-in which the conventional effective stiffness $\bbar{K}_{n+1}$ is
+where the conventional effective stiffness $\bbar{K}_{n+1}$ is
 \begin{gather}\label{eq:effective_k}
     \bbar{K}_{n+1}=\ddfrac{\br_{n+1}}{\bu_{n+1}}=\mb{K}_{n+1}+\mb{C}_{n+1}\ddfrac{\bv_{n+1}}{\bu_{n+1}}+\mb{M}_{n+1}\ddfrac{\ba_{n+1}}{\bu_{n+1}}.
 \end{gather}
@@ -44,13 +44,13 @@ For the latter,
 \end{gather}
 can be combined with the second term in \eqsref{eq:revised_k}.
 
-It thus can be concluded from \eqsref{eq:revised_k} that to account for this energy dissipating action, only an additional matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$, or $\sum\left(\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}-\dfrac{m_j}{s_j}\right)\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ if $\bh_j$ is present, needs to be added to the original effective stiffness $\bbar{K}_{n+1}$.
-In certain cases, this additional matrix can be very efficiently formulated.
+It follows from \eqsref{eq:revised_k} that accounting for this energy-dissipating action requires adding only the matrix $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$, or $\sum\left(\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}-\dfrac{m_j}{s_j}\right)\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ if $\bh_j$ is present, to the original effective stiffness $\bbar{K}_{n+1}$.
+In certain cases, this additional matrix can be formed very efficiently.
 For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}$ is simply the (possibly scaled) stiffness matrix $\mb{K}_{n+1}$ (or the mass matrix $\mb{M}_{n+1}$) that is already available in the original formulation.
-In some other special cases, this matrix can be diagonal, for example, with $\by_j\in\{\bu,\bv,\ba\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with possibly a non-unit scalar $\alpha$.
+In other special cases, this matrix can be diagonal; for example, with $\by_j\in\{\bu,\bv,\ba\}$, $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with a possibly non-unit scalar $\alpha$.
 Adding such a diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 \subsubsection{Effective Load}
-In \eqsref{eq:u_final} and \eqsref{eq:v_final}, simply
+For \eqsref{eq:u_final} and \eqsref{eq:v_final}, the effective load is simply
 \begin{gather}\label{eq:eff_load_simple}
     \bz_{n+1}=\bp_{n+1}.
 \end{gather}
@@ -68,10 +68,10 @@ thus
 \subsubsection{A Reference Algorithm}
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into an existing iterative analysis workflow.
 The subscript $\left(\cdot\right)_{n+1}$ is dropped for brevity.
-Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ and $\bq_{j,n}\leftarrow\bq_j$ shall be committed.
+Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ and $\bq_{j,n}\leftarrow\bq_j$ are committed.
 When $\bh_j$ is an algebraic function of $\by_j$, there is usually no need to store it separately.
-Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ and $\bq=\sum\bq_j$ are all real--valued.
-The same also applies to scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and $\sum\dfrac{m_j}{s_j}$, and thus $\bhat{K}$ is real--valued.
+Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ and $\bq=\sum\bq_j$ are real-valued.
+The same applies to the scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and $\sum\dfrac{m_j}{s_j}$, and thus $\bhat{K}$ is real-valued.
 \begin{breakablealgorithm}
     \setstretch{2}
     \caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
@@ -79,8 +79,8 @@ The same also applies to scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and 
         \State \textbf{*Schema: Newmark + Trapezoidal}
         \State \textbf{Input}: $\bbar{K}$, $\bu$, $\bv$, $\ba$, $\br$, $\bp$ (quantities obtained in the conventional manner as if there is no general damping); damping history/parameters $\bbf_{j,n}$, $\by_{j,n}$, $\bq_{j,n}$, $m_j$, $s_j$
         \State \textbf{Output}: $\bu$
-        \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
-        \State \faMicrochip~compute effective effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
+        \State \faMicrochip~compute energy-dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
+        \State \faMicrochip~compute effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
         \State \faMicrochip~compute effective resistance $\bhat{r}=\br+\sum\bbf_j+\sum\bh_j$
         \State \faMicrochip~compute effective load $\bz$\Comment{\eqsref{eq:eff_load_simple} or \eqsref{eq:eff_load}}
         \State $\delta\bu=\bhat{K}^{-1}\left(\mb{z}-\bhat{r}\right)$
@@ -91,7 +91,7 @@ The same also applies to scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and 
 \tabref{tab:special} summarises a few special cases.
 \begin{table}[ht!]
     \centering\footnotesize\renewcommand{\arraystretch}{1.4}
-    \caption{some noticeable formulations}\label{tab:special}
+    \caption{selected formulations}\label{tab:special}
     \begin{tabular}{lccccll}
         \toprule
                                                   & $s_j$        & $m_j$        & $\by_j$                                       & $\bh_j$             & cost                                                                    & remarks                                                     \\ \midrule
@@ -107,21 +107,21 @@ The same also applies to scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and 
     \end{tabular}
 \end{table}
 The proposed damping formulations can be applied at both the global model and element levels.
-Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
+Consequently, the energy-dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
 
-One shall notice that the proposed formulations have the following advantages.
+The proposed formulations have the following advantages.
 \begin{enumerate}
-    \item It retains the size of the original problem/system.
-    \item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility customising the desired damping response.
-    \item State determination of additional damping history $\bbf_j$ is constant and only involves matrix--vector multiplications.
-    \item The consistent tangent stiffness that allows quadratic convergence rate can be trivially assembled, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
-          In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational efforts required would be minimized.
+    \item They retain the size of the original problem/system.
+    \item The parameters $s_j$ and $m_j$ accept complex values, providing extra flexibility for customising the desired damping response.
+    \item State determination for the additional damping history $\bbf_j$ is local and involves only matrix--vector multiplications.
+    \item The consistent tangent stiffness that enables quadratic convergence can be assembled directly, for example, using different scalar weights in weighted summation if $\by_j\in\left\{\br_{\bu},\br_{\bv},\br_{\ba}\right\}$ or assembling additional diagonal matrices if $\by_j\in\left\{\bu,\bv,\ba\right\}$.
+          In problems where the mass matrix $\mb{M}$ is constant and/or lumped, the extra computational effort is minimized.
     \item The reciprocal formulations are equivalent mathematically.
-          In the absence of other energy dissipating actions (such as conventional viscous damping), one form can be converted into another.
+          In the absence of other energy-dissipating actions (such as conventional viscous damping), one form can be converted into another.
           Instead of scaling $\mb{K}$, it is possible to scale $\mb{M}$ in the equivalent form.
           In global time integration methods that express the equation of motion in terms of $\bu$, $\mb{M}$ is already scaled by a scalar factor; therefore, the proposed contribution can be included with one additional scalar multiplication.
 \end{enumerate}
 
-The preceding analyses assume no external damping actions.
-Consequently, the derived loss stiffnesses and loss ratios hold strictly in the absence of additional velocity dependent energy dissipation mechanisms, such as conventional viscous damping.
+The preceding analyses assume no additional damping actions.
+Consequently, the derived loss stiffnesses and loss ratios hold strictly in the absence of additional velocity-dependent energy dissipation mechanisms, such as conventional viscous damping.
 Nonetheless, a non-trivial $\mb{C}$ is maintained in \eqsref{eq:effective_k} to preserve structural generality.
