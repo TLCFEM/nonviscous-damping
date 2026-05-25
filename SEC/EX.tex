@@ -16,23 +16,49 @@ It is not a concern in general if the global time integration is self-starting.
 
 \figref{fig:sdof} shows the displacement history of the SDOF system with various time step sizes $\Delta{}t$ and the corresponding error convergence rate.
 It is clear that second-order convergence of the used Newmark method is retained.
-\begin{figure}[ht!]
-    \centering
+\begin{figure}[htb]
+\centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.pdf}
     \caption{displacement history and error analysis of SDOF oscillator (free vibration)}\label{fig:sdof}
 \end{figure}
 \figref{fig:sdof_error} further shows the absolute error history of the SDOF system in the time domain.
-\begin{figure}[ht!]
-    \centering
+\begin{figure}[htb]
+\centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.ERROR.pdf}
     \caption{absolute error history of SDOF oscillator (free vibration)}\label{fig:sdof_error}
 \end{figure}
 
 One can further validate that this example can be equivalently expressed in the form of \eqsref{eq:a_right}, with $m=25/18$ and $s=25/3$.
 To maintain brevity, these results are omitted since they are identical to those already presented.
+\subsection{Forced Vibration}
+The same SDOF is analysed under a harmonic external load $p\left(t\right)=\sin\left(2\pi{}t\right)$ with trivial initial conditions.
+\figref{fig:sdof_forced_udd} and \figref{fig:sdof_forced_uda} show displacement history and error convergence with both formulations \eqsref{eq:u_final} and \eqsref{eq:a_final}.
+They together add further evidence that the proposed algorithm is second-order accurate for both formulations under either free or forced vibration.
+\begin{figure}[htb]
+    \centering\footnotesize
+    \includegraphics{PIC/UDD.SDOF.FORCED.pdf}
+    \caption{displacement history and error analysis of SDOF oscillator (forced vibration with UDD)}\label{fig:sdof_forced_udd}
+\end{figure}
+\begin{figure}[htb]
+    \centering\footnotesize
+    \includegraphics{PIC/UDA.SDOF.FORCED.pdf}
+    \caption{displacement history and error analysis of SDOF oscillator (forced vibration with UDA)}\label{fig:sdof_forced_uda}
+\end{figure}
+
+By comparing the absolute error history as presented in \figref{fig:sdof_error_forced_udd} and \figref{fig:sdof_error_forced_uda}, one may observe that both formulations yield identical error history, which further confirms their equivalence.
+\begin{figure}[htb]
+    \centering\footnotesize
+    \includegraphics{PIC/UDD.SDOF.ERROR.FORCED.pdf}
+    \caption{absolute error history of SDOF oscillator (forced vibration with UDD)}\label{fig:sdof_error_forced_udd}
+\end{figure}
+\begin{figure}[htb]
+    \centering\footnotesize
+    \includegraphics{PIC/UDA.SDOF.ERROR.FORCED.pdf}
+    \caption{absolute error history of SDOF oscillator (forced vibration with UDA)}\label{fig:sdof_error_forced_uda}
+\end{figure}
 \subsection{Equivalence and Damping Characteristics}
 Although the aforementioned formulations have been proven mathematically equivalent, their damping characteristics are further examined through a numerical example using the following parameters that satisfy \eqref{eq:rate_eqv}.
-\begin{table}[ht!]
+\begin{table}[htb]
     \centering\footnotesize
 \caption{parameter sets for the narrow-band
 equivalence test}\label{tab:constant_five}
@@ -54,7 +80,7 @@ $1+\sum{}m_j$ & 1.3215e+00 & & \\\bottomrule
 With eight terms, the above parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
 As can be seen in \figref{fig:mass_eq}, the specific damping factor is indeed identical in both cases.
 The corresponding kernel functions are, however, different (as expected).
-\begin{figure}[ht!]
+\begin{figure}[htb]
 \centering
 \includegraphics{PIC/MASS.EQ.pdf}
 \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a narrow approximation range}\label{fig:mass_eq}
@@ -65,7 +91,7 @@ Outside the approximation range, it can be as high as \SI{132}{\percent} of the 
 This higher bound is controlled by the summation $\sum{}m_j$, which roughly translates to the area under the curve of the specific damping factor.
 
 To illustrate, the following parameters are used to approximate a constant specific damping factor of \SI{8}{\percent} with a wider approximation range from \num{0.001} rad/s to \num{1000} rad/s.
-\begin{table}[ht!]
+\begin{table}[htb]
     \centering\footnotesize
 \caption{parameter sets for the wide-band
 equivalence test}
@@ -88,7 +114,7 @@ $1+\sum{}m_j$ & 1.8571e+00 & & \\\bottomrule
 \end{table}
 It can be seen from \figref{fig:mass_eq_wider} that the storage stiffness can reach \SI{186}{\percent} of the static stiffness above \num{1000} rad/s.
 At \num{1} rad/s, it is above \SI{140}{\percent} of the static stiffness.
-\begin{figure}[ht!]
+\begin{figure}[htb]
 \centering
 \includegraphics{PIC/MASS.EQ.MORE.pdf}
 \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a wide approximation range}\label{fig:mass_eq_wider}
@@ -105,7 +131,7 @@ However, whether the associated hardening accurately represents the physical beh
 
 To close this example, we further present a multi-level damping curve in \figref{fig:mass_eq_multilevel} with higher damping level at ultra-low and ultra-high frequencies, while maintaining a constant specific damping factor of \SI{5}{\percent} in the middle frequency range.
 The corresponding parameters are not listed here for brevity.
-\begin{figure}[ht!]
+\begin{figure}[htb]
     \centering
     \includegraphics{PIC/MASS.EQ.MUCHMORE.pdf}
     \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a multi-level damping curve}\label{fig:mass_eq_multilevel}
@@ -117,7 +143,7 @@ The model includes \num{39990} triangular shell elements.
 The global system adopts a banded storage format.
 
 \figref{fig:performance} presents a comparison of the wall-clock time required to analyse the system over \num{25} time steps.
-\begin{figure}[ht!]
+\begin{figure}[htb]
     \centering
     \includegraphics{PIC/PERFORMANCE.pdf}
     \caption{performance comparison among different configurations}\label{fig:performance}
