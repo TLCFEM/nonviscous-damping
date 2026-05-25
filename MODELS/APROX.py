@@ -102,7 +102,7 @@ class DampingC(DampingBase):
         return DampingC(2 * zeta, omega)
 
 
-def to_latex_table(system, system_inv, digits=6):
+def to_latex_table(system, system_inv, digits=4):
     m, s = system.pair()
     rm, rs = system_inv.pair()
 
