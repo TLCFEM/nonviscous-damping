@@ -31,6 +31,13 @@ class DampingBase:
 
         return np.logspace(min(log_s), max(log_s), 200)
 
+    def integrator_cmd(self):
+        cmd = "UDDNewmark" if self.reciprocal else "UDANewmark"
+        cmd = f"integrator {cmd} 1 .25 .5"
+        for mj, sj in zip(self.m, self.s):
+            cmd += f" {mj.real} {mj.imag} {sj.real} {sj.imag}"
+        return cmd
+
 
 class Damping(DampingBase):
     def __init__(self, m, s, reciprocal=False):
@@ -127,6 +134,9 @@ def to_latex_table(system, system_inv, digits=4):
 def process(input_str: str, fn: str, *, t_end: float = 0.1, with_kernel: bool = True):
     system = DampingC.preprocess(input_str)
     system_inv = system.convert()
+
+    print(system.integrator_cmd())
+    print(system_inv.integrator_cmd())
 
     to_latex_table(system, system_inv)
 
