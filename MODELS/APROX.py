@@ -118,14 +118,14 @@ def to_latex_table(system, system_inv, digits=6):
     for mj, sj, rmj, rsj in zip(m, s, rm, rs):
         lines.append(f"{fmt(mj)} & {fmt(sj)} & {fmt(rmj)} & {fmt(rsj)} \\\\")
     lines.append(r"\midrule")
-    lines.append(f"$1+\\sum{{}}m_j/s_j$ & {fmt(1 + sum(m / s))} & & \\\\\bottomrule")
+    lines.append(f"$1+\\sum{{}}m_j$ & {fmt(1 + sum(m))} & & \\\\\\bottomrule")
     lines.append(r"\end{tabular}")
 
     print("\n".join(lines))
 
 
-def process(input_str: str, fn: str):
-    system = Damping.preprocess(input_str)
+def process(input_str: str, fn: str, t_end: float = 0.1):
+    system = DampingC.preprocess(input_str)
     system_inv = system.convert()
 
     to_latex_table(system, system_inv)
@@ -136,9 +136,8 @@ def process(input_str: str, fn: str):
     fig = plt.figure(figsize=(6, 5))
 
     fig.add_subplot(311)
-    ax1 = plt.gca()
-    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
-    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+    # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+    # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
 
     plt.plot(x, dynamic.imag * 100, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
     plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
@@ -150,9 +149,8 @@ def process(input_str: str, fn: str):
     plt.grid(which="both", linestyle="--", linewidth=0.2)
 
     fig.add_subplot(312)
-    ax1 = plt.gca()
-    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
-    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
 
     plt.plot(x, dynamic.real, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
     plt.plot(x, dynamic_inv.real, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
@@ -166,23 +164,28 @@ def process(input_str: str, fn: str):
     fig.add_subplot(313)
 
     plt.plot(
-        t := np.linspace(0, 0.1, 500),
-        np.abs(system.kernel(t)),
+        t := np.linspace(0, t_end, 500),
+        k := np.abs(system.kernel(t)),
         ls="dashed",
         label="$(m_j,s_j)$",
     )
-    plt.plot(t, np.abs(system_inv.kernel(t)), ls="dotted", label="$(m'_j,s'_j)$")
+    max_k = max(k)
+    k = np.abs(system_inv.kernel(t))
+    plt.plot(t, k, ls="dotted", label="$(m'_j,s'_j)$")
+    max_k = max(max_k, max(k))
 
     plt.xlabel("time (s)")
     plt.ylabel("abs. kernel value $|g(t)|$")
-    plt.xlim(0, 0.1)
-    plt.yscale("log")
+    plt.xlim(0, t_end)
+    # plt.yscale("log")
+    # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     plt.legend()
     plt.grid(which="both", linestyle="--", linewidth=0.2)
     plt.tight_layout(pad=0.01)
     plt.text(
-        0.07,
-        4,
+        t_end * 0.7,
+        max_k * 0.8,
         r"kernel: $g(t)=\sum{}m_je^{-s_jt}$",
         va="center",
         ha="center",
@@ -204,4 +207,11 @@ if __name__ == "__main__":
     process(
         "-type0 3.82120e-02 4.72235e-01 -type0 3.91790e-02 1.93519e+02 -type0 3.82670e-02 4.26195e+01 -type0 3.91800e-02 5.16800e-03 -type0 3.82150e-02 9.49720e+00 -type0 3.82130e-02 2.11771e+00 -type0 6.03970e-02 1.11375e+03 -type0 6.03980e-02 8.98000e-04 -type0 3.82140e-02 1.05304e-01 -type0 3.82670e-02 2.34660e-02",
         "../PIC/MASS.EQ.MORE.pdf",
+        0.05,
+    )
+
+    process(
+        "-type0 1.71494e-01 9.98000e-04 -type0 5.10470e-02 2.71442e+05 -type0 3.16270e-02 4.98400e-01 -type0 1.55273e-01 8.00000e-06 -type0 2.15000e-02 4.62431e+02 -type0 4.76030e-02 4.62450e+02 -type0 8.18500e-02 1.00031e+05 -type0 6.15410e-02 8.00000e-06 -type0 1.06310e-01 2.48000e-04 -type0 6.51340e-02 4.11900e-03 -type0 6.66930e-02 2.20460e-02 -type0 1.12819e-01 3.70000e-05 -type0 9.67750e-02 3.93390e+04 -type0 3.88550e-02 6.27600e-03 -type0 8.50900e-03 3.93076e+04 -type0 3.04700e-03 1.25888e+06 -type0 3.15970e-02 2.01656e+01 -type0 7.96230e-02 9.80000e-05 -type0 1.71000e-04 8.00000e-06 -type0 9.85570e-02 2.07026e+03 -type0 2.13940e-01 1.25892e+06 -type0 6.24320e-02 2.71413e+05 -type0 2.85830e-02 3.17157e+00 -type0 1.72577e-01 9.83336e+03",
+        "../PIC/MASS.EQ.MUCHMORE.pdf",
+        0.001,
     )

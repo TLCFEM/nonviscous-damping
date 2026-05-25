@@ -30,27 +30,25 @@ It is clear that second-order convergence of the used Newmark method is retained
 
 One can further validate that this example can be equivalently expressed in the form of \eqsref{eq:a_right}, with $m=25/18$ and $s=25/3$.
 To maintain brevity, these results are omitted since they are identical to those already presented.
-\subsection{Equivalence}
-Although mathematically it has been proved that the two forms \secref{sec:u_dep} and \secref{sec:a_dep} are equivalent to each other, we present a numerical example using the following parameters.
+\subsection{Equivalence and Damping Characteristics}
+Although the aforementioned formulations have been proven mathematically equivalent, their damping characteristics are further examined through a numerical example using the following parameters that satisfy \eqref{eq:rate_eqv}.
 \begin{table}[ht!]
     \centering\footnotesize
 \caption{parameter sets for the narrow-band
 equivalence test}
 \begin{tabular}{cccc}
 \toprule
-$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\
+$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule
+1.773400e-02 & 7.943400e-02 & -6.920212e-02 & 7.403489e-02 \\
+5.468600e-02 & 7.947900e-02 & -8.256710e-07 & 7.944508e-02 \\
+3.974000e-02 & 3.766420e-01 & -3.331138e-02 & 3.631733e-01 \\
+3.329000e-02 & 1.173000e+00 & -2.607222e-02 & 1.138917e+00 \\
+3.064800e-02 & 3.162970e+00 & -2.262894e-02 & 3.080691e+00 \\
+3.329200e-02 & 8.528780e+00 & -2.321870e-02 & 8.294738e+00 \\
+3.974200e-02 & 2.656430e+01 & -2.607268e-02 & 2.572225e+01 \\
+7.241400e-02 & 1.258930e+02 & -4.280362e-02 & 1.190738e+02 \\
 \midrule
--1.408683e-03 & 7.943400e-02 & 1.053682e-02 & 7.167213e-02 \\
--4.346389e-03 & 7.947900e-02 & 6.542804e-08 & 7.944506e-02 \\
--1.496775e-02 & 3.766420e-01 & 2.386119e-02 & 3.577093e-01 \\
--3.904917e-02 & 1.173000e+00 & 5.716967e-02 & 1.125667e+00 \\
--9.693870e-02 & 3.162970e+00 & 1.314155e-01 & 3.049910e+00 \\
--2.839401e-01 & 8.528780e+00 & 3.554469e-01 & 8.210599e+00 \\
--1.055718e+00 & 2.656430e+01 & 1.209992e+00 & 2.543257e+01 \\
--9.116416e+00 & 1.258930e+02 & 8.824363e+00 & 1.169172e+02 \\
-\midrule
-$1+\sum{}m_j/s_j$ & 6.784540e-01 & & \\
-\bottomrule
+$1+\sum{}m_j$ & 1.321546e+00 & & \\\bottomrule
 \end{tabular}
 \end{table}
 With eight terms, the above parameters attempt to approximate a constant specific damping factor of \SI{5}{\percent} from \num{0.1} rad/s to \num{100} rad/s.
@@ -59,46 +57,54 @@ The corresponding kernel functions are, however, different (as expected).
 \begin{figure}[ht!]
 \centering
 \includegraphics{PIC/MASS.EQ.pdf}
-\caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep} with a narrow approximation range}\label{fig:mass_eq}
+\caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a narrow approximation range}\label{fig:mass_eq}
 \end{figure}
 
-In the absence of $\bh$, noting that the storage stiffness would gradually decrease as frequency approaches the left end of the approximation range.
-Outside the approximation range, it can be as low as \SI{68}{\percent} of the static stiffness.
-This lower bound is controlled by the summation $\sum{}m_j/s_j$, which roughly translates to the area under the curve of the specific damping factor.
+The storage stiffness would gradually increase as frequency approaches the right end of the approximation range.
+Outside the approximation range, it can be as high as \SI{132}{\percent} of the static stiffness.
+This higher bound is controlled by the summation $\sum{}m_j$, which roughly translates to the area under the curve of the specific damping factor.
 
 To illustrate, the following parameters are used to approximate a constant specific damping factor of \SI{8}{\percent} with a wider approximation range from \num{0.001} rad/s to \num{1000} rad/s.
 \begin{table}[ht!]
     \centering\footnotesize
 \caption{parameter sets for the wide-band
 equivalence test}
-    \begin{tabular}{cccc}
-        \toprule
-        $m_j$             & $s_j$        & $m'_j$       & $s'_j$       \\
-        \midrule
-        -1.084748e-04     & 8.980000e-04 & 1.621390e-03 & 4.706853e-04 \\
-        -4.049645e-04     & 5.168000e-03 & 3.018247e-03 & 4.033312e-03 \\
-        -1.795947e-03     & 2.346600e-02 & 9.303649e-03 & 1.930699e-02 \\
-        -8.048174e-03     & 1.053040e-01 & 3.066306e-02 & 8.940339e-02 \\
-        -3.609009e-02     & 4.722350e-01 & 1.050192e-01 & 4.101191e-01 \\
-        -1.618481e-01     & 2.117710e+00 & 3.706983e-01 & 1.871086e+00 \\
-        -7.258710e-01     & 9.497200e+00 & 1.340969e+00 & 8.505251e+00 \\
-        -3.261841e+00     & 4.261950e+01 & 4.957341e+00 & 3.858064e+01 \\
-        -1.516376e+01     & 1.935190e+02 & 1.916367e+01 & 1.764117e+02 \\
-        -1.345343e+02     & 1.113750e+03 & 1.279118e+02 & 9.823243e+02 \\
-        \midrule
-        $1+\sum{}m_j/s_j$ & 1.429160e-01 &              &              \\
-        \bottomrule
-    \end{tabular}
+\begin{tabular}{cccc}
+\toprule
+$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule
+1.207960e-01 & 8.980000e-04 & -1.112456e-01 & 7.996548e-04 \\
+7.836000e-02 & 5.168000e-03 & -5.778400e-02 & 4.831148e-03 \\
+7.653400e-02 & 2.346600e-02 & -4.953783e-02 & 2.206264e-02 \\
+7.642800e-02 & 1.053040e-01 & -4.391699e-02 & 9.936882e-02 \\
+7.642400e-02 & 4.722350e-01 & -3.925287e-02 & 4.470364e-01 \\
+7.642600e-02 & 2.117710e+00 & -3.529550e-02 & 2.010417e+00 \\
+7.643000e-02 & 9.497200e+00 & -3.190740e-02 & 9.039157e+00 \\
+7.653400e-02 & 4.261950e+01 & -2.901798e-02 & 4.065591e+01 \\
+7.835800e-02 & 1.935190e+02 & -2.703950e-02 & 1.848066e+02 \\
+1.207940e-01 & 1.113750e+03 & -3.652375e-02 & 1.042156e+03 \\
+\midrule
+$1+\sum{}m_j$ & 1.857084e+00 & & \\\bottomrule
+\end{tabular}
 \end{table}
-It can be seen from \figref{fig:mass_eq_wider} that the storage stiffness is only \SI{14}{\percent} of the static stiffness below \num{0.001} rad/s.
-At \num{1} rad/s, it is below \SI{60}{\percent} of the static stiffness.
+It can be seen from \figref{fig:mass_eq_wider} that the storage stiffness can reach \SI{186}{\percent} of the static stiffness above \num{1000} rad/s.
+At \num{1} rad/s, it is above \SI{140}{\percent} of the static stiffness.
 \begin{figure}[ht!]
 \centering
 \includegraphics{PIC/MASS.EQ.MORE.pdf}
-\caption{equivalence between formulations \secref{sec:u_dep} and \secref{sec:a_dep} with a wide approximation range}\label{fig:mass_eq_wider}
+\caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a wide approximation range}\label{fig:mass_eq_wider}
 \end{figure}
 
-The storage stiffness could decrease below zero under certain circumstances, for example, a moderately high damping with moderate approximation range.
-Similar phenomena can also be observed in formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m}, in which hardening at high frequencies would be observed.
-For structural engineering applications, a practical frequency range of interest is typically from \num{0.1} rad/s to \num{100} rad/s, which is about three orders of magnitude.
-To cover this range, the target system can only be very lightly damped, otherwise the storage stiffness would deviate significantly from the static stiffness at either end of the approximation range.
+The dynamic hardening observed at high frequencies depends on both the approximation range and the damping level.
+A moderately high damping level combined with a wide approximation range results in a substantial increase in storage stiffness at high frequencies.
+
+In structural and mechanical engineering applications, the practical frequency range of interest is typically between \num{0.1} rad/s and \num{100} rad/s, spanning approximately three orders of magnitude.
+To accurately represent this range, the target system must remain lightly damped; otherwise, the storage stiffness deviates considerably from the static stiffness near the upper bound of the approximation range.
+
+As discussed by \citet{Huang2019}, this type of nonviscous damping may be interpreted as a manifestation of stress relaxation in the underlying material.
+However, whether the associated hardening accurately represents the physical behaviour of the system or material remains an open question requiring further investigation.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics{PIC/MASS.EQ.MUCHMORE.pdf}
+    \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a multi-level damping curve}\label{fig:mass_eq_multilevel}
+\end{figure}
