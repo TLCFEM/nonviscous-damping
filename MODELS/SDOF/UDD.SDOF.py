@@ -39,7 +39,7 @@ LS = get_line_style()
 class Response:
     time: np.ndarray
     displacement: np.ndarray
-    error: np.ndarray = None
+    error: np.ndarray = None  # type: ignore
 
 
 u0 = 1
@@ -83,7 +83,7 @@ exit
 """
 
 
-def execute(step_time, damping):
+def execute(step_time: str, damping: str):
     print(f"Executing with step_time={step_time}...")
     target = Path("model.sp")
     target.write_text(model.format(step_time=step_time, damping=damping))
@@ -91,7 +91,7 @@ def execute(step_time, damping):
     target.unlink()
 
 
-def system(omega, s, m):
+def sdof_system(omega: float, s: float, m: float):
     roots = np.roots([1, s, (1 - m / s) * omega**2, s * omega**2])
 
     r1, r2, r3 = roots
@@ -104,54 +104,47 @@ def system(omega, s, m):
     coef[1, 2] = -r2 - r1
     coef[2, 2] = r2 * r1
 
-    w = np.linalg.solve(coef, np.array([u0, u0 * s + v0, s * v0]))
+    weights = np.linalg.solve(coef, np.array([u0, u0 * s + v0, s * v0]))
 
-    def _f(_t):
-        return np.dot(w, exp(roots * _t)).real
+    def disp(_t):
+        if not isinstance(_t, float):
+            return np.array([disp(x) for x in _t])
 
-    return _f
+        return np.dot(weights, exp(roots * _t)).real
+
+    return disp
 
 
-def analytical(para):
-    vibrator = system(*para)
-    t = 20
-    dt = 0.01
+def analytical(*para):
+    disp = sdof_system(*para)
+    dt, t = 0.01, 10
     x = np.linspace(0, t, int(t / dt) + 1)
-    y = np.zeros(len(x))
-    for i in range(len(x)):
-        y[i] = vibrator(x[i])
 
-    plt.plot(x, y, "r", label="analytical", linewidth=0.5)
+    plt.plot(x, disp(x), "r", label="analytical", linewidth=0.5)
 
-    return vibrator
+    return disp
 
 
-def numerical(vibrator, pick):
+def numerical(disp, pick):
     name = "R1-U"
     with h5py.File(f"{name}-{str(pick)}.h5", "r") as f:
         data = f[f"/{name}/{name}2"]
-        time = data[:, 0]
-        displacement = data[:, 1]
 
-    ref = np.zeros(len(time))
-    for i in range(len(time)):
-        ref[i] = vibrator(time[i])
-
-    error = ref - displacement
-
-    return Response(time, displacement, error)
+        return Response(
+            time := data[:, 0],  # type: ignore
+            displacement := data[:, 1],  # type: ignore
+            disp(time) - displacement,
+        )
 
 
-def generate(damping, steps):
+def generate(damping, steps, refresh=False):
     results = {}
 
-    refresh = True
-
-    sdof = analytical([10, 10, -2])
+    disp = analytical(10, 10, -2)
     for step_time in steps:
         if refresh:
             execute(step_time, damping)
-        results[step_time] = numerical(sdof, float(step_time))
+        results[step_time] = numerical(disp, float(step_time))
 
     fig = plt.figure(figsize=(6, 3.5))
     fig.add_subplot(211)
@@ -173,18 +166,15 @@ def generate(damping, steps):
 
     fig.add_subplot(2, 1, 2)
 
-    error_x = []
-    error_y = []
-    for key, value in results.items():
-        error_x.append(float(key))
-        error_y.append(np.max(np.abs(value.error)))
+    error_x = [float(key) for key in results.keys()]
+    error_y = [np.max(np.abs(value.error)) for value in results.values()]
 
     result = linregress(np.log(error_x), np.log(error_y))
     plt.loglog(
         error_x,
-        np.exp(result[1]) * np.power(error_x, result[0]),
+        np.exp(result[1]) * np.power(error_x, result[0]),  # type: ignore
         "r--",
-        label=f"slope {result[0]:.3f} $r^2=${result[2] ** 2:.3f}",
+        label=f"slope {result[0]:.3f} $r^2=${result[2] ** 2:.3f}",  # type: ignore
     )
     plt.loglog(error_x, error_y, "o")
     plt.grid(which="both", linestyle="--", linewidth=0.2)
