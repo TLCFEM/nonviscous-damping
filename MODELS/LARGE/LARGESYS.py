@@ -72,7 +72,7 @@ def create_comparison_figure(results: dict[str, TimingStats], out_path: str) -> 
         "solving_global_system",
     ]
 
-    fig, ax = plt.subplots(figsize=(7, 3))
+    fig, ax = plt.subplots(figsize=(6, 2.5))
 
     lefts = [0.0] * len(labels)
     for comp in components:
