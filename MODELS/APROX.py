@@ -10,24 +10,43 @@ import numpy as np
 matplotlib.rcParams.update({"font.size": 6})
 
 
-def inverse(m, s):
-    m = np.asarray(m, dtype=np.complex128)
-    ones = np.ones_like(m)
+class Damping:
+    def __init__(self, m, s, reciprocal=False):
+        self.m = np.asarray(m, dtype=np.complex128)
+        self.s = np.asarray(s, dtype=np.complex128)
+        self.m = self.m[idx := np.argsort(self.s)]
+        self.s = self.s[idx]
+        self.reciprocal = reciprocal
+        self._ones = np.ones_like(self.m)
 
-    ar, R = np.linalg.eig(
-        np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
-    )
+    def convert(self):
+        poles, ev = np.linalg.eig(np.diag(self.s) + np.outer(self.m, self._ones))
 
-    R = R[:, idx := np.argsort(ar)]
+        ev = ev[:, idx := np.argsort(poles)]
 
-    return -(ones @ R) * np.linalg.solve(R, m), ar[idx]
+        return Damping(
+            -self._ones @ ev * np.linalg.solve(ev, self.m),
+            poles[idx],
+            not self.reciprocal,
+        )
+
+    def amplification(self, omega):
+        amplification = 1 + np.sum(self.m / (self.s + 1j * omega[:, None]), axis=1)
+        return 1 / amplification if self.reciprocal else amplification
+
+    def kernel(self, t):
+        kernel = np.zeros_like(t, dtype=np.complex128)
+        for mj, sj in zip(self.m, self.s):
+            kernel += mj * np.exp(-sj * t)
+        return kernel
+
+    def pair(self):
+        return np.real_if_close(self.m), np.real_if_close(self.s)
 
 
-def to_latex_table(m, s, rm, rs, digits=6):
-    m = np.real_if_close(m)
-    s = np.real_if_close(s)
-    rm = np.real_if_close(rm)
-    rs = np.real_if_close(rs)
+def to_latex_table(system, system_inv, digits=6):
+    m, s = system.pair()
+    rm, rs = system_inv.pair()
 
     def fmt(v):
         if np.iscomplexobj(v) and abs(v.imag) > 1e-14:
@@ -37,68 +56,67 @@ def to_latex_table(m, s, rm, rs, digits=6):
     lines = []
     lines.append(r"\begin{tabular}{cccc}")
     lines.append(r"\toprule")
-    lines.append(r"$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\")
-    lines.append(r"\midrule")
+    lines.append(r"$m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule")
     for mj, sj, rmj, rsj in zip(m, s, rm, rs):
         lines.append(f"{fmt(mj)} & {fmt(sj)} & {fmt(rmj)} & {fmt(rsj)} \\\\")
     lines.append(r"\midrule")
-    lines.append(f"$1+\\sum{{}}m_j/s_j$ & {fmt(1 + sum(m / s))} & & \\\\")
-    lines.append(r"\bottomrule")
+    lines.append(f"$1+\\sum{{}}m_j/s_j$ & {fmt(1 + sum(m / s))} & & \\\\\bottomrule")
     lines.append(r"\end{tabular}")
-    return "\n".join(lines)
+
+    print("\n".join(lines))
 
 
-def process(input_str: str, fn: str):
+def preprocess(input_str: str):
     input_list = [float(x) for x in input_str.split() if x != "-type0"]
     zeta = np.array(input_list[0::2])
     omega = np.array(input_list[1::2])
-    s = omega
-    m = -2 * zeta * omega
 
-    s = s[idx := np.argsort(s)]
-    m = m[idx]
+    return -2 * zeta * omega, omega
 
-    rm, rs = inverse(m, s)
 
-    print(to_latex_table(m, s, rm, rs))
-
-    fig = plt.figure(figsize=(6, 5))
-    fig.add_subplot(311)
-
+def sample(s):
     log_s = np.log10(s)
     log_s = np.where(log_s >= 0, np.ceil(log_s), np.floor(log_s)).astype(int)
 
-    x = np.logspace(log_s[0], log_s[-1], 500)
-    dynamic = np.ones_like(x, dtype=np.complex128)
-    for mj, sj in zip(m, s):
-        dynamic += mj / (sj + 1j * x)
-    plt.plot(x, dynamic.imag * 100, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
+    return np.logspace(min(log_s), max(log_s), 500)
 
-    dynamic_inv = np.ones_like(x, dtype=np.complex128)
-    for mj, sj in zip(rm, rs):
-        dynamic_inv += mj / (sj + 1j * x)
-    dynamic_inv = 1 / dynamic_inv
 
-    plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
+def process(input_str: str, fn: str):
+    m, s = preprocess(input_str)
 
-    plt.xscale("log")
+    system = Damping(m, s)
+    system_inv = system.convert()
+
+    to_latex_table(system, system_inv)
+
+    dynamic = system.amplification(x := sample(s))
+    dynamic_inv = system_inv.amplification(x)
+
+    fig = plt.figure(figsize=(6, 5))
+
+    fig.add_subplot(311)
     ax1 = plt.gca()
     ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
+
+    plt.plot(x, dynamic.imag * 100, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
+    plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
+
+    plt.xscale("log")
     plt.xlabel(r"frequency $\omega$")
     plt.ylabel(r"$\dfrac{\text{loss stiffness}}{\text{static stiffness}}$ (%)")
     plt.legend()
     plt.grid(which="both", linestyle="--", linewidth=0.2)
 
     fig.add_subplot(312)
+    ax1 = plt.gca()
+    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
 
     plt.plot(x, dynamic.real, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
     plt.plot(x, dynamic_inv.real, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
 
     plt.xscale("log")
-    ax1 = plt.gca()
-    ax1.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
-    ax1.yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     plt.xlabel(r"frequency $\omega$")
     plt.ylabel(r"$\dfrac{\text{storage stiffness}}{\text{static stiffness}}$ (1)")
     plt.legend()
@@ -106,16 +124,13 @@ def process(input_str: str, fn: str):
 
     fig.add_subplot(313)
 
-    t = np.linspace(0, 0.1, 500)
-    kernel = np.zeros_like(t, dtype=np.complex128)
-    for mj, sj in zip(m, s):
-        kernel += mj * np.exp(-sj * t)
-    plt.plot(t, np.abs(kernel), ls="dashed", label="$(m_j,s_j)$")
-
-    kernel = np.zeros_like(t, dtype=np.complex128)
-    for mj, sj in zip(rm, rs):
-        kernel += mj * np.exp(-sj * t)
-    plt.plot(t, np.abs(kernel), ls="dotted", label="$(m'_j,s'_j)$")
+    plt.plot(
+        t := np.linspace(0, 0.1, 500),
+        np.abs(system.kernel(t)),
+        ls="dashed",
+        label="$(m_j,s_j)$",
+    )
+    plt.plot(t, np.abs(system_inv.kernel(t)), ls="dotted", label="$(m'_j,s'_j)$")
 
     plt.xlabel("time (s)")
     plt.ylabel("abs. kernel value $|g(t)|$")
