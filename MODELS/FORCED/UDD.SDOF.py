@@ -94,8 +94,6 @@ def sdof_system(s, m, omega_n, A, B):
     Y = B * (K - B**2)
 
     D = X**2 + Y**2
-    if D == 0:
-        raise ValueError("Parameters result in division by zero (unbounded resonance).")
 
     Uc = (A * m * B * omega_n**2) / D
     Us = (A * (s * X + B * Y)) / D
@@ -117,13 +115,13 @@ def sdof_system(s, m, omega_n, A, B):
     def displacement(t):
         t_arr = np.atleast_1d(t)
 
-        transient = (
-            C1 * np.exp(r1 * t_arr) + C2 * np.exp(r2 * t_arr) + C3 * np.exp(r3 * t_arr)
+        total_u = np.real(
+            C1 * np.exp(r1 * t_arr)
+            + C2 * np.exp(r2 * t_arr)
+            + C3 * np.exp(r3 * t_arr)
+            + Uc * np.cos(B * t_arr)
+            + Us * np.sin(B * t_arr)
         )
-
-        steady_state = Uc * np.cos(B * t_arr) + Us * np.sin(B * t_arr)
-
-        total_u = np.real(transient + steady_state)
 
         if np.isscalar(t) or (isinstance(t, np.ndarray) and t.ndim == 0):
             return total_u[0]
