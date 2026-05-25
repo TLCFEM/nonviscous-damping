@@ -126,6 +126,11 @@ The system is additionally analysed under static loading to establish a baseline
 Relative to the static case, dynamic analyses primarily incur additional computational cost due to the assembly of the damping and mass matrices, as well as the corresponding effective stiffness matrix.
 This is reflected in the undamped case solved using the Newmark integration scheme.
 
-For the damped analyses, the same eight terms listed in \tabref{tab:constant_five} are adopted. The label `UDA' refers to the formulation in \eqsref{eq:a_final}, whose computational cost is only marginally higher than that of the undamped case.
-In contrast, the label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
+For the damped analyses, the same eight terms listed in \tabref{tab:constant_five} are adopted.
+The label `UDA' refers to the formulation in \eqsref{eq:a_final}, whose computational cost is only marginally higher than that of the undamped case.
+This behaviour is expected, as the additional cost primarily originates from the computation of the vectors $\bbf_j$ and $\bq_j$, which scales with the number of terms employed in the analysis.
+For a small number of terms, the associated overhead remains negligible.
+The label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
 The dominant additional cost in this case arises from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.
+Although this operation is computationally more expensive, its cost is independent of the number of terms employed in the analysis.
+Consequently, once the number of terms exceeds the bandwidth of the global matrix, the computational cost of the `UDA' formulation is expected to surpass that of the `UDD' formulation.
