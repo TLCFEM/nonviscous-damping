@@ -10,13 +10,35 @@ import numpy as np
 matplotlib.rcParams.update({"font.size": 6})
 
 
-class Damping:
+class DampingBase:
     def __init__(self, m, s, reciprocal=False):
-        self.m = np.asarray(m, dtype=np.complex128)
-        self.s = np.asarray(s, dtype=np.complex128)
-        self.m = self.m[idx := np.argsort(self.s)]
-        self.s = self.s[idx]
+        self.m = m
+        self.s = s
         self.reciprocal = reciprocal
+
+    def kernel(self, t):
+        kernel = np.zeros_like(t, dtype=np.complex128)
+        for mj, sj in zip(self.m, self.s):
+            kernel += mj * np.exp(-sj * t)
+        return kernel
+
+    def pair(self):
+        return np.real_if_close(self.m), np.real_if_close(self.s)
+
+    def sample(self):
+        log_s = np.log10(self.s.real)
+        log_s = np.where(log_s >= 0, np.ceil(log_s), np.floor(log_s)).astype(int)
+
+        return np.logspace(min(log_s), max(log_s), 200)
+
+
+class Damping(DampingBase):
+    def __init__(self, m, s, reciprocal=False):
+        m_tmp = np.asarray(m, dtype=np.complex128)
+        s_tmp = np.asarray(s, dtype=np.complex128)
+
+        super().__init__(m_tmp[idx := np.argsort(s_tmp)], s_tmp[idx], reciprocal)
+
         self._ones = np.ones_like(self.m)
 
     def convert(self):
@@ -34,14 +56,13 @@ class Damping:
         amplification = 1 + np.sum(self.m / (self.s + 1j * omega[:, None]), axis=1)
         return 1 / amplification if self.reciprocal else amplification
 
-    def kernel(self, t):
-        kernel = np.zeros_like(t, dtype=np.complex128)
-        for mj, sj in zip(self.m, self.s):
-            kernel += mj * np.exp(-sj * t)
-        return kernel
+    @staticmethod
+    def preprocess(input_str: str):
+        input_list = [float(x) for x in input_str.split() if x != "-type0"]
+        zeta = np.array(input_list[0::2])
+        omega = np.array(input_list[1::2])
 
-    def pair(self):
-        return np.real_if_close(self.m), np.real_if_close(self.s)
+        return Damping(-2 * zeta * omega, omega)
 
 
 def to_latex_table(system, system_inv, digits=6):
@@ -66,30 +87,13 @@ def to_latex_table(system, system_inv, digits=6):
     print("\n".join(lines))
 
 
-def preprocess(input_str: str):
-    input_list = [float(x) for x in input_str.split() if x != "-type0"]
-    zeta = np.array(input_list[0::2])
-    omega = np.array(input_list[1::2])
-
-    return -2 * zeta * omega, omega
-
-
-def sample(s):
-    log_s = np.log10(s)
-    log_s = np.where(log_s >= 0, np.ceil(log_s), np.floor(log_s)).astype(int)
-
-    return np.logspace(min(log_s), max(log_s), 500)
-
-
 def process(input_str: str, fn: str):
-    m, s = preprocess(input_str)
-
-    system = Damping(m, s)
+    system = Damping.preprocess(input_str)
     system_inv = system.convert()
 
     to_latex_table(system, system_inv)
 
-    dynamic = system.amplification(x := sample(s))
+    dynamic = system.amplification(x := system.sample())
     dynamic_inv = system_inv.amplification(x)
 
     fig = plt.figure(figsize=(6, 5))
