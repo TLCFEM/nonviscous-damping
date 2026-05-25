@@ -3,7 +3,6 @@ from pathlib import Path
 
 from matplotlib import pyplot as plt
 import matplotlib
-from matplotlib.ticker import FuncFormatter
 import numpy as np
 
 
