@@ -1,1 +1,16 @@
 \section{Introduction}
+Damping modelling is a central component of dynamic analysis because it controls the decay of transient response and the amplitude of forced vibration.
+In practical finite element analysis, viscous damping models are commonly used because they are simple to implement and can be incorporated directly into standard time integration schemes.
+However, proportional or sparse viscous models may offer limited flexibility when a prescribed damping level must be maintained over a broad frequency range, especially in large nonlinear systems.
+
+Nonviscous damping provides an alternative representation in which the damping force depends on the history of the response through hereditary or internal-variable descriptions.
+Recent formulations have shown that such models can produce nearly uniform damping over a target frequency interval while remaining suitable for nonlinear dynamic analysis \citep{Huang2019}.
+Efficient evaluation strategies based on first-order internal variables or exponential kernels further make these models attractive for large-scale computations \citep{Chang2024}.
+
+This paper develops a unified framework for constructing several alternative nonviscous damping formulations.
+The proposed approach introduces additive energy-dissipating forces governed by first-order differential equations and examines different choices of the driving field, including displacement-, velocity-, and acceleration-dependent forms associated with stiffness and mass contributions.
+The resulting formulations are analysed in the frequency domain to identify their storage and loss stiffnesses, admissible complex parameter pairs, stability requirements, and asymptotic behaviour.
+
+Particular attention is given to the equivalence between reciprocal formulations and to the correction terms required to recover the correct static stiffness.
+These observations lead to practical formulations that preserve the size of the original dynamic system while allowing the damping contribution to be embedded into a standard direct integration workflow through a modified residual and consistent tangent effective stiffness.
+Numerical examples are then used to verify convergence, demonstrate equivalence among selected formulations, and assess computational performance in a large finite element model.
