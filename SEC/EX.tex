@@ -35,7 +35,7 @@ Although the aforementioned formulations have been proven mathematically equival
 \begin{table}[ht!]
     \centering\footnotesize
 \caption{parameter sets for the narrow-band
-equivalence test}
+equivalence test}\label{tab:constant_five}
 \begin{tabular}{cccc}
 \toprule
 $m_j$ & $s_j$ & $m'_j$ & $s'_j$ \\\midrule
@@ -103,10 +103,28 @@ To accurately represent this range, the target system must remain lightly damped
 As discussed by \citet{Huang2019}, this type of nonviscous damping may be interpreted as a manifestation of stress relaxation in the underlying material.
 However, whether the associated hardening accurately represents the physical behaviour of the system or material remains an open question requiring further investigation.
 
-To close this, we further present a multi-level damping curve in \figref{fig:mass_eq_multilevel} with higher damping level at ultra-low and ultra-high frequencies, while maintaining a constant specific damping factor of \SI{5}{\percent} in the middle frequency range.
+To close this example, we further present a multi-level damping curve in \figref{fig:mass_eq_multilevel} with higher damping level at ultra-low and ultra-high frequencies, while maintaining a constant specific damping factor of \SI{5}{\percent} in the middle frequency range.
 The corresponding parameters are not listed here for brevity.
 \begin{figure}[ht!]
     \centering
     \includegraphics{PIC/MASS.EQ.MUCHMORE.pdf}
     \caption{equivalence between formulations \secref{sec:v_dep_k} and \secref{sec:v_dep_m} with a multi-level damping curve}\label{fig:mass_eq_multilevel}
 \end{figure}
+\subsection{Large System Perforamnce}
+In this example, the performance differences among the proposed formulations are demonstrated.
+The system under consideration is a three-dimensional model comprising \num{20124} nodes, each with six degrees of freedom, yielding a total of \num{120744} degrees of freedom.
+The model includes \num{39990} triangular shell elements.
+
+\figref{fig:performance} presents a comparison of the wall-clock time required to analyse the system over \num{25} time steps.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics{PIC/PERFORMANCE.pdf}
+    \caption{performance comparison among different configurations}\label{fig:performance}
+\end{figure}
+The system is additionally analysed under static loading to establish a baseline for comparison.
+Relative to the static case, dynamic analyses primarily incur additional computational cost due to the assembly of the damping and mass matrices, as well as the corresponding effective stiffness matrix.
+This is reflected in the undamped case solved using the Newmark integration scheme.
+
+For the damped analyses, the same eight terms listed in \tabref{tab:constant_five} are adopted. The label `UDA' refers to the formulation in \eqsref{eq:a_final}, whose computational cost is only marginally higher than that of the undamped case.
+In contrast, the label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
+The dominant additional cost in this case arises from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.
