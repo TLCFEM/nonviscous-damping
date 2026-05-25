@@ -65,6 +65,43 @@ class Damping(DampingBase):
         return Damping(-2 * zeta * omega, omega)
 
 
+class DampingC(DampingBase):
+    def __init__(self, m, s, reciprocal=False):
+        m_tmp = np.asarray(m, dtype=np.complex128)
+        s_tmp = np.asarray(s, dtype=np.complex128)
+
+        super().__init__(m_tmp[idx := np.argsort(s_tmp)], s_tmp[idx], reciprocal)
+
+    def convert(self):
+        scalar = 1 + np.sum(self.m)
+
+        poles, ev = np.linalg.eig(np.diag(self.s) * scalar - np.outer(self.m, self.s))
+
+        ev = ev[:, idx := np.argsort(poles)]
+        poles = poles[idx]
+
+        return DampingC(
+            self.s @ ev * np.linalg.solve(ev, self.m) / (-scalar * poles),
+            poles / scalar,
+            not self.reciprocal,
+        )
+
+    def amplification(self, omega):
+        iw = 1j * omega[None, :]
+        amplification = 1 + np.sum(
+            (self.m[:, None] * iw) / (self.s[:, None] + iw), axis=0
+        )
+        return 1 / amplification if self.reciprocal else amplification
+
+    @staticmethod
+    def preprocess(input_str: str):
+        input_list = [float(x) for x in input_str.split() if x != "-type0"]
+        zeta = np.array(input_list[0::2])
+        omega = np.array(input_list[1::2])
+
+        return DampingC(2 * zeta, omega)
+
+
 def to_latex_table(system, system_inv, digits=6):
     m, s = system.pair()
     rm, rs = system_inv.pair()
