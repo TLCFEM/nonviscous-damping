@@ -56,13 +56,6 @@ class Damping(DampingBase):
         amplification = 1 + np.sum(self.m / (self.s + 1j * omega[:, None]), axis=1)
         return 1 / amplification if self.reciprocal else amplification
 
-    def integrator_cmd(self):
-        cmd = "UDANewmark" if self.reciprocal else "UDDNewmark"
-        cmd = f"integrator {cmd} 1 .25 .5"
-        for mj, sj in zip(self.m, self.s):
-            cmd += f" {mj.real} {mj.imag} {sj.real} {sj.imag}"
-        return cmd
-
     @staticmethod
     def preprocess(input_str: str):
         input_list = [float(x) for x in input_str.split() if x != "-type0"]
@@ -99,6 +92,13 @@ class DampingC(DampingBase):
             (self.m[:, None] * iw) / (self.s[:, None] + iw), axis=0
         )
         return 1 / amplification if self.reciprocal else amplification
+
+    def integrator_cmd(self):
+        cmd = "UDANewmark" if self.reciprocal else "UDDNewmark"
+        cmd = f"integrator {cmd} 1 .25 .5"
+        for mj, sj in zip(-self.m * self.s, self.s):
+            cmd += f" {mj.real:.4e} {mj.imag:.4e} {sj.real:.4e} {sj.imag:.4e}"
+        return cmd
 
     @staticmethod
     def preprocess(input_str: str):
@@ -224,7 +224,7 @@ if __name__ == "__main__":
         with_kernel=False,
     )
 
-    system = Damping.preprocess(
+    system = DampingC.preprocess(
         "-type0 1.98700e-02 3.76642e-01 -type0 1.66460e-02 8.52878e+00 -type0 1.53240e-02 3.16297e+00 -type0 8.86700e-03 7.94340e-02 -type0 1.98710e-02 2.65643e+01 -type0 1.66450e-02 1.17300e+00 -type0 3.62070e-02 1.25893e+02 -type0 2.73430e-02 7.94790e-02"
     )
     system_inv = system.convert()
