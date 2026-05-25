@@ -275,7 +275,7 @@ The damping characteristics, parametrised by $s_j$ and $m_j$, may be interpreted
 
 Among various formulations, three practical ones are repeated in the nonlinear context as follows.
 Each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
-\paragraph{Displacement Dependent}
+\paragraph{UDD --- Displacement Dependent}
 This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
 Its computational cost is lower than that of \eqsref{eq:v_final} but higher than that of \eqsref{eq:a_final}.
 \begin{gather}\label{eq:u_final}
@@ -286,7 +286,7 @@ Its computational cost is lower than that of \eqsref{eq:v_final} but higher than
     \end{array}\right.
 }
 \end{gather}
-\paragraph{Velocity Dependent}
+\paragraph{UDV --- Velocity Dependent}
 This formulation also requires scaling of the tangent stiffness matrix $\mb{K}$.
 In addition, the non-standard quantity $\mb{K}\bv$ must be computed, assembled, and stored as an additional history variable, resulting in the highest computational cost among the three formulations.
 \begin{gather}\label{eq:v_final}
@@ -297,7 +297,7 @@ In addition, the non-standard quantity $\mb{K}\bv$ must be computed, assembled, 
     \end{array}\right.
 }
 \end{gather}
-\paragraph{Acceleration Dependent}
+\paragraph{UDA --- Acceleration Dependent}
 This formulation requires scaling of the mass matrix $\mb{M}$.
 Since $\mb{M}$ is typically sparser than $\mb{K}$ and must be scaled regardless, the additional computational cost is negligible.
 Consequently, this formulation is the least expensive among the three.
@@ -362,24 +362,28 @@ For example, if $\by_j\in\{\br_{\bu},\br_{\ba}\}$, then $\ddfrac{\by_{j,n+1}}{\b
 In some other special cases, this matrix can be diagonal, for example, with $\by_j\in\{\bu,\bv,\ba\}$, then $\ddfrac{\by_{j,n+1}}{\bu_{n+1}}=\alpha\mb{I}$ is a diagonal matrix with possibly a non-unit scalar $\alpha$.
 Adding such a diagonal matrix to $\bhat{K}_{n+1}$ is almost computationally trivial.
 \subsubsection{Effective Load}
-In \eqsref{eq:u_final} and \eqsref{eq:v_final}, simply $\bz_{n+1}=\bp_{n+1}$.
+In \eqsref{eq:u_final} and \eqsref{eq:v_final}, simply
+\begin{gather}\label{eq:eff_load_simple}
+\bz_{n+1}=\bp_{n+1}.
+\end{gather}
 In \eqsref{eq:a_final}, applying the same trapezoidal rule, one obtains
-\begin{gather}\label{eq:discretised_z}
+\begin{gather}\label{eq:discretised_z2}
     \bq_{j,n+1}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bq_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bp_n+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bp_{n+1},
 \end{gather}
 thus
-\begin{gather}
+\begin{gather}\label{eq:eff_load}
 \begin{split}
-\bz_{n+1}&=\left(1-\sum\dfrac{m_j}{s_j}\right)\bp_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bq_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bp_n+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bp_{n+1}\\
+\bz_{n+1}&=\left(1-\sum\dfrac{m_j}{s_j}\right)\bp_{n+1}+\sum\bq_{j,n+1}\\
 &=\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bq_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\bp_n+\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\right)\bp_{n+1}.
 \end{split}
 \end{gather}
 \subsubsection{A Reference Algorithm}
 \algoref{algo:general_algo} presents an algorithm that integrates the proposed damping formulation into an existing iterative analysis workflow.
-Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ shall be committed.
+The subscript $\left(\cdot\right)_{n+1}$ is dropped for brevity.
+Once convergence is achieved, $\bbf_{j,n}\leftarrow\bbf_j$ and $\bq_{j,n}\leftarrow\bq_j$ shall be committed.
 When $\bh_j$ is an algebraic function of $\by_j$, there is usually no need to store it separately.
-Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ is real--valued.
-The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$, and thus $\bhat{K}$ is real--valued.
+Even though $\bbf_j$ can be complex due to complex $s_j$ and $m_j$, as long as conjugate pairs of $s_j$ and $m_j$ are used, $\bbf=\sum\bbf_j$ and $\bq=\sum\bq_j$ are all real--valued.
+The same also applies to scalars $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$ and $\sum\dfrac{m_j}{s_j}$, and thus $\bhat{K}$ is real--valued.
 \begin{breakablealgorithm}
     \setstretch{2}
     \caption{iteration body of solving dynamic systems with general damping}\label{algo:general_algo}
@@ -390,7 +394,7 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$, and thus $\
         \State \faMicrochip~compute energy dissipating force $\bbf_{j}=\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j}$\Comment{\eqsref{eq:discretised_c}}
         \State \faMicrochip~compute effective effective stiffness $\bhat{K}=\bbar{K}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\ddfrac{\by_{j}}{\bu}+\sum\ddfrac{\bh_j}{\bu}$\Comment{\eqsref{eq:revised_k}}
         \State \faMicrochip~compute effective resistance $\bhat{r}=\br+\sum\bbf_j+\sum\bh_j$
-        \State \faMicrochip~compute effective load if needed $\bz$
+        \State \faMicrochip~compute effective load $\bz$\Comment{\eqsref{eq:eff_load_simple} or \eqsref{eq:eff_load}}
         \State $\delta\bu=\bhat{K}^{-1}\left(\mb{z}-\bhat{r}\right)$
         \State update and return $\bu\leftarrow\bu+\delta\bu$
     \end{algorithmic}
