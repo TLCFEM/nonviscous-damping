@@ -140,14 +140,14 @@ def numerical(disp, pick):
 def generate(damping, steps, refresh=False):
     results = {}
 
+    fig = plt.figure(figsize=(6, 3.5))
+    fig.add_subplot(211)
+
     disp = analytical(10, 10, -2)
     for step_time in steps:
         if refresh:
             execute(step_time, damping)
         results[step_time] = numerical(disp, float(step_time))
-
-    fig = plt.figure(figsize=(6, 3.5))
-    fig.add_subplot(211)
 
     for key, value in results.items():
         plt.plot(
