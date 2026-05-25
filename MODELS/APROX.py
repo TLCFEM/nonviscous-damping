@@ -124,7 +124,7 @@ def to_latex_table(system, system_inv, digits=6):
     print("\n".join(lines))
 
 
-def process(input_str: str, fn: str, t_end: float = 0.1):
+def process(input_str: str, fn: str, *, t_end: float = 0.1, with_kernel: bool = True):
     system = DampingC.preprocess(input_str)
     system_inv = system.convert()
 
@@ -133,9 +133,9 @@ def process(input_str: str, fn: str, t_end: float = 0.1):
     dynamic = system.amplification(x := system.sample())
     dynamic_inv = system_inv.amplification(x)
 
-    fig = plt.figure(figsize=(6, 5))
+    fig = plt.figure(figsize=(6, 4.5 if with_kernel else 3))
 
-    fig.add_subplot(311)
+    fig.add_subplot(311 if with_kernel else 211)
     # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
 
@@ -148,7 +148,7 @@ def process(input_str: str, fn: str, t_end: float = 0.1):
     plt.legend()
     plt.grid(which="both", linestyle="--", linewidth=0.2)
 
-    fig.add_subplot(312)
+    fig.add_subplot(312 if with_kernel else 212)
     # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
 
@@ -161,37 +161,38 @@ def process(input_str: str, fn: str, t_end: float = 0.1):
     plt.legend()
     plt.grid(which="both", linestyle="--", linewidth=0.2)
 
-    fig.add_subplot(313)
+    if with_kernel:
+        fig.add_subplot(313)
 
-    plt.plot(
-        t := np.linspace(0, t_end, 500),
-        k := np.abs(system.kernel(t)),
-        ls="dashed",
-        label="$(m_j,s_j)$",
-    )
-    max_k = max(k)
-    k = np.abs(system_inv.kernel(t))
-    plt.plot(t, k, ls="dotted", label="$(m'_j,s'_j)$")
-    max_k = max(max_k, max(k))
+        plt.plot(
+            t := np.linspace(0, t_end, 500),
+            k := np.abs(system.kernel(t)),
+            ls="dashed",
+            label="$(m_j,s_j)$",
+        )
+        max_k = max(k)
+        k = np.abs(system_inv.kernel(t))
+        plt.plot(t, k, ls="dotted", label="$(m'_j,s'_j)$")
+        max_k = max(max_k, max(k))
 
-    plt.xlabel("time (s)")
-    plt.ylabel("abs. kernel value $|g(t)|$")
-    plt.xlim(0, t_end)
-    # plt.yscale("log")
-    # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
-    # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
-    plt.legend()
-    plt.grid(which="both", linestyle="--", linewidth=0.2)
-    plt.tight_layout(pad=0.01)
-    plt.text(
-        t_end * 0.7,
-        max_k * 0.8,
-        r"kernel: $g(t)=\sum{}m_je^{-s_jt}$",
-        va="center",
-        ha="center",
-        fontsize=8,
-        bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.7", alpha=0.9),
-    )
+        plt.xlabel("time (s)")
+        plt.ylabel("abs. kernel value $|g(t)|$")
+        plt.xlim(0, t_end)
+        # plt.yscale("log")
+        # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+        # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+        plt.legend()
+        plt.grid(which="both", linestyle="--", linewidth=0.2)
+        plt.tight_layout(pad=0.01)
+        plt.text(
+            t_end * 0.7,
+            max_k * 0.8,
+            r"kernel: $g(t)=\sum{}m_je^{-s_jt}$",
+            va="center",
+            ha="center",
+            fontsize=8,
+            bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="0.7", alpha=0.9),
+        )
 
     fig.savefig(fn)
 
@@ -207,11 +208,11 @@ if __name__ == "__main__":
     process(
         "-type0 3.82120e-02 4.72235e-01 -type0 3.91790e-02 1.93519e+02 -type0 3.82670e-02 4.26195e+01 -type0 3.91800e-02 5.16800e-03 -type0 3.82150e-02 9.49720e+00 -type0 3.82130e-02 2.11771e+00 -type0 6.03970e-02 1.11375e+03 -type0 6.03980e-02 8.98000e-04 -type0 3.82140e-02 1.05304e-01 -type0 3.82670e-02 2.34660e-02",
         "../PIC/MASS.EQ.MORE.pdf",
-        0.05,
+        with_kernel=False,
     )
 
     process(
         "-type0 1.71494e-01 9.98000e-04 -type0 5.10470e-02 2.71442e+05 -type0 3.16270e-02 4.98400e-01 -type0 1.55273e-01 8.00000e-06 -type0 2.15000e-02 4.62431e+02 -type0 4.76030e-02 4.62450e+02 -type0 8.18500e-02 1.00031e+05 -type0 6.15410e-02 8.00000e-06 -type0 1.06310e-01 2.48000e-04 -type0 6.51340e-02 4.11900e-03 -type0 6.66930e-02 2.20460e-02 -type0 1.12819e-01 3.70000e-05 -type0 9.67750e-02 3.93390e+04 -type0 3.88550e-02 6.27600e-03 -type0 8.50900e-03 3.93076e+04 -type0 3.04700e-03 1.25888e+06 -type0 3.15970e-02 2.01656e+01 -type0 7.96230e-02 9.80000e-05 -type0 1.71000e-04 8.00000e-06 -type0 9.85570e-02 2.07026e+03 -type0 2.13940e-01 1.25892e+06 -type0 6.24320e-02 2.71413e+05 -type0 2.85830e-02 3.17157e+00 -type0 1.72577e-01 9.83336e+03",
         "../PIC/MASS.EQ.MUCHMORE.pdf",
-        0.001,
+        with_kernel=False,
     )
