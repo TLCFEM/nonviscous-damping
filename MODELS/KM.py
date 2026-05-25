@@ -6,27 +6,27 @@ def inverse(m, s):
     m = np.asarray(m, dtype=np.complex128)
     ones = np.ones_like(m)
 
-    ar, R = np.linalg.eig(
+    poles, ev = np.linalg.eig(
         np.diag(np.asarray(s, dtype=np.complex128)) + np.outer(m, ones)
     )
 
-    R = R[:, idx := np.argsort(ar)]
+    ev = ev[:, idx := np.argsort(poles)]
 
-    return -(ones @ R) * np.linalg.solve(R, m), ar[idx]
+    return -ones @ ev * np.linalg.solve(ev, m), poles[idx]
 
 
 def inverse_highpass(m, s):
     m = np.asarray(m, dtype=np.complex128)
     s = np.asarray(s, dtype=np.complex128)
 
-    D = 1.0 + np.sum(m)
+    scalar = 1.0 + np.sum(m)
 
-    ar, R = np.linalg.eig(np.diag(s) - np.outer(m, s) / D)
+    poles, ev = np.linalg.eig(np.diag(s) * scalar - np.outer(m, s))
 
-    R = R[:, idx := np.argsort(ar)]
-    rs = ar[idx]
+    ev = ev[:, idx := np.argsort(poles)]
+    poles = poles[idx]
 
-    return -(s @ R) * np.linalg.solve(R, m) / (D**2 * rs), rs
+    return s @ ev * np.linalg.solve(ev, m) / (-scalar * poles), poles / scalar
 
 
 def plot_response(m, s, ax, omega=None, w_min=None, w_max=None, reciprocal=False):
