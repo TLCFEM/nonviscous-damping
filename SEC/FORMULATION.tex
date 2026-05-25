@@ -6,19 +6,17 @@ Consider the general equation of motion of a dynamic system under external load 
 where $\br=\br\left(\bu,\bv,\ba\right)$ is the overall resistance of the system, accounting for contributions by displacement $\bu$, velocity $\bv$ and acceleration $\ba$.
 Additional energy dissipating terms can be introduced, for example,
 \begin{gather}\label{eq:general_eom}
-\boxed{\br+\bbf+\bh=\bp,}
+\boxed{\br+\bbf=\bp,}
 \end{gather}
-in which $\bbf$ and $\bh$ can be additively decomposed such that
+in which $\bbf$ can be additively decomposed such that
 \begin{gather}
-    \bbf=\sum\bbf_j,\qquad
-    \bh=\sum\bh_j.
+    \bbf=\sum\bbf_j.
 \end{gather}
 Each term $\bbf_j$ is assumed to be governed by a first-order differential equation such that
 \begin{gather}\label{eq:general_de}
     g\left(\dot{\bbf}_j,\bbf_j,\by_j\right)=\mb{0},
 \end{gather}
 where $\by_j=\by_j\left(\bu,\bv,\ba\right)$ is an internal field.
-Optional terms $\bh_j$ are included in \eqsref{eq:general_eom} to ensure correct energy dissipation characteristics.
 
 For simplicity, we assume each $\bbf_j$ is governed by the following linear differential equation in this work:
 \begin{gather}\label{eq:linear_de}
@@ -27,7 +25,7 @@ For simplicity, we assume each $\bbf_j$ is governed by the following linear diff
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are distinct real scalar parameters that control the response.
 Both can be extended to the complex realm $\mathbb{C}$ subject to additional conditions, see later discussions.
 To ensure stability, the poles $s_j$ shall meet the constraint: $\Re\left(s_j\right)>0$.
-It is also assumed that the initial condition for $\bbf_j$ is trivial: $\bbf_j\left(0\right)=\mb{0}$.
+It is also assumed that the initial condition for $\bbf_j$ is trivial, that is $\bbf_j\left(0\right)=\mb{0}$.
 \subsection{Formulation 1}\label{sec:u_dep}
 For ease of discussion, we consider the linear version of \eqsref{eq:general_eom} under free vibration ($\bp=\mb{0}$), which is
 \begin{gather}
@@ -36,7 +34,7 @@ For ease of discussion, we consider the linear version of \eqsref{eq:general_eom
         \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu,
     \end{array}\right.
 \end{gather}
-with $\by_j=\mb{K}\bu$, trivial $\bh_j$ and real parameters $s_j$ and $m_j$.
+with $\by_j=\mb{K}\bu$ and real parameters $s_j$ and $m_j$.
 Assuming harmonic solutions for both $\bu$ and $\bbf_j$,
 \begin{gather}\label{eq:harmonic_solution}
     \bu\left(t\right)=\mb{U}\exp\left(i\omega{}t\right),\qquad
@@ -84,10 +82,11 @@ With this choice, the loss stiffness $\mb{K}''$ no longer relies on the static s
 The above analyses assume $s_j$ and $m_j$ are real scalars.
 One may notice that if $m_j$ and $s_j$ come in conjugate pairs, for example,
 \begin{gather}
+    \boxed{
     m_j\in\mathbb{C},\qquad
     s_j\in\mathbb{C},\qquad
     m_{j+1}=\overline{m_j},\qquad
-    s_{j+1}=\overline{s_j},
+    s_{j+1}=\overline{s_j},}
 \end{gather}
 it can be proved that the above expressions for storage and loss stiffnesses still hold.
 For example, the real part
@@ -104,11 +103,11 @@ For example, the real part
 \end{split}
 \end{gather}
 This simply implies that it is possible to extend the definition of parameters $s_j$ and $m_j$ to the complex realm, provided that they come in conjugate pairs.
-In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with the additional constraint implied.
+In the following, it is thus assumed $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with this additional constraint implied.
 Again, for the system to be stable, it is required that $\Re\left(s_j\right)>0$.
 \subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
-The system is
+The system becomes
 \begin{gather}
     \left\{\begin{array}{l}
         \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0}, \\
@@ -138,15 +137,14 @@ Assuming the matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$ is neither defective nor de
     \dfrac{1}{1+\sum\dfrac{m_j}{s_j+i\omega}}=1+\sum\dfrac{m'_j}{s_j'+i\omega}\qquad\text{with}\quad{}m'_j=-\dfrac{\left\langle\mb{1},\mb{\phi}^r_j\right\rangle\left\langle\mb{\phi}^l_j,\mb{m}\right\rangle}{\left\langle\mb{\phi}^r_j,\mb{\phi}^l_j\right\rangle}.
 \end{gather}
 
-For any given sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
+For proper sets of $s_j$ and $m_j$, it is thus possible to find the corresponding sets $s'_j$ and $m'_j$ to convert between \eqsref{eq:acc_cha} and \eqsref{eq:disp_cha}.
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex realm.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex, simply due to the fact that $s'_j$, which are eigenvalues of matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 In the absence of other energy dissipating actions, the two formulations are thus equivalent.
 This equivalence may offer numerical advantages (that can be seen later) when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
-
 One shall note that the above equivalence is only valid under free vibration.
-For forced vibration, the external load $\bp$ must be properly transformed to ensure the same equivalence.
-\subsection{The Wrong Asymptotic Behaviour}\label{sec:fix}
+For forced vibration, the external load $\bp$ must be properly transformed to ensure the same equivalence, see later sections.
+\subsection{Wrong Asymptotic Behaviour}\label{sec:fix}
 The fundamental consistency requirement states that $\mb{K}^*$ (or $\mb{K}'$) must approach the static stiffness $\mb{K}$ at low frequencies, that is, $\lim\limits_{\omega\rightarrow0}\mb{K}^*=\mb{K}$, to ensure the system behaves as expected under static loading conditions.
 It can be noted that $\mb{K}'$ fails to meet this requirement as it does not converge to the static stiffness $\mb{K}$ at low frequencies in \eqsref{eq:u_stiffnesses}.
 The formulation shall be further augmented to fix this issue, for example, by introducing non-trivial terms $\bh_j$ to cancel the contribution of $\sum\dfrac{m_j}{s_j}\mb{K}$ at low frequencies, resulting in
@@ -182,7 +180,7 @@ s_j\bh_j=-m_j\mb{M}\ba.
     \end{array}\right.
 \end{gather}
 \subsection{Formulation 3}\label{sec:v_dep_k}
-We consider $\by_j=\mb{K}\bv$ with trivial $\bh_j$, the system becomes
+We consider $\by_j=\mb{K}\bv$, the system becomes
 \begin{gather}\label{eq:vel_formulation}
     \left\{\begin{array}{l}
         \mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\mb{0}, \\
@@ -234,10 +232,35 @@ Similar to the previous derivation, via partial fraction decomposition, it is po
 This effectively makes \eqsref{eq:vel_cha2} an equivalent alternative formulation of \eqsref{eq:vel_cha}.
 Because computing and storing $\dot{\ba}=\dddot{\bu}$ is \textbf{not} supported in typical analysis frameworks, this practically restrictive formulation is presented solely to establish the equivalence between the two forms.
 Should $\dddot{\bu}$ be tracked, the system can leverage the unique characteristics of the mass matrix detailed in previous sections.
+\subsection{Forced Vibration}
+If the external load $\bp$ is non-trivial, consider the system \eqsref{eq:a_right} with $\bh_j$ merged and an augmented right hand side,
+\begin{gather}
+    \left\{\begin{array}{l}
+        \left(1-\sum\dfrac{m_j}{s_j}\right)\mb{M}\ddot{\bu}+\mb{K}\bu+\sum\bbf_j=\left(1-\sum\dfrac{m_j}{s_j}\right)\bp+\sum\bq_j, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{M}\ba,                                                                                      \\
+        \dot{\bq}_j=-s_j\bq_j+m_j\bp.
+    \end{array}\right.
+\end{gather}
+Assuming harmonic solutions for $\bu=\mb{U}\exp\left(i\omega{}t\right)$, $\bbf_j=\mb{F}_j\exp\left(i\omega{}t\right)$, $\bq_j=\mb{Q}_j\exp\left(i\omega{}t\right)$ and $\bp=\mb{P}\exp\left(i\omega{}t\right)$, the equation of motion can be expressed in the frequency domain as
+\begin{gather}\label{eq:forced_freq}
+    \left(\mb{K}-\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j}{s_j+i\omega}\right)\omega^2\mb{M}\right)\mb{U}=\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{P}.
+\end{gather}
+It is then straightforward to see that \eqsref{eq:forced_freq} is
+\begin{multline}
+    \left(\dfrac{1}{1-\sum\dfrac{m_j}{s_j}\dfrac{i\omega}{s_j+i\omega}}\mb{K}-\omega^2\mb{M}\right)\mb{U}=\mb{P}\\\longrightarrow\qquad\left(\left(1-\sum\dfrac{m'_j}{s'_j}\dfrac{i\omega}{s'_j+i\omega}\right)\mb{K}-\omega^2\mb{M}\right)\mb{U}=\mb{P}
+\end{multline}
+with the help of \eqsref{eq:rate_eqv}.
+This corresponds to the system \eqsref{eq:u_right} under forced vibration, which is
+\begin{gather}
+    \left\{\begin{array}{l}
+        \mb{M}\ddot{\bu}+\left(1-\sum\dfrac{m_j}{s_j}\right)\mb{K}\bu+\sum\bbf_j=\mb{p}, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu.
+    \end{array}\right.
+\end{gather}
 \subsection{Remarks}
 Since the trivial initial condition $\bbf_j\left(0\right)=\mb{0}$ is assumed, borrowing the relation discussed in the work by \citet{Chang2024}, the above proposed formulations can also be equivalently expressed as
 \begin{gather}
-    \br+\sum{}g_j*\by_j+\sum\bh_j=\mb{p}
+    \br+\sum{}g_j*\by_j=\mb{p}
 \end{gather}
 where $g_j*\by_j$ stands for the convolution between the kernel $g_j$ and $\by_j$, that is,
 \begin{gather}\label{eq:conv}
@@ -324,19 +347,19 @@ The same also applies to $\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}$, and thus $\
 \subsection{Remarks}
 \tabref{tab:special} summarises a few special cases.
 \begin{table}[ht!]
-    \centering\scriptsize\renewcommand{\arraystretch}{1.4}
+    \centering\footnotesize\renewcommand{\arraystretch}{1.4}
     \caption{some noticeable formulations}\label{tab:special}
     \begin{tabular}{lccccll}
         \toprule
-        section                                  &    $s_j$     &    $m_j$     &                    $\by_j$                    &       $\bh_j$       & cost                                                                    & remarks                                          \\ \midrule
+                                           &    $s_j$     &    $m_j$     &                    $\by_j$                    &       $\bh_j$       & cost                                                                    & remarks                                          \\ \midrule
                                                  & $\mathbb{C}$ & $\mathbb{C}$ &                     $\bu$                     &    $-m_j/s_j\bu$    & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & general damping                                  \\
                                                  & $\mathbb{C}$ & $\mathbb{C}$ &                     $\bv$                     &      $\mb{0}$       & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & identical to \citep{Chang2024}                   \\
                                                  & $\mathbb{C}$ & $\mathbb{C}$ &                     $\ba$                     &    $-m_j/s_j\ba$    & \faStar\faStarHalf*\faStar[regular]\faStar[regular]\faStar[regular]     & general damping                                  \\ \midrule
                                                  & $\mathbb{R}$ & $\mathbb{R}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStarHalf*\faStar[regular]                       & identical to \citep{Huang2019}                   \\
-        \secref{sec:v_dep_k}                     & $\mathbb{C}$ & $\mathbb{C}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar[regular]                            & complex extension of \citep{Huang2019}           \\
+        \eqsref{eq:v_final}, \secref{sec:v_dep_k}                   & $\mathbb{C}$ & $\mathbb{C}$ &    $\dot{\br}_{\bu}$ (linear: $\mb{K}\bv$)    &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar[regular]                            & complex extension of \citep{Huang2019}           \\
         \secref{sec:v_dep_m}                     & $\mathbb{C}$ & $\mathbb{C}$ & $\dot{\br}_{\ba}$ (linear: $\mb{M}\dot{\ba}$) &      $\mb{0}$       & \faStar\faStar\faStar\faStar\faStar                                     & equiv. to \secref{sec:v_dep_k} if free vibration                   \\ \midrule
-        \secref{sec:u_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\bu}$                  & $-m_j/s_j\br_{\bu}$ & \faStar\faStar\faStarHalf*\faStar[regular]\faStar[regular]              & alt. form, equiv. to \secref{sec:v_dep_k} \\
-        \secref{sec:a_dep} with \secref{sec:fix} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\ba}$                  & $-m_j/s_j\br_{\ba}$ & \faStar\faStar[regular]\faStar[regular]\faStar[regular]\faStar[regular] & alt. form, equiv. to \secref{sec:v_dep_k} if free vibration \\ \midrule
+        \eqsref{eq:u_final} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\bu}$                  & $-m_j/s_j\br_{\bu}$ & \faStar\faStar\faStarHalf*\faStar[regular]\faStar[regular]              & alt. form, equiv. to \secref{sec:v_dep_k} \\
+        \eqsref{eq:a_final} & $\mathbb{C}$ & $\mathbb{C}$ &                  $\br_{\ba}$                  & $-m_j/s_j\br_{\ba}$ & \faStar\faStar[regular]\faStar[regular]\faStar[regular]\faStar[regular] & alt. form, equiv. to \secref{sec:v_dep_k} \\ \midrule
         \multicolumn{7}{p{15cm}}{The reported implementation cost is intended only to indicate the relative ranking among the formulations in the table, and does not represent a quantitative or absolute measure of computational expense. More stars indicate higher implementation cost.}                               \\ \bottomrule
     \end{tabular}
 \end{table}
@@ -344,7 +367,7 @@ The proposed damping formulations can be applied at both the global model and el
 Consequently, the energy dissipating forces $\bbf$ and $\bh$ can be flexibly formulated using either node-based or element-based representations.
 
 Among various formulations, three practical ones are repeated in the nonlinear context as follows.
-Under free vibration, each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
+Each one is equivalent to the others and all yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{Displacement Dependent}
 This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
 Its computational cost is lower than that of \eqsref{eq:v_final} but higher than that of \eqsref{eq:a_final}.
@@ -374,8 +397,9 @@ Consequently, this formulation is the least expensive among the three.
 \begin{gather}\label{eq:a_final}
 \boxed{
     \left\{\begin{array}{l}
-        \left(1-\sum\dfrac{m_j}{s_j}\right)\br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\mb{p}, \\
-        \dot{\bbf}_j=-s_j\bbf_j+m_j\br_{\ba}.
+        \left(1-\sum\dfrac{m_j}{s_j}\right)\br_{\ba}+\br_{\bv}+\br_{\bu}+\sum\bbf_j=\left(1-\sum\dfrac{m_j}{s_j}\right)\mb{p}+\sum\bq_j, \\
+        \dot{\bbf}_j=-s_j\bbf_j+m_j\br_{\ba},                                                                                      \\
+        \dot{\bq}_j=-s_j\bq_j+m_j\bp.
     \end{array}\right.
 }
 \end{gather}
