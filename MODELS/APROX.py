@@ -38,39 +38,6 @@ class Damping(DampingBase):
 
         super().__init__(m_tmp[idx := np.argsort(s_tmp)], s_tmp[idx], reciprocal)
 
-        self._ones = np.ones_like(self.m)
-
-    def convert(self):
-        poles, ev = np.linalg.eig(np.diag(self.s) + np.outer(self.m, self._ones))
-
-        ev = ev[:, idx := np.argsort(poles)]
-
-        return Damping(
-            -self._ones @ ev * np.linalg.solve(ev, self.m),
-            poles[idx],
-            not self.reciprocal,
-        )
-
-    def amplification(self, omega):
-        amplification = 1 + np.sum(self.m / (self.s + 1j * omega[:, None]), axis=1)
-        return 1 / amplification if self.reciprocal else amplification
-
-    @staticmethod
-    def preprocess(input_str: str):
-        input_list = [float(x) for x in input_str.split() if x != "-type0"]
-        zeta = np.array(input_list[0::2])
-        omega = np.array(input_list[1::2])
-
-        return Damping(-2 * zeta * omega, omega)
-
-
-class DampingC(DampingBase):
-    def __init__(self, m, s, reciprocal=False):
-        m_tmp = np.asarray(m, dtype=np.complex128)
-        s_tmp = np.asarray(s, dtype=np.complex128)
-
-        super().__init__(m_tmp[idx := np.argsort(s_tmp)], s_tmp[idx], reciprocal)
-
     def convert(self):
         scalar = 1 + np.sum(self.m)
 
@@ -79,7 +46,7 @@ class DampingC(DampingBase):
         ev = ev[:, idx := np.argsort(poles)]
         poles = poles[idx]
 
-        return DampingC(
+        return Damping(
             self.s @ ev * np.linalg.solve(ev, self.m) / (-scalar * poles),
             poles / scalar,
             not self.reciprocal,
@@ -105,7 +72,14 @@ class DampingC(DampingBase):
         zeta = np.array(input_list[0::2])
         omega = np.array(input_list[1::2])
 
-        return DampingC(2 * zeta, omega)
+        return Damping(2 * zeta, omega)
+
+
+def convert(m, s):
+    m = np.asarray(m, dtype=np.complex128)
+    s = np.asarray(s, dtype=np.complex128)
+    m, s = Damping(-m / s, s).convert().pair()
+    return -m * s, s
 
 
 def to_latex_table(system, system_inv, digits=4):
@@ -131,7 +105,7 @@ def to_latex_table(system, system_inv, digits=4):
 
 
 def process(input_str: str, fn: str, *, t_end: float = 0.1, with_kernel: bool = True):
-    system = DampingC.preprocess(input_str)
+    system = Damping.preprocess(input_str)
     system_inv = system.convert()
 
     to_latex_table(system, system_inv)
@@ -223,10 +197,9 @@ if __name__ == "__main__":
         with_kernel=False,
     )
 
-    system = DampingC.preprocess(
+    system = Damping.preprocess(
         "-type0 1.98700e-02 3.76642e-01 -type0 1.66460e-02 8.52878e+00 -type0 1.53240e-02 3.16297e+00 -type0 8.86700e-03 7.94340e-02 -type0 1.98710e-02 2.65643e+01 -type0 1.66450e-02 1.17300e+00 -type0 3.62070e-02 1.25893e+02 -type0 2.73430e-02 7.94790e-02"
     )
     system_inv = system.convert()
 
-    print(system.integrator_cmd())
-    print(system_inv.integrator_cmd())
+    print(convert([-2], [10]))
