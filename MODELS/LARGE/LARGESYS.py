@@ -19,7 +19,7 @@ fix2 1 E 1 4 7 8 10 12 14 17 18 20 338 339 340 341 342 343 344 345 346 510 511 5
 displacement 1 0 -5 3 2 3 6 175 176 177 178 179 180 181 182 183 682 683 684 685 686 687 688 689 690
 
 step {analysis} 1
-set ini_step_size 4E-2
+set ini_step_size 2E-2
 set fixed_step_size 1
 set symm_mat 1
 set sparse_mat 0
