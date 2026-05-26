@@ -9,7 +9,7 @@ In the general nonlinear context, the governing system is
         \br+\sum\bbf_j+\sum\bh_j=\mb{z}.
     \end{array}\right.
 \end{gather}
-Because the external load may be augmented as in \eqsref{eq:a_final}, $\mb{z}$ is used here instead.
+Because the external load $\bp$ may be augmented as in \eqsref{eq:a_final}, $\mb{z}$ is used here instead.
 \subsubsection{Effective Stiffness}
 The first expression is a first-order ODE for $\bbf_j$ that can be integrated with the implicit trapezoidal rule, which is second-order accurate and A-stable,
 \begin{gather}
@@ -25,7 +25,7 @@ which can be rearranged to obtain
 \end{gather}
 in which subscripts $\left(\cdot\right)_n$ and $\left(\cdot\right)_{n+1}$ denote the corresponding quantity at $t_n$ and $t_{n+1}=t_n+\Delta{}t$.
 
-Assuming that the equation of motion is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well-known Newmark method), the second expression is
+Assuming that the equation of motion (equilibrium) is satisfied at $t_{n+1}$, which is valid for a wide range of time integration methods (including the well-known Newmark method), the second expression is
 \begin{gather}\label{eq:residual}
     \br_{n+1}+\sum\dfrac{2-s_j\Delta{}t}{2+s_j\Delta{}t}\bbf_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n}+\sum\dfrac{m_j\Delta{}t}{2+s_j\Delta{}t}\by_{j,n+1}+\sum\bh_{j,n+1}=\mb{z}_{n+1}.
 \end{gather}

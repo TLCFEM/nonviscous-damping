@@ -4,11 +4,11 @@ Consider the general equation of motion of a dynamic system under an external lo
     \br\left(\bu,\bv,\ba\right)=\bp\left(t\right),
 \end{gather}
 where $\br=\br\left(\bu,\bv,\ba\right)$ is the overall resistance of the system, accounting for contributions from displacement $\bu$, velocity $\bv$ and acceleration $\ba$.
-Assuming that the contributions of $\bu$, $\bv=\dot{\bu}$, and $\ba=\ddot{\bu}$ are separable, without coupling among them, the resistance $\br$ can be divided into three components
+Assuming that the contributions of $\bu$, $\bv=\dot{\bu}$, and $\ba=\ddot{\bu}$ are separable, there is no coupling among them, the resistance $\br$ can be then divided into three components
 \begin{gather}
     \br=\br_{\bu}+\br_{\bv}+\br_{\ba},
 \end{gather}
-where $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ is a function of $\baleph$ and $\baleph\in\left\{\bu,\bv,\ba\right\}$.
+where $\br_{\baleph}=\br_{\baleph}\left(\baleph\right)$ is a function of $\baleph\in\left\{\bu,\bv,\ba\right\}$.
 Additional energy-dissipating terms can be introduced, for example,
 \begin{gather}\label{eq:general_eom}
 \boxed{\br+\bbf=\bp,}
@@ -29,7 +29,7 @@ For simplicity, throughout this work we assume that each $\bbf_j$ is governed by
 \end{gather}
 where $s_j\in\mathbb{R}$ and $m_j\in\mathbb{R}$ are distinct real scalar parameters that control the response.
 Both can be extended to the complex domain $\mathbb{C}$ subject to additional conditions, as discussed below.
-To ensure stability, the poles $s_j$ must satisfy $\Re\left(s_j\right)>0$.
+To ensure stability, the poles $s_j$ must satisfy the necessary condition $\Re\left(s_j\right)>0$.
 It is also assumed that the initial condition for $\bbf_j$ is trivial; that is, $\bbf_j\left(0\right)=\mb{0}$.
 \subsection{Formulation 1}\label{sec:u_dep}
 For ease of discussion, we consider the linear version of \eqsref{eq:general_eom} under free vibration ($\bp=\mb{0}$), which is
@@ -74,7 +74,7 @@ The limiting cases are
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\mb{K}.
 \end{gather}
 In this formulation, $m_j<0$ is required to ensure that the system is dissipative.
-Physically, $\bbf_j$ represent filtered resistance forces and must be exerted against motion in order to dissipate energy.
+Physically, $\bbf_j$ represent filtered hysteretic resistance forces and must be exerted against motion in order to dissipate energy.
 Accordingly, the storage stiffness $\mb{K}'$ softens at low frequencies (since $m_j<0$ and $s_j>0$) and approaches the original stiffness $\mb{K}$ at high frequencies.
 
 Repeating this procedure with $\by_j=\bu$ gives the following stiffnesses:
@@ -107,7 +107,7 @@ For example, the real part is
 \end{multline}
 This implies that the parameters $s_j$ and $m_j$ can be extended to the complex domain, provided that they come in conjugate pairs.
 In the following, we therefore assume $s_j\in\mathbb{C}$ and $m_j\in\mathbb{C}$ with this additional constraint implied.
-Again, for the system to be stable, it is required that $\Re\left(s_j\right)>0$.
+Again, a stable system requires $\Re\left(s_j\right)>0$.
 \subsection{Formulation 2}\label{sec:a_dep}
 Alternatively, one can pick $\by_j=\mb{M}\ba$.
 The system becomes
@@ -144,12 +144,12 @@ For suitable sets of $s_j$ and $m_j$, it is thus possible to find the correspond
 This process naturally extends the definition of $s_j$ and $m_j$ to the complex domain.
 Even if the input pairs are real, for example, $s_j,m_j\in\mathbb{R}$, the corresponding $s'_j$ and $m'_j$ can be complex because $s'_j$, which are eigenvalues of the matrix $\diag{\mb{s}}+\mb{m}\mb{1}^\mT$, are not necessarily real.
 In the absence of other energy-dissipating actions, the two formulations are thus equivalent.
-This equivalence may offer numerical advantages, as shown later, when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
+This equivalence may offer numerical advantages when the mass matrix is constant, as is often the case, and more sparse than the stiffness matrix, particularly under a lumped mass formulation.
 Note that this equivalence is only valid under free vibration.
 For forced vibration, the external load $\bp$ must be properly transformed to ensure the same equivalence, see later sections.
 \subsection{Wrong Asymptotic Behaviour}\label{sec:fix}
 The fundamental consistency requirement states that $\mb{K}^*$ (or $\mb{K}'$) must approach the static stiffness $\mb{K}$ at low frequencies, that is, $\lim\limits_{\omega\rightarrow0}\mb{K}^*=\mb{K}$, to ensure the system behaves as expected under static loading conditions.
-However, $\mb{K}'$ fails to meet this requirement because it does not converge to the static stiffness $\mb{K}$ at low frequencies in \eqsref{eq:u_stiffnesses}.
+However, $\mb{K}'$ fails to meet this requirement in \eqsref{eq:u_stiffnesses}.
 The formulation must therefore be augmented to fix this issue, for example, by introducing non-trivial terms $\bh_j$ to cancel the contribution of $\sum\dfrac{m_j}{s_j}\mb{K}$ at low frequencies, resulting in
 \begin{gather}\label{eq:u_right}
     \left\{\begin{array}{l}
@@ -173,7 +173,8 @@ With this modification,
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1-\sum\dfrac{m_j}{s_j}\right)\mb{K}.
 \end{gather}
 
-A similar modification can be applied to the formulation in \secref{sec:a_dep}.
+Due to equivalence, the formulation in \secref{sec:a_dep} also does not meet the consistency requirement.
+A similar modification shall be applied.
 Only the governing system is presented below, without repeating the lengthy derivations.
 \begin{gather}\label{eq:a_right}
     \left\{\begin{array}{l}
@@ -244,7 +245,7 @@ If the external load $\bp$ is non-trivial, consider the system \eqsref{eq:a_righ
         \dot{\bq}_j=-s_j\bq_j+m_j\bp.
     \end{array}\right.
 \end{gather}
-Assuming harmonic solutions for $\bu=\mb{U}\exp\left(i\omega{}t\right)$, $\bbf_j=\mb{F}_j\exp\left(i\omega{}t\right)$, $\bq_j=\mb{Q}_j\exp\left(i\omega{}t\right)$ and $\bp=\mb{P}\exp\left(i\omega{}t\right)$, the equation of motion can be expressed in the frequency domain as
+Assuming harmonic solutions for $\bu=\mb{U}\left(\omega\right)\exp\left(i\omega{}t\right)$, $\bbf_j=\mb{F}_j\left(\omega\right)\exp\left(i\omega{}t\right)$, $\bq_j=\mb{Q}_j\left(\omega\right)\exp\left(i\omega{}t\right)$ and $\bp=\mb{P}\left(\omega\right)\exp\left(i\omega{}t\right)$, the equation of motion can be expressed in the frequency domain as
 \begin{gather}\label{eq:forced_freq}
     \left(\mb{K}-\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j}{s_j+i\omega}\right)\omega^2\mb{M}\right)\mb{U}=\left(1-\sum\dfrac{m_j}{s_j}+\sum\dfrac{m_j}{s_j+i\omega}\right)\mb{P}.
 \end{gather}
@@ -277,7 +278,7 @@ Among the formulations above, three practical variants are restated in the nonli
 They are equivalent to one another and yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{UDD --- Displacement Dependent}
 This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
-From an implementation perspective, this operation can be mitigated by applying the reciprocal of the scaling factor to other components of the equation, namely matrices that already require scaling or vectors that are inexpensive to compute.
+From an implementation perspective, this operation might be mitigated by applying the reciprocal of the scaling factor to other components of the equation, namely matrices that already require scaling or vectors that are inexpensive to compute.
 Its computational cost is lower than that of \eqsref{eq:v_final}, while remaining comparable to that of \eqsref{eq:a_final}, being potentially slightly higher or lower depending on the implementation details and configuration.
 \begin{gather}\label{eq:u_final}
 \boxed{
