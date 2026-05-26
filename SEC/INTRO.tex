@@ -7,10 +7,10 @@ Nonviscous damping provides an alternative representation in which the damping f
 Recent formulations have shown that such models can produce nearly uniform damping over a target frequency interval while remaining suitable for nonlinear dynamic analysis \citep{Huang2019}.
 Efficient evaluation strategies based on first-order internal variables or exponential kernels further make these models attractive for large-scale computations \citep{Chang2024}.
 
-This paper develops a unified framework for constructing several alternative nonviscous damping formulations.
-The proposed approach introduces additive energy-dissipating forces governed by first-order differential equations and examines different choices of the driving field, including displacement-, velocity-, and acceleration-dependent forms associated with stiffness and mass contributions.
-The resulting formulations are analysed in the frequency domain to identify their storage and loss stiffnesses, admissible complex parameter pairs, stability requirements, and asymptotic behaviour.
+This paper develops a unified framework for the construction of several alternative nonviscous damping formulations.
+The proposed approach introduces additive energy-dissipating forces governed by first-order differential equations and examines different choices of the driving field, including displacement-, velocity- and acceleration-dependent forms associated with stiffness and mass contributions.
+The resulting formulations are analysed in the frequency domain to identify their storage and loss stiffnesses, admissible pairs of complex parameters, stability requirements, and asymptotic behaviour.
 
-Particular attention is given to the equivalence between reciprocal formulations and to the correction terms required to recover the correct static stiffness.
+Particular attention is paid to the equivalence between reciprocal formulations and to the correction terms required to recover the correct static stiffness.
 These observations lead to practical formulations that preserve the size of the original dynamic system while allowing the damping contribution to be embedded into a standard direct integration workflow through a modified residual and consistent tangent effective stiffness.
 Numerical examples are then used to verify convergence, demonstrate equivalence among selected formulations, and assess computational performance in a large finite element model.
