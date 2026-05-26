@@ -44,7 +44,7 @@ Together, they provide further evidence that the proposed algorithm is second-or
     \caption{displacement history and error analysis of SDOF oscillator (forced vibration with UDA)}\label{fig:sdof_forced_uda}
 \end{figure}
 
-Comparing the absolute error histories in \figref{fig:sdof_error_forced_udd} and \figref{fig:sdof_error_forced_uda} shows that both formulations yield identical error histories, further confirming their equivalence.
+Comparing the absolute error histories in \figref{fig:sdof_error_forced_udd} and \figref{fig:sdof_error_forced_uda} shows that both formulations yield identical error histories, further confirming their equivalence under forced vibration.
 \begin{figure}[htb]
     \centering\footnotesize
     \includegraphics{PIC/UDD.SDOF.ERROR.FORCED.pdf}
@@ -156,6 +156,6 @@ The label `UDA' refers to the formulation in \eqsref{eq:a_final}, for which the 
 This behaviour is expected, as the additional cost primarily originates from the computation of the vectors $\bbf_j$ and $\bq_j$, which scales with the number of terms employed in the analysis.
 For a small number of terms, the associated overhead remains negligible.
 The label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
-The dominant additional cost in this case arises from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.
-Although this operation is computationally more expensive, its cost is independent of the number of terms employed in the analysis.
-Consequently, once the number of terms exceeds the bandwidth of the global matrix, the computational cost of the `UDA' formulation is expected to surpass that of the `UDD' formulation.
+In the numerical implementation, the entire system $\bhat{K}\delta\bu=\bz-\bhat{r}$ is rescaled such that the tangent stiffness matrix $\mb{K}$ remains unscaled, thereby achieving optimal computational performance.
+As shown in \figref{fig:performance}, its computational cost is comparable to that of `UDA'.
+If an implementation strictly follows \eqsref{eq:revised_k}, the corresponding computational cost is expected to be higher, since the dominant additional overhead would arise from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.

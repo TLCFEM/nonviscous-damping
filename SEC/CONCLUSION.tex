@@ -3,13 +3,18 @@ This work has presented a general framework for constructing nonviscous damping 
 
 The main conclusions are as follows.
 \begin{itemize}
-    \item Direct displacement- and acceleration-dependent formulations require algebraic correction terms to recover the correct static stiffness at low frequencies. With these corrections, the formulations remain consistent with the underlying static problem while retaining the desired dissipative behaviour.
-    \item Three practical formulations, \eqsref{eq:u_final}, \eqsref{eq:v_final} and \eqsref{eq:a_final}, are equivalent in the frequency domain when the damping parameters are properly transformed. In the absence of additional damping mechanisms, they therefore produce the same storage and loss stiffnesses and the same dynamic response.
-    \item The velocity-dependent formulation \eqsref{eq:v_final} extends the model proposed by \citet{Huang2019}, but it is computationally more demanding because it requires the evaluation of stiffness-weighted velocity quantities. The equivalent displacement- and acceleration-dependent forms avoid this cost, with \eqsref{eq:a_final} being particularly attractive when the mass matrix is constant or lumped.
-    \item The governing equations can also be interpreted in convolution form through \eqsref{eq:conv}, linking the proposed differential representation to kernel-based descriptions of nonviscous damping. This interpretation provides a useful route for designing damping kernels and fitting target damping characteristics.
-    \item The trapezoidal update of the damping history variables can be embedded into standard direct integration procedures without enlarging the global system. The resulting residual and consistent tangent effective stiffness require only additional matrix--vector operations or simple scaled matrix contributions for the practical formulations considered here.
+    \item Direct displacement- and acceleration-dependent formulations require algebraic correction terms to recover the correct static stiffness at low frequencies.
+With these corrections, the formulations remain consistent with the underlying static problem while retaining the desired dissipative behaviour.
+    \item Three practical formulations, \eqsref{eq:u_final}, \eqsref{eq:v_final} and \eqsref{eq:a_final}, are equivalent in the frequency domain when the damping parameters are properly transformed.
+In the absence of additional damping mechanisms, they therefore produce the same storage and loss stiffnesses and the same dynamic response.
+    \item The velocity-dependent formulation in \eqsref{eq:v_final} extends the model proposed by \citet{Huang2019}, but incurs higher computational cost due to the evaluation of stiffness-weighted velocity terms.
+In contrast, the equivalent displacement- and acceleration-based formulations avoid this operation and are therefore computationally more efficient.
+    \item The governing equations can also be interpreted in convolution form through \eqsref{eq:conv}, linking the proposed differential representation to kernel-based descriptions of nonviscous damping.
+This interpretation provides a useful route for designing damping kernels and fitting target damping characteristics.
+    \item The trapezoidal update of the damping history variables can be embedded into standard direct integration procedures without enlarging the global system.
+The resulting residual and consistent tangent effective stiffness require only additional matrix--vector operations or simple scaled matrix contributions for the practical formulations considered here.
 \end{itemize}
 
-The numerical examples confirm the analytical equivalence of selected formulations under free and forced vibration, demonstrate second-order convergence of the proposed time-discrete update, and highlight the computational benefit of the acceleration-dependent form in large-scale analysis. They also show that broadband damping approximations can introduce significant changes in storage stiffness outside the target frequency range, which should be considered when selecting damping parameters for practical applications.
+The numerical examples confirm the analytical equivalence of selected formulations under free and forced vibration, demonstrate second-order convergence of the proposed time-discrete update, and highlight the computational benefit of the proposed forms in large-scale analysis. They also show that broadband damping approximations can introduce significant changes in storage stiffness outside the target frequency range, which should be considered when selecting damping parameters for practical applications.
 
 The presented nonviscous damping formulations are implemented in the open-source finite element analysis framework \texttt{suanPan} \citep{Chang2026}. All numerical examples and the relevant scripts are available in this repository\footnote{https://github.com/TLCFEM/universal-damping}.
