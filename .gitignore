@@ -2,7 +2,6 @@ __pycache__
 .dirty
 .idea
 .venv
-.vscode
 *.acn
 *.acr
 *.alg
