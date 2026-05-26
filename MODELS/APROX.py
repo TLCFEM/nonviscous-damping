@@ -9,10 +9,12 @@ import numpy as np
 matplotlib.rcParams.update({"font.size": 6})
 
 
-class DampingBase:
+class Damping:
     def __init__(self, m, s, reciprocal=False):
-        self.m = m
-        self.s = s
+        m_tmp = np.asarray(m, dtype=np.complex128)
+        s_tmp = np.asarray(s, dtype=np.complex128)
+        self.m = m_tmp[idx := np.argsort(s_tmp)]
+        self.s = s_tmp[idx]
         self.reciprocal = reciprocal
 
     def kernel(self, t):
@@ -29,14 +31,6 @@ class DampingBase:
         log_s = np.where(log_s >= 0, np.ceil(log_s), np.floor(log_s)).astype(int)
 
         return np.logspace(min(log_s), max(log_s), 200)
-
-
-class Damping(DampingBase):
-    def __init__(self, m, s, reciprocal=False):
-        m_tmp = np.asarray(m, dtype=np.complex128)
-        s_tmp = np.asarray(s, dtype=np.complex128)
-
-        super().__init__(m_tmp[idx := np.argsort(s_tmp)], s_tmp[idx], reciprocal)
 
     def convert(self):
         scalar = 1 + np.sum(self.m)
@@ -74,12 +68,12 @@ class Damping(DampingBase):
 
         return Damping(2 * zeta, omega)
 
-
-def convert(m, s):
-    m = np.asarray(m, dtype=np.complex128)
-    s = np.asarray(s, dtype=np.complex128)
-    m, s = Damping(-m / s, s).convert().pair()
-    return -m * s, s
+    @staticmethod
+    def map(m, s):
+        m = np.asarray(m, dtype=np.complex128)
+        s = np.asarray(s, dtype=np.complex128)
+        m, s = Damping(-m / s, s).convert().pair()
+        return -m * s, s
 
 
 def to_latex_table(system, system_inv, digits=4):
@@ -202,4 +196,4 @@ if __name__ == "__main__":
     )
     system_inv = system.convert()
 
-    print(convert([-2], [10]))
+    print(Damping.map([-2], [10]))
