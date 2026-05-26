@@ -141,7 +141,8 @@ The system under consideration is a three-dimensional model comprising \num{2012
 The model includes \num{39990} triangular shell elements.
 The global system adopts a banded storage format.
 
-\figref{fig:performance} presents a comparison of the wall-clock time required to analyse the system over \num{25} time steps.
+\figref{fig:performance} presents a comparison of the wall-clock time required to analyse the system over \num{50} time steps.
+Each time step involves two iterations, resulting in a total of \num{100} iterations for each configuration.
 \begin{figure}[htb]
     \centering
     \includegraphics{PIC/PERFORMANCE.pdf}
@@ -152,10 +153,13 @@ Relative to the static case, dynamic analyses primarily incur additional computa
 This is reflected in the undamped case solved using the Newmark integration scheme.
 
 For the damped analyses, the same eight terms listed in \tabref{tab:constant_five} are adopted.
+The label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
+In the numerical implementation, the entire system $\bhat{K}\delta\bu=\bz-\bhat{r}$ is rescaled such that the tangent stiffness matrix $\mb{K}$ remains unscaled, thereby achieving optimal computational performance.
+As shown in \figref{fig:performance}, its computational cost is virtually identical to that of the undamped case, as expected, since the additional overhead mainly stems from the computation of the internal forces $\bbf_j$, which is computationally inexpensive.
+If an implementation strictly follows \eqsref{eq:revised_k}, the corresponding computational cost is expected to be higher, since the dominant additional overhead would arise from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.
 The label `UDA' refers to the formulation in \eqsref{eq:a_final}, for which the computational cost is only marginally higher than that of the undamped case.
 This behaviour is expected, as the additional cost primarily originates from the computation of the vectors $\bbf_j$ and $\bq_j$, which scales with the number of terms employed in the analysis.
 For a small number of terms, the associated overhead remains negligible.
-The label `UDD' corresponds to the formulation in \eqsref{eq:u_final}.
-In the numerical implementation, the entire system $\bhat{K}\delta\bu=\bz-\bhat{r}$ is rescaled such that the tangent stiffness matrix $\mb{K}$ remains unscaled, thereby achieving optimal computational performance.
-As shown in \figref{fig:performance}, its computational cost is comparable to that of `UDA'.
-If an implementation strictly follows \eqsref{eq:revised_k}, the corresponding computational cost is expected to be higher, since the dominant additional overhead would arise from the assembly of the effective stiffness matrix, which requires scaling of the stiffness matrix.
+
+For large-scale problems, incorporating this form of nonviscous damping is computationally comparable to Rayleigh damping, provided that the number of pairs $(m_j, s_j)$ remains significantly smaller than the system size.
+The advantage is therefore evident: the damping characteristics of the system can be tailored over a wide frequency range without significant additional computational cost.
