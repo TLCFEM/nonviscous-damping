@@ -82,7 +82,7 @@ def create_comparison_figure(results: dict[str, TimingStats], out_path: str) -> 
 
     ax.set_xlabel("Time (s)")
     ax.invert_yaxis()
-    ax.legend()
+    ax.legend(framealpha=0.6)
 
     fig.tight_layout()
 
