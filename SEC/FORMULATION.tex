@@ -278,7 +278,7 @@ Among the formulations above, three practical variants are restated in the nonli
 They are equivalent to one another and yield identical energy dissipation characteristics, provided that the parameters $s_j$ and $m_j$ are properly adjusted.
 \paragraph{UDD --- Displacement Dependent}
 This formulation requires scaling of the tangent stiffness matrix $\mb{K}$.
-From an implementation perspective, this operation might be mitigated by applying the reciprocal of the scaling factor to the rest of the equation, namely matrices that already require scaling or vectors that are inexpensive to compute.
+From an implementation perspective, this operation might be mitigated by applying the reciprocal of the scaling factor to the rest components in the equation, namely matrices that already require scaling or vectors that are inexpensive to compute.
 Its computational cost is lower than that of \eqsref{eq:v_final}, while remaining comparable to that of \eqsref{eq:a_final}, being potentially slightly higher or lower depending on the implementation details and configuration.
 \begin{gather}\label{eq:u_final}
 \boxed{
