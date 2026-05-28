@@ -160,6 +160,7 @@ If an implementation strictly follows \eqsref{eq:revised_k}, the corresponding c
 The label `UDA' refers to the formulation in \eqsref{eq:a_final}, for which the computational cost is only marginally higher than that of the undamped case.
 This behaviour is expected, as the additional cost primarily originates from the computation of the vectors $\bbf_j$ and $\bq_j$, which scales with the number of terms employed in the analysis.
 For a small number of terms, the associated overhead remains negligible.
+Although \eqsref{eq:v_final} provides an analytically concise formulation, it is neither implemented nor presented owing to its evident computational inefficiency.
 
 For large-scale problems, incorporating this form of nonviscous damping is computationally comparable to Rayleigh damping, provided that the number of pairs $(m_j, s_j)$ remains significantly smaller than the system size.
 The advantage is therefore evident: the damping characteristics of the system can be tailored over a wide frequency range without significant additional computational cost.
