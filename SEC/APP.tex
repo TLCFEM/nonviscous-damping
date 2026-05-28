@@ -1,10 +1,10 @@
 \appendix
 \section{Analytical Solution}
-Consider the SDOF system following \eqsref{eq:u_final}, with $\omega_n$ denoting the natural frequency, the equation of motion after eliminating $f$ can be expressed as
+Consider the SDOF system following \eqsref{eq:u_final} under free vibration, with $\omega_n$ denoting the natural frequency, the equation of motion after eliminating $f$ can be expressed as
 \begin{gather}
 \dddot{u}+s\ddot{u}+\left(1-\dfrac{m}{s}\right)\omega_n^2\dot{u}+s\omega_n^2u=0.
 \end{gather}
-Assuming $f_0=0$ gives $a_0=\left(\dfrac{m}{s}-1\right)\omega^2_nu_0$.
+Assuming $f_0=0$ gives $a_0=\left(\dfrac{m}{s}-1\right)\omega^2_nu_0$, where subscript $\left(\cdot\right)_0$ denotes initial condition.
 Apply the Laplace transform with $U=U\left(l\right)$ where $l$ denotes the Laplace variable,
 \begin{gather}
 \left(l^3+sl^2+\left(1-\dfrac{m}{s}\right)\omega_n^2l+s\omega_n^2\right)U=u_0l^2+\left(su_0+v_0\right)l+sv_0.
@@ -34,3 +34,7 @@ After solving for $P_i$, transforming $U$ back to the time domain gives the solu
 \begin{gather}
 u(t)=\sum_{i=1}^3P_i\exp\left(r_it\right).
 \end{gather}
+\section{Parameter Transform}
+The parameter set used in one system can be transformed to the corresponding counterpart to be used in another system between \eqsref{eq:u_final} and \eqsref{eq:a_final}.
+The following \faPython~\texttt{Python} function converts between the two parameter sets.
+\inputminted[baselinestretch=1,breaklines,frame=lines,linenos,fontsize=\footnotesize]{python3}{MODELS/EX.py}
