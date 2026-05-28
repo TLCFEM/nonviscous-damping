@@ -3,14 +3,11 @@ import numpy as np
 
 def map(m, s):
     """
-    Convert damping coefficients from ``(m, s)`` to an equivalent transformed pair for UDD and UDA.
+    Transform damping coefficients between UDD and UDA.
     """
-    m = np.asarray(m, dtype=np.complex128)
-    s = np.asarray(s, dtype=np.complex128)
-    ms = m / s
+    m, s = np.asarray(m, np.complex128), np.asarray(s, np.complex128)
 
-    scalar = 1 - np.sum(ms)
-
+    scalar = 1 - np.sum(ms := m / s)
     poles, ev = np.linalg.eig(np.diag(s) * scalar + np.outer(ms, s))
 
     ev = ev[:, idx := np.argsort(poles)]
