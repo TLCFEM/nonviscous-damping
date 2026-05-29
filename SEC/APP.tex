@@ -1,4 +1,8 @@
 \appendix
+\section{Parameter Transform}
+The parameter set of one system can be transformed into the corresponding parameter set of the other system between \eqsref{eq:u_final} and \eqsref{eq:a_final}.
+The following \faPython~\texttt{Python} function implements the conversion between the two parameter sets.
+\inputminted[baselinestretch=1,breaklines,frame=lines,linenos,fontsize=\footnotesize,bgcolor=manni-bg]{python3}{MODELS/EX.py}
 \section{Analytical Solution}
 Consider the SDOF system following \eqsref{eq:u_final} under free vibration, with $\omega_n$ denoting the natural frequency, the equation of motion after eliminating $f$ can be expressed as
 \begin{gather}
@@ -34,7 +38,3 @@ After solving for $P_i$, transforming $U$ back to the time domain gives the solu
 \begin{gather}
 u(t)=\sum_{i=1}^3P_i\exp\left(r_it\right).
 \end{gather}
-\section{Parameter Transform}
-The parameter set of one system can be transformed into the corresponding parameter set of the other system between \eqsref{eq:u_final} and \eqsref{eq:a_final}.
-The following \faPython~\texttt{Python} function implements the conversion between the two parameter sets.
-\inputminted[baselinestretch=1,breaklines,frame=lines,linenos,fontsize=\footnotesize,bgcolor=manni-bg]{python3}{MODELS/EX.py}
