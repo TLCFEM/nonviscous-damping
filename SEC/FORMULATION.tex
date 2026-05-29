@@ -206,10 +206,18 @@ The limiting cases are
     \lim\limits_{\omega\rightarrow\infty}\mb{K}'=\left(1+\sum{}m_j\right)\mb{K}.
 \end{gather}
 In this formulation, a dissipative system requires $\Re\left(m_j\right)>0$.
-A careful comparison reveals that \eqsref{eq:vel_formulation} is equivalent to the model by \citet{Huang2019}, which adopts real parameters $s_j$ and $m_j$.
 The loss stiffness $\mb{K}''$ in this case is positive, indicating that the system is dissipative and stable when $\Re\left(m_j\right)>0$.
 Unlike the previous formulations, the storage stiffness $\mb{K}'$ approaches the original stiffness $\mb{K}$ at low frequencies and hardens at high frequencies.
-It is also equivalent to \eqsref{eq:u_right} after a simple parameter mapping: $s_j$ stays unchanged, and replacing $m_j$ in \eqsref{eq:vel_formulation} by $-m_j/s_j$ yields \eqsref{eq:u_right}.
+
+It is equivalent to \eqsref{eq:u_right} after a simple parameter mapping: $s_j$ stays unchanged, and replacing $m_j$ in \eqsref{eq:vel_formulation} by $-m_j/s_j$ yields \eqsref{eq:u_right}.
+By comparing \eqsref{eq:u_right} and \eqsref{eq:vel_formulation}, one can also derive the following third equivalent formulation.
+\begin{gather}\label{eq:vel_formulation_alter}
+\left\{\begin{array}{l}
+\mb{M}\ddot{\bu}+\mb{K}\bu-\sum\dfrac{\dot{\bbf}_j}{s_j}=\mb{0}, \\
+\dot{\bbf}_j=-s_j\bbf_j+m_j\mb{K}\bu.
+\end{array}\right.
+\end{gather}
+A careful comparison reveals that \eqsref{eq:vel_formulation_alter} is equivalent to the model by \citet{Huang2019}, which adopts real parameters $s_j$ and $m_j$.
 \subsection{Formulation 4}\label{sec:v_dep_m}
 Alternatively, for $\by_j=\mb{M}\dot{\ba}$, the corresponding characteristic equation can be expressed as
 \begin{gather}\label{eq:vel_cha2}
