@@ -76,13 +76,17 @@ The limiting cases are
 In this formulation, $m_j<0$ is required to ensure that the system is dissipative.
 Physically, $\bbf_j$ represent filtered hysteretic resistance forces and must be exerted against motion in order to dissipate energy.
 Accordingly, the storage stiffness $\mb{K}'$ softens at low frequencies (since $m_j<0$ and $s_j>0$) and approaches the original stiffness $\mb{K}$ at high frequencies.
+\subsection{Guaranteed Energy Dissipation}
+The choice $\by_j=\mb{K}\bu$ yields a dynamic stiffness proportional to the exact stiffness matrix $\mb{K}$, enabling the definition of a scalar loss ratio and, potentially, an equivalent damping factor.
+However, for systems exhibiting stiffness degradation or damage induced softening, this formulation may inject energy into the system rather than dissipate it.
 
-Repeating this procedure with $\by_j=\bu$ gives the following stiffnesses:
+To ensure a dissipative system, repeating this procedure with $\by_j=\bu$ gives the following stiffnesses:
 \begin{gather}
     \mb{K}'=\mb{K}+\sum\dfrac{s_jm_j}{s_j^2+\omega^2}\mb{I},\qquad
     \mb{K}''=-\sum\dfrac{m_j\omega}{s_j^2+\omega^2}\mb{I}.
 \end{gather}
-With this choice, the loss stiffness $\mb{K}''$ no longer depends on the static stiffness $\mb{K}$.
+Under this choice, the loss stiffness $\mb{K}''$ becomes independent of the static stiffness $\mb{K}$.
+Although a scalar loss ratio can no longer be defined, the formulation guarantees positive energy dissipation.
 \subsection{Complex Realm Extension}
 The above analyses assume $s_j$ and $m_j$ are real scalars.
 If $m_j$ and $s_j$ come in conjugate pairs, for example,
