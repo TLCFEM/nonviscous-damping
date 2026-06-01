@@ -106,17 +106,26 @@ def sdof_system(omega: float, s: float, m: float):
 
     weights = np.linalg.solve(coef, np.array([u0, u0 * s + v0, s * v0]))
 
-    def disp(_t):
+    def kernel(_t, order):
         if not isinstance(_t, float):
-            return np.array([disp(x) for x in _t])
+            return np.array([kernel(x, order) for x in _t])
 
-        return np.dot(weights, exp(roots * _t)).real
+        return np.dot(weights * roots**order, exp(roots * _t)).real
 
-    return disp
+    def disp(_t):
+        return kernel(_t, 0)
+
+    def vel(_t):
+        return kernel(_t, 1)
+
+    def acc(_t):
+        return kernel(_t, 2)
+
+    return disp, vel, acc
 
 
 def analytical(*para):
-    disp = sdof_system(*para)
+    disp, _, _ = sdof_system(*para)
     dt, t = 0.01, 10
     x = np.linspace(0, t, int(t / dt) + 1)
 
