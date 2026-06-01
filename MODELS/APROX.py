@@ -113,8 +113,8 @@ def process(input_str: str, fn: str, *, t_end: float = 0.1, with_kernel: bool = 
     # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
     # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:g}"))
 
-    plt.plot(x, dynamic.imag * 100, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
-    plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
+    plt.plot(x, dynamic.imag * 100, linestyle="dashed", label=r"$(m_j,s_j)$")
+    plt.plot(x, dynamic_inv.imag * 100, linestyle="dotted", label=r"$(m'_j,s'_j)$")
 
     plt.xscale("log")
     plt.xlabel(r"frequency $\omega$")
@@ -126,8 +126,8 @@ def process(input_str: str, fn: str, *, t_end: float = 0.1, with_kernel: bool = 
     # plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     # plt.gca().yaxis.set_minor_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
 
-    plt.plot(x, dynamic.real, linestyle="dashed", label=r"$\zeta(m_j,s_j)$")
-    plt.plot(x, dynamic_inv.real, linestyle="dotted", label=r"$\zeta(m'_j,s'_j)$")
+    plt.plot(x, dynamic.real, linestyle="dashed", label=r"$(m_j,s_j)$")
+    plt.plot(x, dynamic_inv.real, linestyle="dotted", label=r"$(m'_j,s'_j)$")
 
     plt.xscale("log")
     plt.xlabel(r"frequency $\omega$")
