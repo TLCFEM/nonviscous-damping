@@ -69,3 +69,28 @@ The above simplifies to
     c_1c_3+c_2c_6>0,\quad
     c_2c_6<0.}
 \end{gather}
+\section{Stability Analysis}
+Since the formulations are equivalent, we consider the free vibration of the following SDOF system.
+\begin{gather}
+    \left\{\begin{array}{l}
+        \ddot{u}+\omega_n^2u+f=0, \\
+        \dot{f}=-sf+m\omega^2_n\dot{u}.
+    \end{array}\right.
+\end{gather}
+With \algoref{algo:general_algo}, the corresponding amplification matrix can be derived as
+\begin{multline}
+\begin{bmatrix}
+1+\beta\Delta{}t^2\omega^2_n&\cdot&\beta\Delta{}t^2\\
+\gamma\Delta{}t\omega^2_n&1&\gamma\Delta{}t\\
+\cdot&-m\Delta{}t\omega^2_n&2+s\Delta{}t
+\end{bmatrix}\begin{bmatrix}
+u_{n+1}\\\dot{u}_{n+1}\\f_{n+1}
+\end{bmatrix}\\=\begin{bmatrix}
+1+\left(\beta-\dfrac{1}{2}\right)\Delta{}t^2\omega_n^2&\Delta{}t&\left(\beta-\dfrac{1}{2}\right)\Delta{}t^2\\
+\left(\gamma-1\right)\Delta{}t\omega_n^2&1&\left(\gamma-1\right)\Delta{}t\\
+\cdot&m\Delta{}t\omega^2_n&2-s\Delta{}t
+\end{bmatrix}
+\begin{bmatrix}
+u_n\\\dot{u}_n\\f_n
+\end{bmatrix}.
+\end{multline}
