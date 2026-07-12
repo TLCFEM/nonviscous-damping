@@ -1,5 +1,3 @@
-name: PDF
-on: [ push, pull_request ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,14 +14,18 @@ jobs:
       - name: Compile
         uses: xu-cheng/texlive-action@v3
         with:
-          scheme: full
           run: latexmk -pdf UNIDAMPING.tex
-      - name: Release
-        if: github.event_name == 'push'
+          scheme: full
+      - if: github.event_name == 'push'
+        name: Release
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: UNIDAMPING.pdf
           asset_name: UNIDAMPING.pdf
-          tag: latest
+          file: UNIDAMPING.pdf
           overwrite: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+name: PDF
+'on':
+  - push
+  - pull_request
