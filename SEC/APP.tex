@@ -1,0 +1,65 @@
+\section{Parameter Transform}
+The parameter set of one system can be transformed into the corresponding parameter set of the other system between \eqsref{eq:u_final} and \eqsref{eq:a_final}.
+The following \faPython~\texttt{Python} function implements the conversion between the two parameter sets.
+\begin{minted}[baselinestretch=1,breaklines,frame=lines,linenos,fontsize=\footnotesize,bgcolor=manni-bg]{python3}
+#!/usr/bin/env python3
+
+import numpy as np
+
+
+def map(m, s):
+    """
+    Transform damping coefficients between UDD and UDA.
+    """
+    m, s = np.asarray(m, np.complex128), np.asarray(s, np.complex128)
+
+    scalar = 1 - np.sum(ms := m / s)
+    poles, ev = np.linalg.eig(np.diag(s) * scalar + np.outer(ms, s))
+
+    ev = ev[:, idx := np.argsort(poles)]
+    poles = poles[idx]
+
+    ms = s @ ev * np.linalg.solve(ev, ms) / (-scalar * poles)
+    s = poles / scalar
+
+    return ms * s, s
+
+
+if __name__ == "__main__":
+    print(map([-2], [10]))
+\end{minted}
+\section{Analytical Solution}
+Consider the SDOF system following \eqsref{eq:u_final} under free vibration, with $\omega_n$ denoting the natural frequency, the equation of motion after eliminating $f$ can be expressed as
+\begin{gather}
+\dddot{u}+s\ddot{u}+\left(1-\dfrac{m}{s}\right)\omega_n^2\dot{u}+s\omega_n^2u=0.
+\end{gather}
+Assuming $f_0=0$ gives $a_0=\left(\dfrac{m}{s}-1\right)\omega^2_nu_0$, where subscript $\left(\cdot\right)_0$ denotes initial condition.
+Apply the Laplace transform with $U=U\left(l\right)$ where $l$ denotes the Laplace variable,
+\begin{gather}
+\left(l^3+sl^2+\left(1-\dfrac{m}{s}\right)\omega_n^2l+s\omega_n^2\right)U=u_0l^2+\left(su_0+v_0\right)l+sv_0.
+\end{gather}
+The three roots of the characteristic equation $l^3+sl^2+\left(1-\dfrac{m}{s}\right)\omega_n^2l+s\omega_n^2=0$ are denoted by $r_1$, $r_2$ and $r_3$, so that $U$ can be expressed as
+\begin{gather}
+U\left(l\right)=\sum_{i=1}^3\dfrac{P_i}{l-r_i}.
+\end{gather}
+After expanding and comparing coefficients, one obtains
+\begin{gather}
+\begin{bmatrix}
+1&1&1\\
+-r_2-r_3&-r_1-r_3&-r_1-r_2\\
+r_2r_3&r_1r_3&r_1r_2
+\end{bmatrix}
+\begin{bmatrix}
+P_1\\P_2\\P_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+u_0\\
+su_0+v_0\\
+sv_0
+\end{bmatrix}.
+\end{gather}
+After solving for $P_i$, transforming $U$ back to the time domain gives the solution
+\begin{gather}
+u(t)=\sum_{i=1}^3P_i\exp\left(r_it\right).
+\end{gather}

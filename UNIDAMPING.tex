@@ -1,0 +1,102 @@
+% !TeX document-id = {a32cb1d2-1804-499b-bc4e-4e4ae3688c7d}
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
+\documentclass[3p,11pt,fleqn,review,sort&compress]{elsarticle}
+\bibliographystyle{elsarticle-num-names}
+\usepackage{amsmath,amsfonts,amssymb,siunitx,float,subcaption,setspace,booktabs,diagbox,bm,mathtools,url,fontawesome5,xcolor,minted,algorithm,algpseudocode,lineno}
+\definecolor{manni-bg}{RGB}{240,243,243}
+\usemintedstyle{manni}
+\journal{}
+\newcommand*{\mb}[1]{\bm{#1}}
+\newcommand*{\bbar}[1]{\bar{\bm{#1}}}
+\newcommand*{\bhat}[1]{\hat{\bm{#1}}}
+\newcommand*{\mT}{\mathrm{T}}
+\newcommand*{\md}[1]{\mathrm{d}#1}
+\newcommand*{\eqsref}[1]{Eq.~(\ref{#1})}
+\newcommand*{\figref}[1]{Fig.~\ref{#1}}
+\newcommand*{\tabref}[1]{Table~\ref{#1}}
+\newcommand*{\algoref}[1]{Algorithm~\ref{#1}}
+\newcommand*{\secref}[1]{\S~\ref{#1}}
+\newcommand*{\diag}[1]{\text{diag}\left(#1\right)}
+\newcommand*{\sign}[1]{\text{sign}\left(#1\right)}
+\newcommand*{\dev}[1]{\text{dev}\left(#1\right)}
+\newcommand*{\tr}[1]{\text{trace}\left(#1\right)}
+\newcommand*{\ddfrac}[2]{\dfrac{\md{#1}}{\md{#2}}}
+\newcommand*{\pdfrac}[2]{\dfrac{\partial{#1}}{\partial{#2}}}
+\newcommand{\bsigma}{\mb{\sigma}}
+\newcommand{\bvarepsilon}{\mb{\varepsilon}}
+\newcommand{\beeta}{\mb{\eta}}
+\newcommand{\balpha}{\mb{\alpha}}
+\newcommand{\baleph}{\mb{\aleph}}
+\newcommand{\bbeta}{\mb{\beta}}
+\newcommand{\bgamma}{\mb{\gamma}}
+\newcommand{\bn}{\mb{n}}
+\newcommand{\bq}{\mb{q}}
+\newcommand{\bs}{\mb{s}}
+\newcommand{\bc}{\mb{c}}
+\newcommand{\be}{\mb{e}}
+\newcommand{\bu}{\mb{u}}
+\newcommand{\bv}{\mb{v}}
+\newcommand{\bw}{\mb{w}}
+\newcommand{\bh}{\mb{h}}
+\newcommand{\by}{\mb{y}}
+\newcommand{\ba}{\mb{a}}
+\newcommand{\bx}{\mb{x}}
+\newcommand{\bz}{\mb{z}}
+\newcommand{\br}{\mb{r}}
+\newcommand{\bp}{\mb{p}}
+\newcommand{\bbf}{\mb{f}}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\newenvironment{breakablealgorithm}
+{\begin{center}
+\refstepcounter{algorithm}
+\hrule height.8pt depth0pt \kern2pt
+\renewcommand{\caption}[2][\relax]{
+{\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}
+\ifx\relax##1\relax
+\addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}
+\else
+\addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}
+\fi
+\kern2pt\hrule\kern2pt
+}}{\kern2pt\hrule\relax
+\end{center}}
+\begin{document}
+\linenumbers
+\begin{abstract}
+\begin{linenumbers}
+This paper develops a general framework for nonviscous damping in dynamic systems by introducing additive energy-dissipating forces governed by first-order differential equations.
+Several choices of the driving field are examined, including displacement-, velocity-, and acceleration-dependent forms associated with stiffness and mass contributions.
+For each formulation, the frequency-domain response is derived to identify the corresponding storage and loss stiffnesses, admissible complex conjugate parameter pairs, stability and dissipation requirements, and asymptotic behaviour.
+The analysis shows that some direct formulations must be augmented by algebraic correction terms to recover the correct static stiffness, while reciprocal formulations can be converted into each other through transformed damping parameters.
+A trapezoidal update of the damping history variables is then embedded into a standard direct integration workflow, yielding a modified residual and a consistent tangent effective stiffness without increasing the size of the original system.
+Numerical examples involving single-degree-of-freedom oscillators, broadband damping approximations, and a large finite element model verify the equivalence of selected formulations, demonstrate second-order convergence, and illustrate the computational advantages and practical limitations of the proposed alternatives.
+\end{linenumbers}
+\end{abstract}
+\begin{keyword}
+nonviscous damping\sep
+direct integration
+\end{keyword}
+\begin{frontmatter}
+\title{Some Alternative Forms of Nonviscous Damping}
+\author[add1]{Theodore~L.~Chang\corref{tlc}}\ead{tlcfem@gmail.com}
+\author[add2]{Chin-Long~Lee}
+\cortext[tlc]{corresponding author}
+\address[add1]{IRIS Adlershof, Humboldt-Universität zu Berlin, Berlin, Germany, 12489.}
+\address[add2]{Department of Civil and Environmental Engineering, University of Canterbury, Christchurch, New Zealand, 8041.}
+\end{frontmatter}
+\input{SEC/INTRO}
+\input{SEC/FORMULATION}
+\input{SEC/IMPL}
+\input{SEC/EX}
+\input{SEC/CONCLUSION}
+\appendix
+\input{SEC/APP}
+% \input{SEC/SECOND}
+\bibliography{BIB}
+\end{document}

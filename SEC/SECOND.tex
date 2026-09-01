@@ -1,0 +1,96 @@
+\section{First Order Formulation}
+Consider the following general first order formulation:
+\begin{gather}
+    \left\{\begin{array}{l}
+       \ddot{u}+c_1u+ c_2f=0,\\
+        \dot{f}+c_3f=c_4\ddot{u}+c_5\dot{u}+c_6u.
+    \end{array}\right.
+\end{gather}
+Without complicating the discussion, we here assume constants $c_n\in\mathbb{R}$.
+Rewriting the above in the state space, one has
+\begin{gather}
+    \begin{bmatrix}
+        \dot{u}\\
+        \ddot{u}\\
+        \dot{f}
+    \end{bmatrix}=\begin{bmatrix}
+      0  &1&0\\
+       -c_1 &0&-c_2\\
+    c_6-c_4c_1   &c_5&-c_3-c_4c_2
+    \end{bmatrix}\begin{bmatrix}
+        u\\
+        \dot{u}\\
+        f
+    \end{bmatrix}.
+\end{gather}
+The Routh--Hurwitz criterion can be expressed as
+\begin{gather}
+    c_2c_4+c_3>0,\quad
+    c_1+c_2c_5>0,\quad
+    c_1c_3+c_2c_6>0,\quad
+    c_2\left(c_1c_4+c_2c_4c_5+c_3c_5-c_6\right)>0.
+\end{gather}
+\subsection{$c_5=c_6=0$}
+The above simplifies to
+\begin{gather}
+    c_2c_4+c_3>0,\quad
+    c_1>0,\quad
+    c_1c_3>0,\quad
+    c_1c_2c_4>0.
+\end{gather}
+Since $c_1>0$ and $c_1c_3>0$, one has $c_3>0$.
+It is thus equivalent to
+\begin{gather}
+    \boxed{c_1>0,\quad
+    c_3>0,\quad
+    c_2c_4>0.}
+\end{gather}
+\subsection{$c_4=c_6=0$}
+The above simplifies to
+\begin{gather}
+     c_3>0,\quad
+    c_1+c_2c_5>0,\quad
+    c_1c_3>0,\quad
+    c_2c_3c_5>0.
+\end{gather}
+Since $c_1c_3>0$ and $c_3>0$, one has $c_1>0$.
+It is thus equivalent to
+\begin{gather}
+    \boxed{c_1>0,\quad
+    c_3>0,\quad
+    c_2c_5>0.}
+\end{gather}
+\subsection{$c_4=c_5=0$}
+The above simplifies to
+\begin{gather}
+    \boxed{
+    c_1>0,\quad
+    c_3>0,\quad
+    c_1c_3+c_2c_6>0,\quad
+    c_2c_6<0.}
+\end{gather}
+\section{Stability Analysis}
+Since the formulations are equivalent, we consider the free vibration of the following SDOF system.
+\begin{gather}
+    \left\{\begin{array}{l}
+        \ddot{u}+\omega_n^2u+f=0, \\
+        \dot{f}=-sf+m\omega^2_n\dot{u}.
+    \end{array}\right.
+\end{gather}
+With \algoref{algo:general_algo}, the corresponding amplification matrix can be derived as
+\begin{multline}
+\begin{bmatrix}
+1+\beta\Delta{}t^2\omega^2_n&\cdot&\beta\Delta{}t^2\\
+\gamma\Delta{}t\omega^2_n&1&\gamma\Delta{}t\\
+\cdot&-m\Delta{}t\omega^2_n&2+s\Delta{}t
+\end{bmatrix}\begin{bmatrix}
+u_{n+1}\\\dot{u}_{n+1}\\f_{n+1}
+\end{bmatrix}\\=\begin{bmatrix}
+1+\left(\beta-\dfrac{1}{2}\right)\Delta{}t^2\omega_n^2&\Delta{}t&\left(\beta-\dfrac{1}{2}\right)\Delta{}t^2\\
+\left(\gamma-1\right)\Delta{}t\omega_n^2&1&\left(\gamma-1\right)\Delta{}t\\
+\cdot&m\Delta{}t\omega^2_n&2-s\Delta{}t
+\end{bmatrix}
+\begin{bmatrix}
+u_n\\\dot{u}_n\\f_n
+\end{bmatrix}.
+\end{multline}

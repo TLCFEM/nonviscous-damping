@@ -1,0 +1,38 @@
+Numerical models of structures commonly require a damping model to represent sources of energy dissipation that are not modelled explicitly \citep{PEER-ATC:2010:Modeling, Deierlein:et:al:2010:NLStructAnalysis}.
+Major energy dissipation associated with material hysteresis, inelastic structural response, and supplemental damping devices can often be represented directly, 
+while additional dissipation may arise from mechanisms that are difficult to identify or quantify individually. 
+These may include interaction between structural and non-structural components, friction and contact, components idealised as elastic, and other unmodelled structural and foundation effects. 
+A damping model is therefore commonly introduced to represent the combined effect of these unmodelled or inherent sources of energy dissipation.
+
+The representation of such energy dissipation is not unique. 
+In practical finite element analysis, viscous damping models have traditionally been widely used because of their mathematical simplicity and efficiency with standard time integration procedures. 
+The Rayleigh damping model \citep{Rayleigh:1896:Sound} is perhaps the most common example, but its frequency dependence and tendency to generate spurious damping forces in nonlinear analysis are well known to require careful treatment \citep{Chrisp:80:Damping, Shing:Mahin:87:SpuriousDamping, Leger:Dussault:92:Dissipation, Bernal:94:Damping, Carr:97:Damping, Hall:06:RayleighProblems, Carr:07:RUAUMOKO, Charney:08:UnintendedRayleigh, Jehel:et:al:14:RayleighInitialTangent, Chopra:McKenna:16:Damping, Luco:Lanzi:19:SpuriousForce, Lee:20:MatchingDampingRatio}.
+A number of alternative viscous damping formulations have therefore been developed to provide greater flexibility in controlling the distribution of damping over frequency and in reducing unintended damping effects \citep{Lee:22:SofteningResponse, Lee:et:al:23:ConsistentElemental}.
+
+Recent developments of the bell-shaped damping model have further demonstrated that viscous damping can be constructed to satisfy a range of different modelling requirements \citep{Lee:19:CompDynDamping, Lee:20:MatchingDampingRatio, Lee:20:SparseDampingModel, Lee:21:AdjustableBW, Lee:22:SofteningResponse}.
+These studies have considered the representation of prescribed frequency-dependent damping ratios, the treatment of nonlinear and softening response, the control of damping forces outside the frequency range of interest, and the formulation of damping at structural, elemental and material levels \citep{Lee:et:al:23:ConsistentElemental, Lee:24:Nodycon, Lee:24:WCEE18StateDamping}.
+
+Nonviscous damping provides another route for representing unmodelled energy dissipation. 
+In a nonviscous model, the dissipative force depends on the history of the response and may be expressed through hereditary relations, convolution integrals \citep{WOODHOUSE:98:LinearDamping, Adhikari:Wagner:04:Convolution, ADHIKARI:07:Damping, Shen:et:al:21:TimeIntegrationMethod, Shen:et:al:22:DampingIdentification, Shen:et:al:23:CompositeImplicit, Shen:et:al:23:DampingCharacteristics, Shen:et:al:23:Eigensystem}, or equivalent internal-variable formulations \citep{Chang2024}.
+When suitable kernel functions are adopted, the hereditary terms can also be represented by first-order internal variables, allowing the models to be incorporated efficiently into time-domain dynamic analysis \citep{Chang2024}.
+
+\citet{Huang2019} proposed a nonviscous damping formulation based on filtering the material constitutive forces and showed that an approximately uniform loss factor could be obtained over a prescribed frequency range.
+This formulation, referred to by them as the uniform damping model, provides an attractive means of introducing rate-independent dissipation into nonlinear finite element analysis.
+More recent work has also considered efficient numerical implementations of this class of models using exponential kernels or first-order internal variables \citep{Chang2024}.
+
+The formulation proposed by \citet{Huang2019}, however, represents only one possible mathematical construction for achieving the prescribed loss-factor distribution.
+A specified damping or loss-factor distribution defines the desired dissipative behaviour, but does not necessarily determine a unique mathematical representation of that behaviour. 
+This raises a more fundamental question: how broad is the family of nonviscous formulations capable of reproducing the same loss-factor characteristics, and what additional properties distinguish formulations that are equivalent in their dissipative response?
+
+This distinction is important because formulations that produce the same or similar loss-factor distributions may nevertheless differ in other respects.
+In particular, they may exhibit different storage stiffnesses, static limits, high- and low-frequency asymptotic behaviour, stability properties, and numerical implementation characteristics. 
+Some formulations may also require correction terms to recover the appropriate static stiffness, while others may admit reciprocal or alternative representations that are mathematically equivalent but computationally different. 
+Identifying these relationships helps to separate the essential dissipative behaviour from the particular mathematical form used to realise it.
+
+This paper develops a unified framework for constructing and analysing several alternative nonviscous damping formulations. 
+Additive energy-dissipating forces governed by first-order differential equations are introduced, with different choices of the driving field, including displacement-, velocity-, and acceleration-dependent forms associated with stiffness and mass contributions. 
+The resulting formulations are examined in the frequency domain to determine their storage and loss stiffnesses, admissible pairs of complex parameters, stability requirements, asymptotic behaviour, and relationships with one another.
+
+Particular attention is given to reciprocal formulations and to the correction terms required to preserve the appropriate static stiffness. 
+These observations lead to practical formulations that retain the size of the original dynamic system and can be incorporated into standard direct integration procedures through a modified residual and consistent tangent effective stiffness. 
+Numerical examples are then used to verify the theoretical results, demonstrate equivalence among selected formulations, and assess computational performance in a large finite element model.

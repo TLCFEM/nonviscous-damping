@@ -1,0 +1,31 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.x
+      - run: |
+          pip install -r requirements.txt
+          export PYTHONPATH=$PWD
+      - name: Compile
+        uses: xu-cheng/texlive-action@v3
+        with:
+          run: latexmk -pdf UNIDAMPING.tex
+          scheme: full
+      - if: github.event_name == 'push'
+        name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          asset_name: UNIDAMPING.pdf
+          file: UNIDAMPING.pdf
+          overwrite: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: latest
+name: PDF
+'on':
+  - push
+  - pull_request
