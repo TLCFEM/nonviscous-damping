@@ -275,15 +275,16 @@ This corresponds to the system \eqsref{eq:u_right} under forced vibration, which
     \end{array}\right.
 \end{gather}
 \subsection{Remarks}
-Because the trivial initial condition $\bbf_j\left(0\right)=\mb{0}$ is assumed, the relation discussed by \citet{Chang2024} can be used to express the proposed formulations equivalently as
+Because the trivial initial condition $\bbf_j\left(0\right)=\mb{0}$ is assumed, the relation discussed by \citet{Chang2024} can be used to express the (core of the) proposed formulations equivalently as
 \begin{gather}
     \br+\sum{}g_j*\by_j=\mb{p}
 \end{gather}
-where $g_j*\by_j$ denotes the convolution of the kernel $g_j$ and $\by_j$; that is,
+where $g_j*\by_j$ denotes the convolution of the kernel $g_j$ and the field $\by_j$; that is,
 \begin{gather}\label{eq:conv}
     \left(g_j*\by_j\right)\left(t\right)=\int_0^tg_j\left(t-\tau\right)\by_j\left(\tau\right)\md{\tau},
 \end{gather}
 with $g_j=g_j\left(t\right)=m_j\exp\left(-s_jt\right)$ and $\by_j$ taking one of the forms discussed above.
+Note that additional modifications for consistency are not included in the above expression.
 This type of equivalence provides an alternative perspective to understand various damping formulations.
 The damping characteristics, parametrised by $s_j$ and $m_j$, may be interpreted as modifications to the kernel functions $g_j$, enabling the desired damping response to be realised through kernel design.
 
